@@ -5,7 +5,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-          <Map rows_number="3" columns_number="3"/>
+          <Map map_name = "hive_1"/>
       </header>
     </div>
   );
