@@ -3,6 +3,7 @@ import "./Map.css"
 import Cell from "../Cell/Cell.jsx"
 import Seat from "../Seat/Seat.jsx"
 import { get_map } from "../../scripts/main";
+import { get_seat } from "../../scripts/main";
 
 class Map extends React.Component {
     constructor(props) {
@@ -15,12 +16,13 @@ class Map extends React.Component {
         this.create_cells = this.create_cells.bind(this)  
         this.update_map = this.update_map.bind(this)
         this.update_seat = this.update_seat.bind(this)
+        this.add_seat = this.add_seat.bind(this)
     }
     create_cells(){
         var cells = []
         var key = 0
         for(var rowsCounter = 1; rowsCounter <= this.state.rows_number; rowsCounter++){
-            cells[rowsCounter-1] = Array()
+            cells[rowsCounter-1] = []
             for(var colsCounter = 1; colsCounter <= this.state.columns_number; colsCounter++){
                 key++
                 cells[rowsCounter-1][colsCounter-1] = <Cell row_number={rowsCounter} col_number={colsCounter} key={key} color='#be985f'/>
@@ -38,14 +40,16 @@ class Map extends React.Component {
     componentDidMount(){
         this.update_map()
     }
-    update_seat(){
-        var row_number = 2
-        var col_number = 5
+    add_seat(){}
+    async update_seat(){
+        var seats = await get_seat(this.props.map_name)
         var cells = this.state.cells.slice()
-        var row = cells[row_number-1].slice()
-        var seat = row[col_number-1]
-        row[col_number-1] = <Seat key={seat.key}/>
-        cells[row_number-1] = row
+        for(let seat of seats){
+            var row = cells[seat.row_num-1].slice()
+            var prev_cell = row[seat.col_num-1]
+            row[seat.col_num-1] = <Seat key={prev_cell.key}/>
+            cells[seat.row_num-1] = row
+        }
         this.setState({cells:cells})
         console.log(cells)
     }
