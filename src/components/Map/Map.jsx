@@ -54,18 +54,18 @@ class Map extends React.Component {
             console.log(bel)
             cells = cells.map((corrent_row)=>{
                 return corrent_row.map((corrent_seat)=>{
+                    var new_seat = corrent_seat
                     for(let corrent_bel of bel){
                         if(corrent_seat.props.id !== undefined){
                             if(corrent_bel.seat === corrent_seat.props.id){
-                                corrent_seat = <Seat key={corrent_seat.props.key} number={corrent_seat.props.seat_number} id={corrent_seat.props.id} name={corrent_bel.guest_first_name + " " + corrent_bel.guest_last_name}/>
-                                console.log(corrent_seat)
+                                new_seat = <Seat key={corrent_seat.key} number={corrent_seat.props.seat_number} id={corrent_seat.props.id} name={corrent_bel.guest_first_name + " " + corrent_bel.guest_last_name}/>
+                                console.log(new_seat)
                             }
                         }
                     }
-                    return corrent_seat 
+                    return new_seat 
                 })
             })
-            console.log(cells)
             this.setState({cells:cells})
         }
     }
