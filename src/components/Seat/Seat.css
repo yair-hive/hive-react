@@ -1,0 +1,20 @@
+.seat{
+    width: 120px;
+    height: 50px;
+    margin: 2.5px;
+    border-radius: 0.25rem;
+}
+.num_box, .name_box{
+    width: 120px;
+    height: 25px;
+    text-align: center;
+    font-size: 15px;
+}
+.num_box{
+    border-radius: 0.25rem 0.25rem 0 0;
+    background-color: rgb(0, 128, 128);
+}
+.name_box{
+    background-color: rgb(105, 90, 205);
+    border-radius: 0 0 0.25rem 0.25rem;
+}
