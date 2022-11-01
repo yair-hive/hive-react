@@ -47,7 +47,7 @@ class Map extends React.Component {
             for(let seat of seats){
                 var row = cells[seat.row_num-1].slice()
                 var prev_cell = row[seat.col_num-1]
-                row[seat.col_num-1] = <Seat key={prev_cell.key}/>
+                row[seat.col_num-1] = <Seat key={prev_cell.key} seat_number={seat.seat_number}/>
                 cells[seat.row_num-1] = row
             }
             this.setState({cells:cells})
