@@ -42,7 +42,7 @@ class Map extends React.Component {
     }
     async update_seat(){
         var seats = await get_seat(this.props.map_name)
-        if(this.state.cells.length != 0){
+        if(this.state.cells.length !== 0){
             var cells = this.state.cells.slice()
             for(let seat of seats){
                 var row = cells[seat.row_num-1].slice()
