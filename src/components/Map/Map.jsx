@@ -2,7 +2,7 @@ import React from "react";
 import "./Map.css"
 import Cell from "../Cell/Cell.jsx"
 import Seat from "../Seat/Seat.jsx"
-import { get_map } from "../../scripts/main";
+import { get_belongs, get_map } from "../../scripts/main";
 import { get_seat } from "../../scripts/main";
 
 class Map extends React.Component {
@@ -47,9 +47,25 @@ class Map extends React.Component {
             for(let seat of seats){
                 var row = cells[seat.row_num-1].slice()
                 var prev_cell = row[seat.col_num-1]
-                row[seat.col_num-1] = <Seat key={prev_cell.key} seat_number={seat.seat_number}/>
+                row[seat.col_num-1] = <Seat key={prev_cell.key} number={seat.seat_number} id={seat.id}/>
                 cells[seat.row_num-1] = row
             }
+            var bel = await get_belongs(this.props.map_name)
+            console.log(bel)
+            cells = cells.map((corrent_row)=>{
+                return corrent_row.map((corrent_seat)=>{
+                    for(let corrent_bel of bel){
+                        if(corrent_seat.props.id !== undefined){
+                            if(corrent_bel.seat === corrent_seat.props.id){
+                                corrent_seat = <Seat key={corrent_seat.props.key} number={corrent_seat.props.seat_number} id={corrent_seat.props.id} name={corrent_bel.guest_first_name + " " + corrent_bel.guest_last_name}/>
+                                console.log(corrent_seat)
+                            }
+                        }
+                    }
+                    return corrent_seat 
+                })
+            })
+            console.log(cells)
             this.setState({cells:cells})
         }
     }

@@ -7,9 +7,11 @@ class Seat extends React.Component{
             <div>
                 <div className="seat">
                     <div className="num_box">
-                        {this.props.seat_number}    
+                        {this.props.number}    
                     </div> 
-                    <div className="name_box"></div>          
+                    <div className="name_box">
+                        {this.props.name}
+                    </div>          
                 </div>
             </div>)
     }
