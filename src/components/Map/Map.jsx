@@ -51,15 +51,14 @@ class Map extends React.Component {
                 cells[seat.row_num-1] = row
             }
             var bel = await get_belongs(this.props.map_name)
-            console.log(bel)
             cells = cells.map((corrent_row)=>{
                 return corrent_row.map((corrent_seat)=>{
                     var new_seat = corrent_seat
                     for(let corrent_bel of bel){
                         if(corrent_seat.props.id !== undefined){
                             if(corrent_bel.seat === corrent_seat.props.id){
-                                new_seat = <Seat key={corrent_seat.key} number={corrent_seat.props.seat_number} id={corrent_seat.props.id} name={corrent_bel.guest_first_name + " " + corrent_bel.guest_last_name}/>
-                                console.log(new_seat)
+                                var guest_name = corrent_bel.guest_first_name + " " + corrent_bel.guest_last_name
+                                new_seat = <Seat key={corrent_seat.key} number={corrent_seat.props.seat_number} id={corrent_seat.props.id} name={guest_name}/>
                             }
                         }
                     }
