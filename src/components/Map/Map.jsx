@@ -16,7 +16,6 @@ class Map extends React.Component {
         this.create_cells = this.create_cells.bind(this)  
         this.update_map = this.update_map.bind(this)
         this.update_seat = this.update_seat.bind(this)
-        this.add_seat = this.add_seat.bind(this)
     }
     create_cells(){
         var cells = []
@@ -25,7 +24,7 @@ class Map extends React.Component {
             cells[rowsCounter-1] = []
             for(var colsCounter = 1; colsCounter <= this.state.columns_number; colsCounter++){
                 key++
-                cells[rowsCounter-1][colsCounter-1] = <Cell row_number={rowsCounter} col_number={colsCounter} key={key} color='#be985f'/>
+                cells[rowsCounter-1][colsCounter-1] = <Cell row_number={rowsCounter} col_number={colsCounter} key={key}/>
             }
         }
         return cells
@@ -37,25 +36,26 @@ class Map extends React.Component {
         map_ele.style.setProperty('--map-rows', this.state.rows_number)
         map_ele.style.setProperty('--map-cols', this.state.columns_number)
     }
-    componentDidMount(){
-        this.update_map()
+    async componentDidMount(){
+        await this.update_map()
+        await this.update_seat()
     }
-    add_seat(){}
     async update_seat(){
         var seats = await get_seat(this.props.map_name)
-        var cells = this.state.cells.slice()
-        for(let seat of seats){
-            var row = cells[seat.row_num-1].slice()
-            var prev_cell = row[seat.col_num-1]
-            row[seat.col_num-1] = <Seat key={prev_cell.key}/>
-            cells[seat.row_num-1] = row
+        if(this.state.cells.length != 0){
+            var cells = this.state.cells.slice()
+            for(let seat of seats){
+                var row = cells[seat.row_num-1].slice()
+                var prev_cell = row[seat.col_num-1]
+                row[seat.col_num-1] = <Seat key={prev_cell.key}/>
+                cells[seat.row_num-1] = row
+            }
+            this.setState({cells:cells})
         }
-        this.setState({cells:cells})
-        console.log(cells)
     }
     render(){
         return (
-            <div id="map" className="map"> {this.state.cells} <button onClick={this.update_seat}> button </button></div>
+            <div id="map" className="map"> {this.state.cells} </div>
         )
     }
 }
