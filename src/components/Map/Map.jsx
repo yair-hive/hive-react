@@ -50,7 +50,6 @@ class Map extends React.Component {
                 cells[seat.row_num-1] = row
             }
             var bel = await get_belongs(this.props.map_name)
-            console.log(bel)
             cells = cells.map((corrent_row)=>{
                 return corrent_row.map((corrent_seat)=>{
                     var new_seat = corrent_seat
