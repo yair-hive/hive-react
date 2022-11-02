@@ -3,6 +3,7 @@ import "./Map.css"
 import Cell from "../Cell/Cell.jsx"
 import Seat from "../Seat/Seat.jsx"
 import { get_belongs, get_map,  get_seat } from "../../scripts/main";
+import SelectionArea from "@viselect/react";
 
 class Map extends React.Component {
     constructor(props) {
@@ -10,20 +11,71 @@ class Map extends React.Component {
         this.state = {
             rows_number: 0,
             columns_number: 0,
-            cells: []
+            cells: [],
+            selected: new Set()
         }
         this.create_cells = this.create_cells.bind(this)  
         this.update_map = this.update_map.bind(this)
         this.update_seat = this.update_seat.bind(this)
+        this.extract_cell_data = this.extract_cell_data.bind(this)
+        this.onStart = this.onStart.bind(this)
+        this.onMove = this.onMove.bind(this)
+        this.callbeck = this.callbeck.bind(this)
     }
+    extract_cell_data(els){
+        return els.map((v) => {
+            var cell_location = {
+                index : v.getAttribute("index"),
+                row_number : v.getAttribute("cell-row"),
+                col_number : v.getAttribute("cell-col")
+            }
+            return cell_location
+        })
+    }
+    onStart({ event, selection }){
+        if (!(event === null || event === void 0 ? void 0 : event.ctrlKey) && !(event === null || event === void 0 ? void 0 : event.metaKey)) {
+            selection.clearSelection();
+            var new_cells = this.state.cells.map((row)=>{
+                return row.map((cell)=>{
+                    if(cell.props.selected){
+                        return React.cloneElement(cell, {selected: false})
+                    }
+                    return cell
+                })
+            })
+            this.setState({selected: [], cells: new_cells});
+        }
+        console.log(this.state.cells)
+    };
+    callbeck(selected, added, removed){
+        const next = new Set(selected);
+        this.extract_cell_data(added).forEach((cell_data) => next.add(cell_data));
+        this.extract_cell_data(removed).forEach((cell_data) => next.delete(cell_data));
+        var new_cells = this.state.cells.map((row) => {
+            return row.map((cell) => {
+                for(let corrent of selected){
+                    if(cell.key === corrent.index){
+                        return React.cloneElement(cell, {selected: true})
+                    }
+                }
+                return cell
+            })
+        })
+        return {new_selected: next, new_cells: new_cells};
+    }
+    onMove({ store: { changed: { added, removed } } }){
+        var selected = this.state.selected
+        var callbeck = this.callbeck(selected, added, removed)
+        this.setState({cells: callbeck.new_cells, selected:callbeck.new_selected})
+    };
     create_cells(){
         var cells = []
         var key = 0
         for(var rowsCounter = 1; rowsCounter <= this.state.rows_number; rowsCounter++){
             cells[rowsCounter-1] = []
             for(var colsCounter = 1; colsCounter <= this.state.columns_number; colsCounter++){
-                key++
-                cells[rowsCounter-1][colsCounter-1] = <Cell row_number={rowsCounter} col_number={colsCounter} key={key}/>
+                key++            
+                cells[rowsCounter-1][colsCounter-1] = <Cell index={key} row_number={rowsCounter} col_number={colsCounter} key={key} selectable={true}/>
             }
         }
         return cells
@@ -69,7 +121,14 @@ class Map extends React.Component {
     }
     render(){
         return (
-            <div id="map" className="map"> {this.state.cells} </div>
+            <SelectionArea
+            className="container App-header"
+            onStart={this.onStart}
+            onMove={this.onMove}
+            selectables=".selectable"
+            >
+                <div id="map" className="map"> {this.state.cells} </div>
+            </SelectionArea>
         )
     }
 }

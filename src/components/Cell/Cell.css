@@ -5,3 +5,6 @@
     border-radius: 0.25rem;
     background: #323a46;
 }
+.selected{
+    background: #5f9efc;
+}
