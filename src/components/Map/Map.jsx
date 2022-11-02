@@ -2,8 +2,7 @@ import React from "react";
 import "./Map.css"
 import Cell from "../Cell/Cell.jsx"
 import Seat from "../Seat/Seat.jsx"
-import { get_belongs, get_map } from "../../scripts/main";
-import { get_seat } from "../../scripts/main";
+import { get_belongs, get_map,  get_seat } from "../../scripts/main";
 
 class Map extends React.Component {
     constructor(props) {
@@ -58,13 +57,14 @@ class Map extends React.Component {
                         if(corrent_seat.props.id !== undefined){
                             if(corrent_bel.seat === corrent_seat.props.id){
                                 var guest_name = corrent_bel.guest_first_name + " " + corrent_bel.guest_last_name
-                                new_seat = <Seat key={corrent_seat.key} number={corrent_seat.props.seat_number} id={corrent_seat.props.id} name={guest_name}/>
+                                new_seat = <Seat key={corrent_seat.key} number={corrent_seat.props.number} id={corrent_seat.props.id} name={guest_name}/>
                             }
                         }
                     }
                     return new_seat 
                 })
             })
+            console.log(cells)
             this.setState({cells:cells})
         }
     }
