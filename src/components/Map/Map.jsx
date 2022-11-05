@@ -9,6 +9,7 @@ class Map extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            map_name: 'hive_1',
             rows_number: 0,
             columns_number: 0,
             cells: [],
@@ -83,42 +84,46 @@ class Map extends React.Component {
         return cells
     }
     async update_map(){
-        var map_data = await get_map(this.props.map_name)
-        this.setState({rows_number: map_data.rows_number, columns_number: map_data.columns_number, cells:this.create_cells()})
-        const map_ele = document.getElementById('map')
-        map_ele.style.setProperty('--map-rows', this.state.rows_number)
-        map_ele.style.setProperty('--map-cols', this.state.columns_number)
+        if(this.state.map_name){
+            var map_data = await get_map(this.state.map_name)
+            this.setState({rows_number: map_data.rows_number, columns_number: map_data.columns_number, cells:this.create_cells()})
+            const map_ele = document.getElementById('map')
+            map_ele.style.setProperty('--map-rows', this.state.rows_number)
+            map_ele.style.setProperty('--map-cols', this.state.columns_number)
+        }
     }
     async componentDidMount(){
         await this.update_map()
         await this.update_seat()
     }
     async update_seat(){
-        var seats = await get_seat(this.props.map_name)
-        if(this.state.cells.length !== 0){
-            var cells = this.state.cells.slice()
-            for(let seat of seats){
-                var row = cells[seat.row_num-1].slice()
-                var prev_cell = row[seat.col_num-1]
-                row[seat.col_num-1] = <Seat key={prev_cell.key} number={seat.seat_number} id={seat.id}/>
-                cells[seat.row_num-1] = row
-            }
-            var bel = await get_belongs(this.props.map_name)
-            cells = cells.map((corrent_row)=>{
-                return corrent_row.map((corrent_seat)=>{
-                    var new_seat = corrent_seat
-                    for(let corrent_bel of bel){
-                        if(corrent_seat.props.id !== undefined){
-                            if(corrent_bel.seat === corrent_seat.props.id){
-                                var guest_name = corrent_bel.guest_first_name + " " + corrent_bel.guest_last_name
-                                new_seat = <Seat key={corrent_seat.key} number={corrent_seat.props.number} id={corrent_seat.props.id} name={guest_name} group={corrent_bel.guest_group}/>
+        if(this.state.map_name){
+            var seats = await get_seat(this.state.map_name)
+            if(this.state.cells.length !== 0){
+                var cells = this.state.cells.slice()
+                for(let seat of seats){
+                    var row = cells[seat.row_num-1].slice()
+                    var prev_cell = row[seat.col_num-1]
+                    row[seat.col_num-1] = <Seat key={prev_cell.key} number={seat.seat_number} id={seat.id}/>
+                    cells[seat.row_num-1] = row
+                }
+                var bel = await get_belongs(this.state.map_name)
+                cells = cells.map((corrent_row)=>{
+                    return corrent_row.map((corrent_seat)=>{
+                        var new_seat = corrent_seat
+                        for(let corrent_bel of bel){
+                            if(corrent_seat.props.id !== undefined){
+                                if(corrent_bel.seat === corrent_seat.props.id){
+                                    var guest_name = corrent_bel.guest_first_name + " " + corrent_bel.guest_last_name
+                                    new_seat = <Seat key={corrent_seat.key} number={corrent_seat.props.number} id={corrent_seat.props.id} name={guest_name} group={corrent_bel.guest_group}/>
+                                }
                             }
                         }
-                    }
-                    return new_seat 
+                        return new_seat 
+                    })
                 })
-            })
-            this.setState({cells:cells})
+                this.setState({cells:cells})
+            }
         }
     }
     render(){
