@@ -2,6 +2,7 @@ import './App.css';
 import Map from './components/Map/Map.jsx'
 import Login from './components/login/Login'
 import Home from './components/Home/Home'
+import Map_test from './components/Map_test/Map_test';
 import React from 'react';
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
@@ -24,7 +25,7 @@ function App() {
             </ul>
             <Routes>
               <Route path='/' element={<Home />} />
-              <Route path='/maps' element={<Map map_name = "hive_1"/>} />
+              <Route path='/maps' element={<Map_test map_name = "hive_1"/>} />
               <Route path='/login' element={<Login />} />
             </Routes>
         </header>
