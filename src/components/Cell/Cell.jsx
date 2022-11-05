@@ -13,7 +13,7 @@ class Cell extends React.Component {
         if(this.props.selected){
             selected= "selected"
         }
-        var class_name_string = class_rows + ' ' + class_cols + ' cell' + ' ' + selectable + ' ' + selected
+        var class_name_string = `${class_rows} ${class_cols} cell ${selectable} ${selected}`
 
         return (
             <div className={class_name_string} 
