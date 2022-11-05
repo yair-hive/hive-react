@@ -38,11 +38,13 @@ class Map extends React.Component {
             var new_cells = this.state.cells.map((row)=>{
                 return row.map((cell)=>{
                     if(cell.props.selected){
+                        console.log(cell)
                         return React.cloneElement(cell, {selected: false})
                     }
                     return cell
                 })
             })
+            console.log(new_cells)
             this.setState({selected: [], cells: new_cells});
         }
         console.log(this.state.cells)
