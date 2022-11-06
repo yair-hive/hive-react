@@ -75,42 +75,40 @@ function Map_test(props){
             cells[rowsCounter-1] = []
             for(var colsCounter = 1; colsCounter <= cols; colsCounter++){
                 key++ 
-                cells[rowsCounter-1][colsCounter-1] = <Cell index={key} row_number={rowsCounter} col_number={colsCounter} key={key} selectable={true}/>
-                for(let seat of seats){ 
-                    cells = cells.map((row)=>{
-                        return row.map((cell)=>{
-                            if(cell.props){
-                                if(cell.props.row_number === Number(seat.row_num)){
-                                    if(cell.props.col_number === Number(seat.col_num)){
-                                        return <Seat key={cell.key} number={seat.seat_number} id={seat.id}/>
-                                    }
-                                }
-                            }
-                            return cell
-                        })
-                    })
-                          
-                    // if(Number(seat.row_num) === rowsCounter && Number(seat.col_num) === colsCounter){ 
-                    //     if(belongs.length !== 0){
-                    //         for(let corrent_bel of belongs){
-                    //             if(corrent_bel.seat === seat.id){
-                    //                 var guest_name = corrent_bel.guest_first_name + " " + corrent_bel.guest_last_name
-                    //                 cells[rowsCounter-1][colsCounter-1] = <Seat key={key} number={seat.seat_number} id={seat.id} name={guest_name} group={corrent_bel.guest_group}/>
-                    //             }else{
-                    //                 cells[rowsCounter-1][colsCounter-1] = <Seat key={key} number={seat.seat_number} id={seat.id}/>
-                    //             }
-                    //         }
-                    //     }else{
-                    //         cells[rowsCounter-1][colsCounter-1] = <Seat key={key} number={seat.seat_number} id={seat.id}/>
-                    //         console.log('toy')
-                    //     }                     
-                    // }else{
-                    //     console.log(seat)
-                        
-                    // }
-                }  
+                cells[rowsCounter-1][colsCounter-1] = <Cell index={key} row_number={rowsCounter} col_number={colsCounter} key={key} selectable={true}/> 
             }                         
         }
+        for(let seat of seats){ 
+            cells = cells.map((row)=>{
+                return row.map((cell)=>{
+                    if(cell.props){
+                        if(cell.props.row_number === Number(seat.row_num)){
+                            if(cell.props.col_number === Number(seat.col_num)){
+                                return <Seat key={cell.key} number={seat.seat_number} id={seat.id}/>                                       
+                            }
+                        }
+                    }
+                    return cell
+                })
+            })                   
+        }
+        for(let seat of seats){ 
+            for(let corrent_bel of belongs){
+                cells = cells.map((row)=>{
+                    return row.map((cell)=>{
+                        if(cell.props.id){                     
+                            if(corrent_bel.seat === cell.props.id){
+                                if(!cell.props.name){
+                                    var guest_name = corrent_bel.guest_first_name + " " + corrent_bel.guest_last_name
+                                    return <Seat key={cell.key} number={seat.seat_number} id={seat.id} name={guest_name} group={corrent_bel.guest_group}/>
+                                }
+                            }                                        
+                        }
+                        return cell
+                    })
+                })
+            }                   
+        } 
         setCells(cells)
     }
 
