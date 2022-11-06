@@ -62,15 +62,13 @@ function Map_test(props){
             setCells(new_cells)
         }
     }
-    useEffect(() => {
+    useEffect(()=>{
         update_map()
-    }, [rows])
-    useEffect(() => {
-        update_map()
-    }, [cols])
+    },[rows, cols])
     useEffect(()=>{
         update_seat()
     })
+
     return(
         <div id="map" className="map"> {cells} </div>
     )
