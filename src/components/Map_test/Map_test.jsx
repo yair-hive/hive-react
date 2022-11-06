@@ -27,48 +27,45 @@ function Map_test(props){
             return cell_location
         })
     }
-    // const onStart = ({ event, selection })=>{
-    //     if (!(event === null || event === void 0 ? void 0 : event.ctrlKey) && !(event === null || event === void 0 ? void 0 : event.metaKey)) {
-    //         selection.clearSelection();
-    //         var new_cells = cells.map((row)=>{
-    //             return row.map((cell)=>{
-    //                 if(cell.props.selected){
-    //                     console.log(cell)
-    //                     return React.cloneElement(cell, {selected: false})
-    //                 }
-    //                 return cell
-    //             })
-    //         })
-    //         console.log(new_cells)
-    //         setCells(new_cells)
-    //         setSelected([])
-    //     }
-    //     console.log(cells)
-    // };
-    // const callbeck = (selected, added, removed)=>{
-    //     const next = new Set(selected);
-    //     extract_cell_data(added).forEach((cell_data) => next.add(cell_data));
-    //     extract_cell_data(removed).forEach((cell_data) => next.delete(cell_data));
-    //     var new_cells = cells.map((row) => {
-    //         return row.map((cell) => {
-    //             for(let corrent of selected){
-    //                 if(cell.key === corrent.index){
-    //                     return React.cloneElement(cell, {selected: true})
-    //                 }
-    //             }
-    //             return cell
-    //         })
-    //     })
-    //     return {new_selected: next, new_cells: new_cells};
-    // }
-    // const onMove = ({ store: { changed: { added, removed } } })=>{
-    //     var new_selected = selected
-    //     var new_callbeck = callbeck(new_selected, added, removed)
-    //     setCells(new_callbeck.new_cells)
-    //     setSelected(new_callbeck.new_selected)
-    // };
+    const onStart = ({ event, selection })=>{
+        if (!(event === null || event === void 0 ? void 0 : event.ctrlKey) && !(event === null || event === void 0 ? void 0 : event.metaKey)) {
+            selection.clearSelection();
+            if(Cells.length !== 0){
+                console.log(Cells)
+                var new_cells = Cells.map((row)=>{
+                    return row.map((cell)=>{
+                        if(cell.props.selected){
+                            console.log(cell)
+                            return React.cloneElement(cell, {selected: false})
+                        }
+                        return cell
+                    })
+                })
+                setCells(new_cells)
+                setSelected([])
+            }       
+        }
+    };
+    const onMove = ({ store: { changed: { added, removed } } })=>{
+        if(Cells.length !== 0){
+            var new_selected = new Set(selected);
+            extract_cell_data(added).forEach((cell_data) => new_selected.add(cell_data));
+            extract_cell_data(removed).forEach((cell_data) => new_selected.delete(cell_data));
+            var new_cells = Cells.map((row) => {
+                return row.map((cell) => {
+                    for(let corrent of selected){
+                        if(cell.key === corrent.index){
+                            return React.cloneElement(cell, {selected: true})
+                        }
+                    }
+                    return cell
+                })
+            })
+            setCells(new_cells)
+            setSelected(new_selected)
+        }
+    };
     const create_cells = ()=>{
-        // console.log(seats)
         var cells = []
         var key = 0
         for(var rowsCounter = 1; rowsCounter <= rows; rowsCounter++){
@@ -141,16 +138,16 @@ function Map_test(props){
     }, [belongs])
 
     return(
-        // <SelectionArea
-        // className="container App-header"
-        // onStart={onStart}
-        // onMove={onMove}
-        // selectables=".selectable"
-        // >
+        <SelectionArea
+        className="container App-header"
+        onStart={onStart}
+        onMove={onMove}
+        selectables=".selectable"
+        >
             <div className="map-container">
                 <div id="map" className="map" style={{'--map-rows' : rows, '--map-cols' : cols}}> {Cells} </div>
             </div>
-        // </SelectionArea>
+        </SelectionArea>
     )
 }
 
