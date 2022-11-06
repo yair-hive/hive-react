@@ -12,6 +12,7 @@ function Map_test(props){
     const [cols, setCols] = useState(0)
     const [seats, setSeats] = useState([])
     const [belongs, setBelongs] = useState([])
+    const [Cells, setCells] = useState([])
     const [selected, setSelected] = useState(new Set())
     const [status, setStatus] = useState(false)
     let {map_name} = useParams() 
@@ -67,45 +68,80 @@ function Map_test(props){
     //     setSelected(new_callbeck.new_selected)
     // };
     const create_cells = ()=>{
+        // console.log(seats)
         var cells = []
         var key = 0
         for(var rowsCounter = 1; rowsCounter <= rows; rowsCounter++){
             cells[rowsCounter-1] = []
             for(var colsCounter = 1; colsCounter <= cols; colsCounter++){
                 key++ 
-                for(let seat of seats){                    
-                    if(seat.row_num === rowsCounter && seat.col_num === colsCounter){
-                        for(let corrent_bel of belongs){
-                            if(corrent_bel.seat === seat.id){
-                                var guest_name = corrent_bel.guest_first_name + " " + corrent_bel.guest_last_name
-                                cells[rowsCounter-1][colsCounter-1] = <Seat key={key} number={seat.seat_number} id={seat.id} name={guest_name} group={corrent_bel.guest_group}/>
-                            }else{
-                                cells[rowsCounter-1][colsCounter-1] = <Seat key={key} number={seat.seat_number} id={seat.id}/>
+                cells[rowsCounter-1][colsCounter-1] = <Cell index={key} row_number={rowsCounter} col_number={colsCounter} key={key} selectable={true}/>
+                for(let seat of seats){ 
+                    cells = cells.map((row)=>{
+                        return row.map((cell)=>{
+                            if(cell.props){
+                                if(cell.props.row_number === Number(seat.row_num)){
+                                    if(cell.props.col_number === Number(seat.col_num)){
+                                        return <Seat key={cell.key} number={seat.seat_number} id={seat.id}/>
+                                    }
+                                }
                             }
-                        }
-                    }
-                }
-                if(cells[rowsCounter-1][colsCounter-1] === undefined){
-                    cells[rowsCounter-1][colsCounter-1] = <Cell index={key} row_number={rowsCounter} col_number={colsCounter} key={key} selectable={true}/>
+                            return cell
+                        })
+                    })
+                          
+                    // if(Number(seat.row_num) === rowsCounter && Number(seat.col_num) === colsCounter){ 
+                    //     if(belongs.length !== 0){
+                    //         for(let corrent_bel of belongs){
+                    //             if(corrent_bel.seat === seat.id){
+                    //                 var guest_name = corrent_bel.guest_first_name + " " + corrent_bel.guest_last_name
+                    //                 cells[rowsCounter-1][colsCounter-1] = <Seat key={key} number={seat.seat_number} id={seat.id} name={guest_name} group={corrent_bel.guest_group}/>
+                    //             }else{
+                    //                 cells[rowsCounter-1][colsCounter-1] = <Seat key={key} number={seat.seat_number} id={seat.id}/>
+                    //             }
+                    //         }
+                    //     }else{
+                    //         cells[rowsCounter-1][colsCounter-1] = <Seat key={key} number={seat.seat_number} id={seat.id}/>
+                    //         console.log('toy')
+                    //     }                     
+                    // }else{
+                    //     console.log(seat)
+                        
+                    // }
                 }  
             }                         
         }
-        return cells
+        setCells(cells)
     }
 
-    const update_map = async ()=> {
-        var map_data = await get_map(map_name)
-        setRows(map_data.rows_number)
-        setCols(map_data.columns_number)
-        var seats_data = await get_seat(map_name)
-        setSeats(seats_data)
-        var belongs_data = await get_belongs(map_name)
-        setBelongs(belongs_data)
-    }
     useEffect(()=>{
-        console.log(seats)
-        update_map()
-    },[rows, cols])
+        get_map(map_name).then((map_data)=>{
+            if(rows !== map_data.rows_number){
+                setRows(map_data.rows_number)
+            } 
+            if(cols !== map_data.columns_number){
+                setCols(map_data.columns_number)
+            }         
+        })
+    })
+    useEffect(()=>{
+        get_seat(map_name).then((seats_data)=>{
+            if(seats !== seats_data){
+                setSeats(seats_data)
+            }            
+        })
+    }, [rows, cols])
+    useEffect(()=>{
+        get_belongs(map_name).then((belongs_data)=>{
+            if(belongs !== belongs_data){
+                setBelongs(belongs_data)
+            }           
+        })
+    }, [seats])
+    useEffect(()=>{
+        create_cells()
+    }, [belongs])
+
     return(
         // <SelectionArea
         // className="container App-header"
@@ -114,7 +150,7 @@ function Map_test(props){
         // selectables=".selectable"
         // >
             <div className="map-container">
-                <div id="map" className="map" style={{'--map-rows' : rows, '--map-cols' : cols}}> {create_cells()} </div>
+                <div id="map" className="map" style={{'--map-rows' : rows, '--map-cols' : cols}}> {Cells} </div>
             </div>
         // </SelectionArea>
     )
