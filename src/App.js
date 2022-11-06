@@ -13,11 +13,13 @@ function App() {
         <header className="App-header">
           <Nav_bar />
         </header>
-        <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/maps/*' element={<Maps/>} />
-          <Route path='/login' element={<Login />} />
-        </Routes>
+        <div className='main-bord'>
+          <Routes>
+            <Route path='/' element={<Home />} />
+            <Route path='/maps/*' element={<Maps/>} />
+            <Route path='/login' element={<Login />} />
+          </Routes>
+        </div>
       </div>
     </BrowserRouter>
 

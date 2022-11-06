@@ -1,5 +1,12 @@
 .App {
+  height: 100%;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+.main-bord{
+  overflow: auto;
+  background-color: rgb(54, 42, 42);
 }
 
 

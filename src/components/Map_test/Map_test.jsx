@@ -70,7 +70,9 @@ function Map_test(props){
     })
 
     return(
-        <div id="map" className="map"> {cells} </div>
+        <div className="map-container">
+            <div id="map" className="map"> {cells} </div>
+        </div>
     )
 }
 

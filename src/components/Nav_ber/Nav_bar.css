@@ -3,6 +3,7 @@
     display: flex;
     justify-content: space-between;
     align-items: stretch;
+    height: 50px;
 }
 .links > li{
     display: inline-block;
