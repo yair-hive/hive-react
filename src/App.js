@@ -1,11 +1,9 @@
 import './App.css';
-import Map from './components/Map/Map.jsx'
 import Login from './components/login/Login'
 import Home from './components/Home/Home'
-import Map_test from './components/Map_test/Map_test';
 import React from 'react';
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
-import Maps from './components/Maps/Maps';
+import Maps from './pages/Maps/Maps';
 
 function App() {
   return (
