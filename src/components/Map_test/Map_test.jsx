@@ -30,40 +30,16 @@ function Map_test(props){
     const onStart = ({ event, selection })=>{
         if (!(event === null || event === void 0 ? void 0 : event.ctrlKey) && !(event === null || event === void 0 ? void 0 : event.metaKey)) {
             selection.clearSelection();
-            if(Cells.length !== 0){
-                console.log(Cells)
-                var new_cells = Cells.map((row)=>{
-                    return row.map((cell)=>{
-                        if(cell.props.selected){
-                            console.log(cell)
-                            return React.cloneElement(cell, {selected: false})
-                        }
-                        return cell
-                    })
-                })
-                setCells(new_cells)
-                setSelected([])
-            }       
+            setSelected(new Set())     
         }
     };
     const onMove = ({ store: { changed: { added, removed } } })=>{
-        if(Cells.length !== 0){
-            var new_selected = new Set(selected);
+        setSelected((prev)=>{
+            var new_selected = new Set(prev);
             extract_cell_data(added).forEach((cell_data) => new_selected.add(cell_data));
             extract_cell_data(removed).forEach((cell_data) => new_selected.delete(cell_data));
-            var new_cells = Cells.map((row) => {
-                return row.map((cell) => {
-                    for(let corrent of selected){
-                        if(cell.key === corrent.index){
-                            return React.cloneElement(cell, {selected: true})
-                        }
-                    }
-                    return cell
-                })
-            })
-            setCells(new_cells)
-            setSelected(new_selected)
-        }
+            return new_selected
+        })
     };
     const create_cells = ()=>{
         var cells = []
@@ -71,8 +47,12 @@ function Map_test(props){
         for(var rowsCounter = 1; rowsCounter <= rows; rowsCounter++){
             cells[rowsCounter-1] = []
             for(var colsCounter = 1; colsCounter <= cols; colsCounter++){
-                key++ 
-                cells[rowsCounter-1][colsCounter-1] = <Cell index={key} row_number={rowsCounter} col_number={colsCounter} key={key} selectable={true}/> 
+                key++
+                if(selected.has(key)){
+                    cells[rowsCounter-1][colsCounter-1] = <Cell index={key} row_number={rowsCounter} col_number={colsCounter} key={key} selectable={true} selected={true}/> 
+                }else{
+                    cells[rowsCounter-1][colsCounter-1] = <Cell index={key} row_number={rowsCounter} col_number={colsCounter} key={key} selectable={true} selected={false}/>
+                }                
             }                         
         }
         for(let seat of seats){ 
