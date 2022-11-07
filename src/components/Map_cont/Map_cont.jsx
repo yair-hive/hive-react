@@ -94,12 +94,12 @@ function Map_cont(){
             }         
         })
         get_seat(map_name).then((seats_data)=>{
-            if(seats !== seats_data){
+            if(seats.length !== seats_data.length){
                 setSeats(seats_data)
             }            
         })
         get_belongs(map_name).then((belongs_data)=>{
-            if(belongs !== belongs_data){
+            if(belongs.length !== belongs_data.length){
                 setBelongs(belongs_data)
             }           
         })
