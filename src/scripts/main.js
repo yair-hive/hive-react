@@ -1,17 +1,22 @@
-const api_url = 'http://localhost/hive-php/api.php'
+const api_url = 'http://localhost/hive-php/php/api.php'
 
 exports.get_map = function(map_name){
     const options = {
         method: 'POST',
-        body: "action=get_map&map_name="+map_name,
+        body: "category=map&action=get&map_name="+map_name,
         headers: {
             'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
         }
     };
       
     return fetch(api_url, options)
-    .then((response) => {
-        return response.json();
+    // .then(res => res.text())
+    // .then(res => alert(res))
+    .then(res => res.json())
+    .then((res)=>{
+        if(res.msg == 'ok') return res.data[0]
+        alert(res.msg)
+        return res.msg
     })
 }
 exports.get_seat = function(map_name){
@@ -58,16 +63,17 @@ exports.get_belongs = function(map_name){
     })
 }
 exports.get_maps = ()=>{
-    const options = {
-        method: 'POST',
-        body: "action=get_maps",
-        headers: {
-            'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        }
-    };
-      
-    return fetch(api_url, options)
-    .then((response) => {
-        return response.json();
-    })
+        const options = {
+            method: 'POST',
+            body: "category=map&action=get_all",
+            headers: {
+                'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            }
+        };         
+        return fetch(api_url, options)
+        .then(res => res.json())
+        .then(res => {
+            if(res.msg) return res.data
+            alert(res.msg)
+        })
 }

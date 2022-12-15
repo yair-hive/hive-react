@@ -30,37 +30,40 @@ function Map_cont(){
                 }                
             }                         
         }
-        for(let seat of seats){ 
-            cells = cells.map((row)=>{
-                return row.map((cell)=>{
-                    if(cell.props){
-                        if(cell.props.row_number === Number(seat.row_num)){
-                            if(cell.props.col_number === Number(seat.col_num)){
-                                return <Seat key={cell.key} number={seat.seat_number} id={seat.id}/>                                       
-                            }
-                        }
-                    }
-                    return cell
-                })
-            })                   
-        }
-        for(let seat of seats){ 
-            for(let corrent_bel of belongs){
-                cells = cells.map((row)=>{
-                    return row.map((cell)=>{
-                        if(cell.props.id){                     
-                            if(corrent_bel.seat === cell.props.id){
-                                if(!cell.props.name){
-                                    var guest_name = corrent_bel.guest_first_name + " " + corrent_bel.guest_last_name
-                                    return <Seat key={cell.key} number={seat.seat_number} id={seat.id} name={guest_name} group={corrent_bel.guest_group}/>
-                                }
-                            }                                        
-                        }
-                        return cell
-                    })
-                })
-            }                   
-        } 
+        console.log(seats.length)
+        // if(seats && seats.length != 0){
+        //     for(let seat of seats){ 
+        //         cells = cells.map((row)=>{
+        //             return row.map((cell)=>{
+        //                 if(cell.props){
+        //                     if(cell.props.row_number === Number(seat.row_num)){
+        //                         if(cell.props.col_number === Number(seat.col_num)){
+        //                             return <Seat key={cell.key} number={seat.seat_number} id={seat.id}/>                                       
+        //                         }
+        //                     }
+        //                 }
+        //                 return cell
+        //             })
+        //         })                   
+        //     }
+        //     for(let seat of seats){ 
+        //         for(let corrent_bel of belongs){
+        //             cells = cells.map((row)=>{
+        //                 return row.map((cell)=>{
+        //                     if(cell.props.id){                     
+        //                         if(corrent_bel.seat === cell.props.id){
+        //                             if(!cell.props.name){
+        //                                 var guest_name = corrent_bel.guest_first_name + " " + corrent_bel.guest_last_name
+        //                                 return <Seat key={cell.key} number={seat.seat_number} id={seat.id} name={guest_name} group={corrent_bel.guest_group}/>
+        //                             }
+        //                         }                                        
+        //                     }
+        //                     return cell
+        //                 })
+        //             })
+        //         }                   
+        //     } 
+        // }
         return cells
     }
 
