@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
-import Map_test from "../Map_test/Map_test"
-import { get_map, get_seat, get_belongs } from "../../scripts/main"
+import Map_test from "../test/Map_test"
 import SelectionArea from "@viselect/react";
 import Cell from "../Cell/Cell"
 import Seat from "../Seat/Seat"
+import api from "../../scripts/api/api"
 
 function Map_cont(){
     const [rows, setRows] = useState(0)
@@ -13,7 +13,8 @@ function Map_cont(){
     const [seats, setSeats] = useState([])
     const [belongs, setBelongs] = useState([])
     const [selected, setSelected] = useState(new Set())
-
+    const [map_id, setMapId] = useState('')
+ 
     let {map_name} = useParams()
 
     const create_cells = ()=>{
@@ -30,7 +31,6 @@ function Map_cont(){
                 }                
             }                         
         }
-        console.log(seats.length)
         // if(seats && seats.length != 0){
         //     for(let seat of seats){ 
         //         cells = cells.map((row)=>{
@@ -88,42 +88,43 @@ function Map_cont(){
     };
 
     useEffect(()=>{
-        get_map(map_name).then((map_data)=>{
+        api.map.get(map_name)
+        .then((map_data)=>{
             if(rows !== map_data.rows_number){
                 setRows(map_data.rows_number)
             } 
             if(cols !== map_data.columns_number){
                 setCols(map_data.columns_number)
-            }         
+            } 
+            if(map_id !== map_data.id){
+                setMapId(map_data.id)
+            }        
         })
-        get_seat(map_name).then((seats_data)=>{
+    })
+    useEffect(()=>{
+        api.seat.get_all(map_id)
+        .then((seats_data)=>{
             if(seats.length !== seats_data.length){
                 setSeats(seats_data)
             }            
         })
-        get_belongs(map_name).then((belongs_data)=>{
-            if(belongs.length !== belongs_data.length){
-                setBelongs(belongs_data)
-            }           
-        })
-        var new_cells = create_cells()
-        if(cells.length !== new_cells.length){
-            setCells(new_cells)
-        }
-    })
+        // get_belongs(map_name).then((belongs_data)=>{
+        //     if(belongs.length !== belongs_data.length){
+        //         setBelongs(belongs_data)
+        //     }           
+        // })
+        // var new_cells = create_cells()
+        // if(cells.length !== new_cells.length){
+        //     setCells(new_cells)
+        // }
+    }, [map_id])
     useEffect(()=>{
         var new_cells = create_cells()
         setCells(new_cells)
     }, [selected])
     return (
-        <SelectionArea
-        className="container App-header"
-        onStart={onStart}
-        onMove={onMove}
-        selectables=".selectable"
-        >
-            <Map_test rows={rows} cols={cols} seats={seats} belongs={belongs} selected={selected} cells={cells}/>
-        </SelectionArea>)
+            <Map_test rows={rows} cols={cols} seats={seats}/>
+        )
 }
 
 export default Map_cont

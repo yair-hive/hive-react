@@ -8,7 +8,7 @@ class Seat extends React.Component{
             'ב': 'rgb(180, 25, 115)'
         }
         const NAME_BOX_STYLE = {
-            backgroundColor: GROUPS_COLOR[this.props.group]
+            backgroundColor: GROUPS_COLOR['א']
         }
         return (
             <div>
