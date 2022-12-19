@@ -16,7 +16,7 @@ export const seat = {
         // .then(res => alert(res))
         .then(res => res.json())
         .then((res)=>{
-            if(res.msg == 'ok') return res.data
+            if(res.msg === 'ok') return res.data
             alert(res.msg)
             return res.msg
         })
@@ -34,7 +34,7 @@ export const seat = {
         return fetch(api_url, options)
         .then(res => res.json())
         .then((res)=>{
-            if(res.msg == 'ok') return res.data
+            if(res.msg === 'ok') return res.data
             alert(res.msg)
             return res.msg
         })
@@ -52,7 +52,7 @@ export const seat = {
         return fetch(api_url, options)
         .then(res => res.json())
         .then((res)=>{
-            if(res.msg == 'ok') return res.data
+            if(res.msg === 'ok') return res.data
             alert(res.msg)
             return res.msg
         })
@@ -70,7 +70,7 @@ export const seat = {
         return fetch(api_url, options)
         .then(res => res.json())
         .then((res)=>{
-            if(res.msg == 'ok') return res.data
+            if(res.msg === 'ok') return res.data
             alert(res.msg)
             return res.msg
         })
@@ -99,7 +99,7 @@ export const seat = {
         return fetch(api_url, options)
         .then(res => res.json())
         .then((res)=>{
-            if(res.msg == 'ok') return
+            if(res.msg === 'ok') return
             alert(res.msg)
             return res.msg
         })
@@ -116,7 +116,7 @@ export const seat = {
         return fetch(api_url, options)
         .then(res => res.json())
         .then((res)=>{
-            if(res.msg == 'ok') return
+            if(res.msg === 'ok') return
             alert(res.msg)
             return res.msg
         })

@@ -7,6 +7,7 @@ export const tags = {
         const options = {
             method: 'POST',
             body: JSON.stringify(data_a),
+            credentials: 'include',
         }
         return fetch(api_url, options)
         // .then(res => res.text())
@@ -19,6 +20,7 @@ export const tags = {
         const options = {
             method: 'POST',
             body: JSON.stringify(data_a),
+            credentials: 'include',
         }
         return fetch(api_url, options)
         // .then(res => res.text())
@@ -31,6 +33,7 @@ export const tags = {
         const options = {
             method: 'POST',
             body: JSON.stringify(data_a),
+            credentials: 'include',
         }
         return fetch(api_url, options)
         // .then(res => res.text())

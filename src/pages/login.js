@@ -1,6 +1,6 @@
 import api from "../scripts/api/api"
 
-export default function(){
+export default function login(){
     const on = function(){
         var user_form = document.getElementById('user_form')
         var user_form_data = new FormData(user_form)

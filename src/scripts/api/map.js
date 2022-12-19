@@ -5,6 +5,7 @@ export const map = {
         const options = {
             method: 'POST',
             body: "category=map&action=get_all",
+            credentials: 'include',
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
             }
@@ -16,6 +17,7 @@ export const map = {
         const options = {
             method: 'POST',
             body: "category=map&action=get&map_name="+map_name,
+            credentials: 'include',
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
             }
@@ -26,7 +28,7 @@ export const map = {
         // .then(res => alert(res))
         .then(res => res.json())
         .then((res)=>{
-            if(res.msg == 'ok') return res.data[0]
+            if(res.msg === 'ok') return res.data[0]
             alert(res.msg)
             return res.msg
         })
@@ -40,6 +42,7 @@ export const map = {
         const options = {
             method: 'POST',
             body: JSON.stringify(data_a),
+            credentials: 'include',
             headers: {}
         }
         return fetch(api_url, options)

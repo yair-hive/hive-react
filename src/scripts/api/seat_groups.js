@@ -5,6 +5,7 @@ export const seat_groups = {
         const options = {
             method: 'POST',
             body: "category=seat_groups&action=create&name="+name+"&score="+score,
+            credentials: 'include',
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
             }
@@ -14,7 +15,7 @@ export const seat_groups = {
         .then(res => alert(res))
         // .then(res => res.json())
         // .then((res)=>{
-        //     if(res.msg == 'ok') return
+        //     if(res.msg === 'ok') return
         //     alert(res.msg)
         //     return res.msg
         // })
@@ -23,6 +24,7 @@ export const seat_groups = {
         const options = {
             method: 'POST',
             body: "category=seat_groups&action=get_id&name="+name,
+            credentials: 'include',
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
             }
@@ -32,7 +34,7 @@ export const seat_groups = {
         // .then(res => alert(res))
         .then(res => res.json())
         .then((res)=>{
-            if(res.msg == 'ok') return res.data[0].id
+            if(res.msg === 'ok') return res.data[0].id
             alert(res.msg)
             return res.msg
         })
@@ -41,6 +43,7 @@ export const seat_groups = {
         const options = {
             method: 'POST',
             body: "category=seat_groups&action=get_name&id="+id,
+            credentials: 'include',
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
             }
@@ -50,7 +53,7 @@ export const seat_groups = {
         .then(res => alert(res))
         // .then(res => res.json())
         // .then((res)=>{
-        //     if(res.msg == 'ok') return res.data
+        //     if(res.msg === 'ok') return res.data
         //     alert(res.msg)
         //     return res.msg
         // })
@@ -59,6 +62,7 @@ export const seat_groups = {
         const options = {
             method: 'POST',
             body: "category=seat_groups&action=get_groups_cols&map_id="+map_id,
+            credentials: 'include',
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
             }
@@ -68,7 +72,7 @@ export const seat_groups = {
         // .then(res => alert(res))
         .then(res => res.json())
         .then((res)=>{
-            if(res.msg == 'ok') return res.data
+            if(res.msg === 'ok') return res.data
             alert(res.msg)
             return res.msg
         })
@@ -77,6 +81,7 @@ export const seat_groups = {
         const options = {
             method: 'POST',
             body: "category=seat_groups&action=get_seats_cols&map_id="+map_id+"&group_name="+group_name,
+            credentials: 'include',
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
             }
@@ -86,7 +91,7 @@ export const seat_groups = {
         // .then(res => alert(res))
         .then(res => res.json())
         .then((res)=>{
-            if(res.msg == 'ok') return res.data
+            if(res.msg === 'ok') return res.data
             alert(res.msg)
             return res.msg
         })
@@ -95,6 +100,7 @@ export const seat_groups = {
         const options = {
             method: 'POST',
             body: "category=seat_groups&action=add_col&seat="+seat+"&group="+group+"&map="+map,
+            credentials: 'include',
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
             }
@@ -104,7 +110,7 @@ export const seat_groups = {
         // .then(res => alert(res))
         .then(res => res.json())
         .then((res)=>{
-            if(res.msg == 'ok') return
+            if(res.msg === 'ok') return
             alert(res.msg)
             return res.msg
         })
@@ -113,6 +119,7 @@ export const seat_groups = {
         const options = {
             method: 'POST',
             body: "category=seat_groups&action=add_ob&map="+map+"&name="+name+"&from_row="+from_row+"&from_col="+from_col+"&to_row="+to_row+"&to_col="+to_col,
+            credentials: 'include',
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
             }
@@ -122,7 +129,7 @@ export const seat_groups = {
         // .then(res => alert(res))
         .then(res => res.json())
         .then((res)=>{
-            if(res.msg == 'ok') return
+            if(res.msg === 'ok') return
             alert(res.msg)
             return res.msg
         })
@@ -131,6 +138,7 @@ export const seat_groups = {
         const options = {
             method: 'POST',
             body: "category=seat_groups&action=get_ob&map_id="+map_id,
+            credentials: 'include',
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
             }
@@ -140,7 +148,7 @@ export const seat_groups = {
         // .then(res => alert(res))
         .then(res => res.json())
         .then((res)=>{
-            if(res.msg == 'ok') return res.data
+            if(res.msg === 'ok') return res.data
             alert(res.msg)
             return res.msg
         })
@@ -149,6 +157,7 @@ export const seat_groups = {
         const options = {
             method: 'POST',
             body: "category=seat_groups&action=add_tag&seat="+seat+"&group="+group+"&map="+map,
+            credentials: 'include',
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
             }
@@ -158,7 +167,7 @@ export const seat_groups = {
         // .then(res => alert(res))
         .then(res => res.json())
         .then((res)=>{
-            if(res.msg == 'ok') return
+            if(res.msg === 'ok') return
             alert(res.msg)
             return res.msg
         })
@@ -167,6 +176,7 @@ export const seat_groups = {
         const options = {
             method: 'POST',
             body: "category=seat_groups&action=get_groups_tags&map_id="+map_id,
+            credentials: 'include',
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
             }
@@ -176,7 +186,7 @@ export const seat_groups = {
         // .then(res => alert(res))
         .then(res => res.json())
         .then((res)=>{
-            if(res.msg == 'ok') return res.data
+            if(res.msg === 'ok') return res.data
             alert(res.msg)
             return res.msg
         })
@@ -185,6 +195,7 @@ export const seat_groups = {
         const options = {
             method: 'POST',
             body: "category=seat_groups&action=get_seats_tags&map_id="+map_id+"&group_name="+group_name,
+            credentials: 'include',
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
             }
@@ -194,7 +205,7 @@ export const seat_groups = {
         // .then(res => alert(res))
         .then(res => res.json())
         .then((res)=>{
-            if(res.msg == 'ok') return res.data
+            if(res.msg === 'ok') return res.data
             alert(res.msg)
             return res.msg
         })
@@ -203,6 +214,7 @@ export const seat_groups = {
         const options = {
             method: 'POST',
             body: "category=seat_groups&action=update_tag_color&color="+color+"&id="+id,
+            credentials: 'include',
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
             }
@@ -219,6 +231,7 @@ export const seat_groups = {
         const options = {
             method: 'POST',
             body: "category=seat_groups&action=update_tag_name&name="+name+"&id="+id,
+            credentials: 'include',
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
             }
@@ -235,6 +248,7 @@ export const seat_groups = {
         const options = {
             method: 'POST',
             body: "category=seat_groups&action=get_all_tags&map_id="+map_id,
+            credentials: 'include',
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
             }
@@ -244,7 +258,7 @@ export const seat_groups = {
         // .then(res => alert(res))
         .then(res => res.json())
         .then((res)=>{
-            if(res.msg == 'ok') return res.data
+            if(res.msg === 'ok') return res.data
             alert(res.msg)
             return res.msg
         })

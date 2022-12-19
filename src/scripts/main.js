@@ -14,7 +14,7 @@ exports.get_map = function(map_name){
     // .then(res => alert(res))
     .then(res => res.json())
     .then((res)=>{
-        if(res.msg == 'ok') return res.data[0]
+        if(res.msg === 'ok') return res.data[0]
         alert(res.msg)
         return res.msg
     })

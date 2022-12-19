@@ -35,6 +35,7 @@ export const user = {
         const options = {
             method: 'POST',
             body: JSON.stringify(data_a),
+            credentials: 'include',
             headers: {}
         }
         return fetch(api_url, options)
