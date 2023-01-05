@@ -11,7 +11,7 @@ function Maps_list(){
     get_maps().then((maps_list)=>{
         var key = 0
         for(let map of maps_list){
-            maps_array.push(<li key={key++}> <Link to={`${map}`}> {map} </Link></li>)
+            maps_array.push(<li key={key++}> <Link to={`${map.map_name}`}> {map.map_name} </Link></li>)
         }
         setMaps(maps_array)
     })

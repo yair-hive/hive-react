@@ -6,18 +6,28 @@ export const user = {
         const options = {
             method: 'POST',
             body: JSON.stringify(data),
-            credentials: 'include',
         };
         return fetch(api_url, options)
         // .then(res => res.text())
         // .then(res => console.log(res))
         .then(res => res.json())
     },
+    get_all_actions: ()=>{
+        var data = {category: 'sys', action: 'get_all_actions'}
+        const options = {
+            method: 'POST',
+            body: JSON.stringify(data),
+        };
+        return fetch(api_url, options)
+        // .then(res => res.text())
+        // .then(res => console.log(res))
+        .then(res => res.json())
+        .then((res) => console.log(res))
+    },
     get_all: ()=>{
         const options = {
             method: 'POST',
             body: "category=user&action=get_all",
-            credentials: 'include',
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
             }
@@ -35,13 +45,12 @@ export const user = {
         const options = {
             method: 'POST',
             body: JSON.stringify(data_a),
-            credentials: 'include',
             headers: {}
         }
         return fetch(api_url, options)
-        .then(res => res.text())
-        .then(res => console.log(res))
-        // .then(res => res.json())
+        // .then(res => res.text())
+        // .then(res => console.log(res))
+        .then(res => res.json())
     },
     sginup : (form_data)=>{
         var data = {
@@ -52,7 +61,7 @@ export const user = {
         const options = {
             method: 'POST',
             body: JSON.stringify(data_a),
-            credentials: 'include',
+            headers: {}
         }
         return fetch(api_url, options)
         // .then(res => res.text())
@@ -63,7 +72,6 @@ export const user = {
         const options = {
             method: 'POST',
             body: "category=user&action=add_permission&user_id="+user_id+"&permission="+permission,
-            credentials: 'include',
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
             }
@@ -76,7 +84,6 @@ export const user = {
         const options = {
             method: 'POST',
             body: "category=user&action=get_permissions_list",
-            credentials: 'include',
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
             }
@@ -89,12 +96,75 @@ export const user = {
         const options = {
             method: 'POST',
             body: "category=user&action=logout",
-            credentials: 'include',
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
             }
         };
         return fetch(api_url, options)
         .then(res => res.json())
-    }
+    },
+    create_group : (data)=>{
+        var param = {
+            category: 'user', 
+            action: 'create_group'
+        }
+        var data_a = Object.assign(param, data)
+        const options = {
+            method: 'POST',
+            body: JSON.stringify(data_a),
+            headers: {}
+        }
+        return fetch(api_url, options)
+        // .then(res => res.text())
+        // .then(res => console.log(res))
+        .then(res => res.json())
+    },
+    add_permission_to_group : (data)=>{
+        var param = {
+            category: 'user', 
+            action: 'add_permission_to_group'
+        }
+        var data_a = Object.assign(param, data)
+        const options = {
+            method: 'POST',
+            body: JSON.stringify(data_a),
+            headers: {}
+        }
+        return fetch(api_url, options)
+        // .then(res => res.text())
+        // .then(res => console.log(res))
+        .then(res => res.json())
+    },
+    add_user_to_group : (data)=>{
+        var param = {
+            category: 'user', 
+            action: 'add_user_to_group'
+        }
+        var data_a = Object.assign(param, data)
+        const options = {
+            method: 'POST',
+            body: JSON.stringify(data_a),
+            headers: {}
+        }
+        return fetch(api_url, options)
+        // .then(res => res.text())
+        // .then(res => console.log(res))
+        .then(res => res.json())
+    },
+    get_last_action : (data)=>{
+        var param = {
+            category: 'sys', 
+            action: 'get_last_action'
+        }
+        var data_a = Object.assign(param, data)
+        const options = {
+            method: 'POST',
+            body: JSON.stringify(data_a),
+            headers: {}
+        }
+        return fetch(api_url, options)
+        // .then(res => res.text())
+        // .then(res => console.log(res))
+        .then(res => res.json())
+    },
 }

@@ -5,10 +5,14 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, } from "react-router-dom";
 import Maps from './pages/Maps/Maps';
 import Nav_bar from './components/Nav_ber/Nav_bar';
+import { QueryClient, QueryClientProvider } from 'react-query';
+
+const queryClient = new QueryClient()
 
 function App() {
   return (
     <BrowserRouter>
+    <QueryClientProvider client={queryClient}>
       <div className="App">
         <header className="App-header">
           <Nav_bar />
@@ -21,6 +25,7 @@ function App() {
           </Routes>
         </div>
       </div>
+    </QueryClientProvider>
     </BrowserRouter>
 
   );

@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import Maps_list from "../../components/Maps_list/Maps_list";
-import Map_cont from "../../components/Map_cont/Map_cont";
+import Map_cont from "../../edit_map/map_cont";
 
 function Maps(){
     return (

@@ -16,15 +16,35 @@ export const seat = {
         // .then(res => alert(res))
         .then(res => res.json())
         .then((res)=>{
-            if(res.msg === 'ok') return res.data
+            if(res.msg == 'ok') return res.data
             alert(res.msg)
             return res.msg
         })
     },
-    get_belong: (seat_id)=>{
+    get_all_and_all: (map_id)=>{
         const options = {
             method: 'POST',
-            body: "category=seat&action=get_belong&seat_id="+seat_id,
+            body: "category=seat&action=get_all_and_all&map_id="+map_id,
+            credentials: 'include',
+            headers: {
+                'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            }
+        };
+          
+        return fetch(api_url, options)
+        // .then(res => res.text())
+        // .then(res => alert(res))
+        .then(res => res.json())
+        .then((res)=>{
+            if(res.msg == 'ok') return res.data
+            alert(res.msg)
+            return res.msg
+        })
+    },
+    get_belong: (map_id)=>{
+        const options = {
+            method: 'POST',
+            body: "category=seat&action=get_belong&map_id="+map_id,
             credentials: 'include',
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -34,7 +54,7 @@ export const seat = {
         return fetch(api_url, options)
         .then(res => res.json())
         .then((res)=>{
-            if(res.msg === 'ok') return res.data
+            if(res.msg == 'ok') return res.data
             alert(res.msg)
             return res.msg
         })
@@ -52,7 +72,7 @@ export const seat = {
         return fetch(api_url, options)
         .then(res => res.json())
         .then((res)=>{
-            if(res.msg === 'ok') return res.data
+            if(res.msg == 'ok') return res.data
             alert(res.msg)
             return res.msg
         })
@@ -70,7 +90,7 @@ export const seat = {
         return fetch(api_url, options)
         .then(res => res.json())
         .then((res)=>{
-            if(res.msg === 'ok') return res.data
+            if(res.msg == 'ok') return res.data
             alert(res.msg)
             return res.msg
         })
@@ -99,7 +119,7 @@ export const seat = {
         return fetch(api_url, options)
         .then(res => res.json())
         .then((res)=>{
-            if(res.msg === 'ok') return
+            if(res.msg == 'ok') return
             alert(res.msg)
             return res.msg
         })
@@ -114,9 +134,31 @@ export const seat = {
             }
         }
         return fetch(api_url, options)
+        // .then((res)=> res.text())
+        // .then((res)=> console.log(res))
         .then(res => res.json())
         .then((res)=>{
-            if(res.msg === 'ok') return
+            console.log(res)
+            // if(res.msg == 'ok') return
+            // alert(res.msg)
+            // return res.msg
+        })
+    },
+    delete: (seat_id)=>{
+        const options = {
+            method: 'POST',
+            body: "category=seat&action=delete&seat_id="+seat_id,
+            credentials: 'include',
+            headers: {
+                'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            }
+        }
+        return fetch(api_url, options)
+        // .then(res => res.text())
+        // .then(res => console.log(res))
+        .then(res => res.json())
+        .then((res)=>{
+            if(res.msg == 'ok') return
             alert(res.msg)
             return res.msg
         })
