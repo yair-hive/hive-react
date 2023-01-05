@@ -4,6 +4,7 @@ export const seat_groups = {
     get_groups_cols: (map_id)=>{
         const options = {
             method: 'POST',
+            credentials: 'include',
             body: "category=seat_groups&action=get_groups_cols&map_id="+map_id,
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -22,6 +23,7 @@ export const seat_groups = {
     get_seats_cols: (map_id, group_name)=>{
         const options = {
             method: 'POST',
+            credentials: 'include',
             body: "category=seat_groups&action=get_seats_cols&map_id="+map_id+"&group_name="+group_name,
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -40,6 +42,7 @@ export const seat_groups = {
     add_col: (seat, group, map)=>{
         const options = {
             method: 'POST',
+            credentials: 'include',
             body: "category=seat_groups&action=add_col&seat="+seat+"&group="+group+"&map="+map,
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',

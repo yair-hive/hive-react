@@ -5,6 +5,7 @@ export const user = {
         var data = {category: 'user', action: 'get'}
         const options = {
             method: 'POST',
+            credentials: 'include',
             body: JSON.stringify(data),
         };
         return fetch(api_url, options)
@@ -16,6 +17,7 @@ export const user = {
         var data = {category: 'sys', action: 'get_all_actions'}
         const options = {
             method: 'POST',
+            credentials: 'include',
             body: JSON.stringify(data),
         };
         return fetch(api_url, options)
@@ -27,6 +29,7 @@ export const user = {
     get_all: ()=>{
         const options = {
             method: 'POST',
+            credentials: 'include',
             body: "category=user&action=get_all",
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -44,6 +47,7 @@ export const user = {
         var data_a = Object.assign(data, form_data)
         const options = {
             method: 'POST',
+            credentials: 'include',
             body: JSON.stringify(data_a),
             headers: {}
         }
@@ -60,6 +64,7 @@ export const user = {
         var data_a = Object.assign(data, form_data)
         const options = {
             method: 'POST',
+            credentials: 'include',
             body: JSON.stringify(data_a),
             headers: {}
         }
@@ -71,6 +76,7 @@ export const user = {
     add_permission : (user_id, permission)=>{
         const options = {
             method: 'POST',
+            credentials: 'include',
             body: "category=user&action=add_permission&user_id="+user_id+"&permission="+permission,
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -83,6 +89,7 @@ export const user = {
     get_permissions_list : ()=>{
         const options = {
             method: 'POST',
+            credentials: 'include',
             body: "category=user&action=get_permissions_list",
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -95,6 +102,7 @@ export const user = {
     logout : ()=>{
         const options = {
             method: 'POST',
+            credentials: 'include',
             body: "category=user&action=logout",
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -111,6 +119,7 @@ export const user = {
         var data_a = Object.assign(param, data)
         const options = {
             method: 'POST',
+            credentials: 'include',
             body: JSON.stringify(data_a),
             headers: {}
         }
@@ -127,6 +136,7 @@ export const user = {
         var data_a = Object.assign(param, data)
         const options = {
             method: 'POST',
+            credentials: 'include',
             body: JSON.stringify(data_a),
             headers: {}
         }
@@ -143,6 +153,7 @@ export const user = {
         var data_a = Object.assign(param, data)
         const options = {
             method: 'POST',
+            credentials: 'include',
             body: JSON.stringify(data_a),
             headers: {}
         }
@@ -159,6 +170,7 @@ export const user = {
         var data_a = Object.assign(param, data)
         const options = {
             method: 'POST',
+            credentials: 'include',
             body: JSON.stringify(data_a),
             headers: {}
         }

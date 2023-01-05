@@ -4,6 +4,7 @@ export const map = {
     get_all: ()=>{
         const options = {
             method: 'POST',
+            credentials: 'include',
             body: "category=map&action=get_all",
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -15,6 +16,7 @@ export const map = {
     delete_row: (row, map_id)=>{
         const options = {
             method: 'POST',
+            credentials: 'include',
             body: "category=map&action=delete_row&row="+row+"&map_id="+map_id,
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -29,6 +31,7 @@ export const map = {
     delete_col: (col, map_id)=>{
         const options = {
             method: 'POST',
+            credentials: 'include',
             body: "category=map&action=delete_col&col="+col+"&map_id="+map_id,
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -42,6 +45,7 @@ export const map = {
     add_row: (row, map_id)=>{
         const options = {
             method: 'POST',
+            credentials: 'include',
             body: "category=map&action=add_row&row="+row+"&map_id="+map_id,
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -56,6 +60,7 @@ export const map = {
     add_col: (col, map_id)=>{
         const options = {
             method: 'POST',
+            credentials: 'include',
             body: "category=map&action=add_col&col="+col+"&map_id="+map_id,
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -69,6 +74,7 @@ export const map = {
     get: (map_name)=>{
         const options = {
             method: 'POST',
+            credentials: 'include',
             body: "category=map&action=get&map_name="+map_name,
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -93,6 +99,7 @@ export const map = {
         var data_a = Object.assign(data, form_data)
         const options = {
             method: 'POST',
+            credentials: 'include',
             body: JSON.stringify(data_a),
             headers: {}
         }

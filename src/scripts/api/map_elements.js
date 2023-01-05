@@ -4,6 +4,7 @@ export const map_elements = {
     add: (name, from_row, from_col, to_row, to_col, map)=>{
         const options = {
             method: 'POST',
+            credentials: 'include',
             body: "category=map_element&action=add&map="+map+"&name="+name+"&from_row="+from_row+"&from_col="+from_col+"&to_row="+to_row+"&to_col="+to_col,
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -22,6 +23,7 @@ export const map_elements = {
     get: (map_id)=>{
         const options = {
             method: 'POST',
+            credentials: 'include',
             body: "category=map_element&action=get&map_id="+map_id,
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -40,6 +42,7 @@ export const map_elements = {
     delete: (ob_id)=>{
         const options = {
             method: 'POST',
+            credentials: 'include',
             body: "category=map_element&action=delete&ob_id="+ob_id,
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',

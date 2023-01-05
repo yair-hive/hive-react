@@ -3,6 +3,7 @@ const api_url = 'http://localhost/hive-php/php/api.php'
 const options = {
     method: 'POST',
     credentials: 'include',
+    
 }; 
 
 export const guest = {
@@ -67,6 +68,7 @@ export const guest = {
     update: (data, map_id, guest_id)=>{
         const options = {
             method: 'POST',
+            credentials: 'include',
             body: "category=guest&action=update&guest_id="+guest_id+"&first_name="+data[0]+"&last_name="+data[1]+"&guest_group="+data[2]+"&score="+data[3]+"&map_id="+map_id,
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -85,8 +87,9 @@ export const guest = {
     create_belong: (selected_guest_id, selected_seat_class, map_id)=>{
         const options = {
             method: 'POST',
-            body: "category=guest&action=add&guest_id="+selected_guest_id+"&seat_id="+selected_seat_class+"&map_id="+map_id,
             credentials: 'include',
+            body: "category=guest&action=add&guest_id="+selected_guest_id+"&seat_id="+selected_seat_class+"&map_id="+map_id,
+            
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
             }
@@ -99,8 +102,9 @@ export const guest = {
     update_belong: (selected_guest_id, selected_seat_class, map_id)=>{
         const options = {
             method: 'POST',
-            body: "category=guest&action=update_belong&guest_id="+selected_guest_id+"&seat_id="+selected_seat_class+"&map_id="+map_id,
             credentials: 'include',
+            body: "category=guest&action=update_belong&guest_id="+selected_guest_id+"&seat_id="+selected_seat_class+"&map_id="+map_id,
+            
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
             }
@@ -112,8 +116,9 @@ export const guest = {
         data = JSON.stringify(data)
         const options = {
             method: 'POST',
-            body: "category=guest&action=update_belong_multiple&data="+data+"&map_id="+map_id,
             credentials: 'include',
+            body: "category=guest&action=update_belong_multiple&data="+data+"&map_id="+map_id,
+            
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
             }
@@ -126,6 +131,7 @@ export const guest = {
     delete: (guest_id)=>{
         const options = {
             method: 'POST',
+            credentials: 'include',
             body: "category=guest&action=delete&guest_id="+guest_id,
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -137,8 +143,9 @@ export const guest = {
     get_all_groups: (map_id)=>{
         const options = {
             method: 'POST',
-            body: "category=guest&action=get_all_groups&map_id="+map_id,
             credentials: 'include',
+            body: "category=guest&action=get_all_groups&map_id="+map_id,
+            
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
             }
@@ -157,6 +164,7 @@ export const guest = {
     delete_group: (group_id)=>{
         const options = {
             method: 'POST',
+            credentials: 'include',
             body: "category=guest&action=delete_group&group_id="+group_id,
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -175,6 +183,7 @@ export const guest = {
     update_group_color: (group_id, color)=>{
         const options = {
             method: 'POST',
+            credentials: 'include',
             body: "category=guest&action=update_group_color&group_id="+group_id+"&color="+color,
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -193,6 +202,7 @@ export const guest = {
     update_group_score: (group_id, score)=>{
         const options = {
             method: 'POST',
+            credentials: 'include',
             body: "category=guest&action=update_group_score&group_id="+group_id+"&score="+score,
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -211,6 +221,7 @@ export const guest = {
     update_guest_score: (guest_id, score)=>{
         const options = {
             method: 'POST',
+            credentials: 'include',
             body: "category=guest&action=update_guest_score&guest_id="+guest_id+"&score="+score,
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',

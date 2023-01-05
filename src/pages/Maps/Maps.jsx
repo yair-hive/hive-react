@@ -1,12 +1,12 @@
 import { Routes, Route } from "react-router-dom";
 import Maps_list from "../../components/Maps_list/Maps_list";
-import Map_cont from "../../edit_map/map_cont";
+import MapContainer from "../../edit_map/map_container";
 
 function Maps(){
     return (
         <Routes>
             <Route path="/" element={<Maps_list />} />
-            <Route path="/:map_name" element={<Map_cont />}/>
+            <Route path="/:map_name" element={<MapContainer />}/>
         </Routes>
     )
 }

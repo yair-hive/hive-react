@@ -1,29 +1,83 @@
-.App {
-  height: 100%;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-}
-.main-bord{
-  height: 100%;
-  overflow: auto;
-  background-color: rgb(54, 42, 42);
-}
 html, body, #root{
+  width: 100%;
   height: 100%;
-}
-body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-size: 13px;
+  font-family: sans-serif;
+}
+.content{
+  z-index: 30;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-rows: 8% 92%;
+  grid-template-columns: 78% 22%;
+}
+.top_bar{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: chartreuse;
+  grid-column-start: 1;
+  grid-column-end: 3;
+  z-index: 20;
+  font-size: 40px;
+  margin: 0;
+  padding: 0;
+  background-color: rgb(130, 101, 211);
+}
+.top_bar > ul{
+  width: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.user_icon{
+  padding-left: 50px;
+  user-select: none;
+}
+.user_icon:hover{
+  cursor: pointer;
+  color: rgb(241, 210, 151);
+}
+.map_container{
+  padding: 30px;
+  user-select: none;
+  display: inline-block;
+  align-items: center;
+  justify-content: center;
+}
+.main_bord{
+  display: block;
+  overflow: auto;
+  justify-content: center;
+  align-items: flex-start;
+  background-color: rgb(54, 48, 45);
+}
+.side_menu{
+  z-index: 20;
+  padding: 10px;
+  background-color: rgb(120, 140, 228);
+}
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
 }
 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+}
 
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}

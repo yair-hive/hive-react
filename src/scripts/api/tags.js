@@ -4,6 +4,7 @@ export const tags = {
     add: (seat, group, map)=>{
         const options = {
             method: 'POST',
+            credentials: 'include',
             body: "category=tag&action=add_tag&seat="+seat+"&group="+group+"&map="+map,
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -22,6 +23,7 @@ export const tags = {
     get_seats_tags: (map_id, group_name)=>{
         const options = {
             method: 'POST',
+            credentials: 'include',
             body: "category=tag&action=get_belong&map_id="+map_id+"&group_name="+group_name,
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -40,6 +42,7 @@ export const tags = {
     get_all_belongs: (map_id)=>{
         const options = {
             method: 'POST',
+            credentials: 'include',
             body: "category=tag&action=get_all_belongs&map_id="+map_id,
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -58,6 +61,7 @@ export const tags = {
     update_color: (id, color)=>{
         const options = {
             method: 'POST',
+            credentials: 'include',
             body: "category=tag&action=update_tag_color&color="+color+"&id="+id,
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -74,6 +78,7 @@ export const tags = {
     update_name: (id, name)=>{
         const options = {
             method: 'POST',
+            credentials: 'include',
             body: "category=tag&action=update_tag_name&name="+name+"&id="+id,
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -92,6 +97,7 @@ export const tags = {
         var data_a = Object.assign(action_data, data)
         const options = {
             method: 'POST',
+            credentials: 'include',
             body: JSON.stringify(data_a),
         }
         return fetch(api_url, options)
@@ -104,6 +110,7 @@ export const tags = {
         var data_a = Object.assign(action_data, data)
         const options = {
             method: 'POST',
+            credentials: 'include',
             body: JSON.stringify(data_a),
         }
         return fetch(api_url, options)
@@ -116,6 +123,7 @@ export const tags = {
         var data_a = Object.assign(action_data, data)
         const options = {
             method: 'POST',
+            credentials: 'include',
             body: JSON.stringify(data_a),
         }
         return fetch(api_url, options)
@@ -128,6 +136,7 @@ export const tags = {
         var data_a = Object.assign(action_data, data)
         const options = {
             method: 'POST',
+            credentials: 'include',
             body: JSON.stringify(data_a),
         }
         return fetch(api_url, options)

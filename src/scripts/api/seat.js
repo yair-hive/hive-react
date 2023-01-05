@@ -4,8 +4,9 @@ export const seat = {
     get_all: (map_id)=>{
         const options = {
             method: 'POST',
-            body: "category=seat&action=get_all&map_id="+map_id,
             credentials: 'include',
+            body: "category=seat&action=get_all&map_id="+map_id,
+            
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
             }
@@ -24,8 +25,9 @@ export const seat = {
     get_all_and_all: (map_id)=>{
         const options = {
             method: 'POST',
-            body: "category=seat&action=get_all_and_all&map_id="+map_id,
             credentials: 'include',
+            body: "category=seat&action=get_all_and_all&map_id="+map_id,
+            
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
             }
@@ -44,8 +46,9 @@ export const seat = {
     get_belong: (map_id)=>{
         const options = {
             method: 'POST',
-            body: "category=seat&action=get_belong&map_id="+map_id,
             credentials: 'include',
+            body: "category=seat&action=get_belong&map_id="+map_id,
+            
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
             }
@@ -62,8 +65,9 @@ export const seat = {
     get_number: (seat_id)=>{
         const options = {
             method: 'POST',
-            body: "category=seat&action=get_number&seat_id="+seat_id,
             credentials: 'include',
+            body: "category=seat&action=get_number&seat_id="+seat_id,
+            
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
             }
@@ -80,8 +84,9 @@ export const seat = {
     delete_belong: (seat_id)=>{
         const options = {
             method: 'POST',
-            body: "category=seat&action=delete_belong&seat_id="+seat_id,
             credentials: 'include',
+            body: "category=seat&action=delete_belong&seat_id="+seat_id,
+            
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
             }
@@ -98,8 +103,9 @@ export const seat = {
     create_number: (seat_id, seat_number)=>{
         const options = {
             method: 'POST',
-            body: "category=seat&action=add_number&seat_id="+seat_id+"&seat_number="+seat_number,
             credentials: 'include',
+            body: "category=seat&action=add_number&seat_id="+seat_id+"&seat_number="+seat_number,
+            
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
             }
@@ -110,8 +116,9 @@ export const seat = {
     create: (map_id, row, col)=>{
         const options = {
             method: 'POST',
-            body: "category=seat&action=create&map_id="+map_id+"&row="+row+"&col="+col,
             credentials: 'include',
+            body: "category=seat&action=create&map_id="+map_id+"&row="+row+"&col="+col,
+            
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
             }
@@ -127,8 +134,9 @@ export const seat = {
     create_multiple: (map_id, data)=>{
         const options = {
             method: 'POST',
-            body: "category=seat&action=create_multiple&map_id="+map_id+"&data="+data,
             credentials: 'include',
+            body: "category=seat&action=create_multiple&map_id="+map_id+"&data="+data,
+            
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
             }
@@ -147,8 +155,9 @@ export const seat = {
     delete: (seat_id)=>{
         const options = {
             method: 'POST',
-            body: "category=seat&action=delete&seat_id="+seat_id,
             credentials: 'include',
+            body: "category=seat&action=delete&seat_id="+seat_id,
+            
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
             }

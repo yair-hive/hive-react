@@ -72,8 +72,7 @@ function Map(){
     }
 
     if(seats_res.data && belongs_res.data && guests_res.data && guests_groups_res.data){
-        return (<div className="map-container">
-            {/* {console.log(map_res.data)} */}
+        return (
         <div id="map" className="map" style={{'--map-rows' : map_res.data.rows_number, '--map-cols' : map_res.data.columns_number}}> 
             {create_cells().map(cell => {
                 var new_guests = {} 
@@ -99,7 +98,6 @@ function Map(){
                     return <Cell row_number={cell.row} col_number={cell.col} key={cell.key}/>
                 }                  
             })} 
-        </div>
         </div>)
     }
     // return (<>

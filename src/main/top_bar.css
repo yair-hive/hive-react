@@ -1,0 +1,24 @@
+.nav_bar{
+    background-color: thistle;
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    height: 50px;
+}
+.links > li{
+    display: inline-block;
+    padding: 0px 20px;
+}
+.logo{
+    display: flex;
+    align-items: center;
+    margin: 0px 40px;
+    padding: 0px 30px;
+    color: rgb(109, 101, 221);
+    font-weight: 600;
+    font-size: 40px;
+    background-color: aqua;
+}
+li{
+    background-color: coral;
+}

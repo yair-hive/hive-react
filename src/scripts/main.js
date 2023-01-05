@@ -3,6 +3,7 @@ const api_url = 'http://localhost/hive-php/php/api.php'
 exports.get_map = function(map_name){
     const options = {
         method: 'POST',
+        credentials: 'include',
         body: "category=map&action=get&map_name="+map_name,
         headers: {
             'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -22,6 +23,7 @@ exports.get_map = function(map_name){
 exports.get_seat = function(map_name){
     const options = {
         method: 'POST',
+        credentials: 'include',
         body: "action=get_seats&map_name="+map_name,
         headers: {
             'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -37,6 +39,7 @@ exports.get_seat = function(map_name){
 exports.get_guests = function(){
     const options = {
         method: 'POST',
+        credentials: 'include',
         body: "action=get_guests_names",
         headers: {
             'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -51,6 +54,7 @@ exports.get_guests = function(){
 exports.get_belongs = function(map_name){
     const options = {
         method: 'POST',
+        credentials: 'include',
         body: "action=get_guest_seat_num&map_name="+map_name,
         headers: {
             'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -65,6 +69,7 @@ exports.get_belongs = function(map_name){
 exports.get_maps = ()=>{
         const options = {
             method: 'POST',
+            credentials: 'include',
             body: "category=map&action=get_all",
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
