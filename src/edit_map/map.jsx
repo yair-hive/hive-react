@@ -5,7 +5,6 @@ import Seat from './seat'
 import api from '../scripts/api/api'
 
 function Map(props){
-    // console.log(props)
     let {map_name} = useParams()
 
     const  map_res  = useQuery(['get_map', map_name], async ()=>{

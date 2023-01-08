@@ -20,3 +20,6 @@ a:-webkit-any-link{
 .hive_button:hover{
     background-color: #7a93b9;
 }
+.hive_button.active{
+    background-color: rgb(91, 209, 130);;
+}

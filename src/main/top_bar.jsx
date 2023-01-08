@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import api from '../scripts/api/api';
 import { useState } from 'react';
 import PopUp from '../hive_elements/pop_up';
-import Maps_list from '../components/Maps_list/Maps_list';
+import Maps_list from '../components/maps_list';
 import HiveButton from '../hive_elements/hive_button';
 
 function TopBar(){

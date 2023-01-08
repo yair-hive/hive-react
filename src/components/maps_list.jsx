@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 import { useQuery } from "react-query"
-import api from "../../scripts/api/api"
+import api from "../scripts/api/api"
 
 
 function Maps_list(){
