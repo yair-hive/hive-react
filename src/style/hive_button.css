@@ -1,0 +1,22 @@
+a:-webkit-any-link{
+    text-decoration: none;
+}
+.hive_button{
+    text-decoration: none;
+    display: block;
+    border-radius: 5px;
+    user-select: none;
+    cursor: pointer;
+    text-decoration: none;
+    color: black;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 10px;
+    margin: 5px;
+    border: solid 0.5px rgb(87, 87, 87);
+    background-color: rgb(119, 224, 224);
+}
+.hive_button:hover{
+    background-color: #7a93b9;
+}

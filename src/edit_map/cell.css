@@ -5,6 +5,9 @@
     border-radius: 0.25rem;
     background: #323a46;
 }
-.selected{
-    background: #5f9efc;
-}
+.cell.selected{
+    border-style: solid;
+    border-width: 0.1px;
+    border-color: #7a8392;
+    background: #555b66;
+} 

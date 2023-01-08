@@ -17,10 +17,9 @@ function Cell(props){
         <div className={class_name_string} 
         cell-row = {props.row_number} 
         cell-col = {props.col_number}
-        index={props.index}> 
+        cell_index={props.index}> 
         </div>
     )
-    console.log(props)
 }
 
 export default Cell

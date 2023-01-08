@@ -4,33 +4,34 @@ import Cell from './cell'
 import Seat from './seat'
 import api from '../scripts/api/api'
 
-function Map(){
+function Map(props){
+    // console.log(props)
     let {map_name} = useParams()
 
-    const  map_res  = useQuery('get_map', async ()=>{
+    const  map_res  = useQuery(['get_map', map_name], async ()=>{
         return await api.map.get(map_name)
     })
 
     const map_id = map_res.data?.id
 
-    const seats_res = useQuery('get_seats', async ()=>{
+    const seats_res = useQuery(['get_seats', map_name], async ()=>{
         return await api.seat.get_all(map_id)
     }, {
         enabled: !!map_id,
     })
 
-    const belongs_res = useQuery('get_belongs', async ()=>{
+    const belongs_res = useQuery(['get_belongs', map_name], async ()=>{
         return await api.seat.get_belong(map_id)
     }, {
         enabled: !!map_id,
     })
 
-    const guests_res = useQuery('get_guests', async ()=>{
+    const guests_res = useQuery(['get_guests', map_name], async ()=>{
         return await api.guest.get_all({map_id: map_id})
     }, {
         enabled: !!map_id,
     })
-    const guests_groups_res = useQuery('guests_groups', async ()=>{
+    const guests_groups_res = useQuery(['guests_groups', map_name], async ()=>{
         return await api.guest.get_all_groups(map_id)
     }, {
         enabled: !!map_id,
@@ -71,7 +72,7 @@ function Map(){
         }
     }
 
-    if(seats_res.data && belongs_res.data && guests_res.data && guests_groups_res.data){
+    if(map_res.data && seats_res.data && belongs_res.data && guests_res.data && guests_groups_res.data){
         return (
         <div id="map" className="map" style={{'--map-rows' : map_res.data.rows_number, '--map-cols' : map_res.data.columns_number}}> 
             {create_cells().map(cell => {
@@ -89,17 +90,26 @@ function Map(){
                     var color = null
                     if(cell.seat.belong) {
                         var guest = new_guests[cell.seat.belong]
-                        guest_name = guest.last_name + ' ' + guest.first_name
-                        if(guest.guest_group) color = new_groups[guest.guest_group].color
+                        if(guest){
+                            guest_name = guest.last_name + ' ' + guest.first_name
+                            if(guest.guest_group) color = new_groups[guest.guest_group].color
+                        }
                     }
                     // console.log(guest_name)
                     return <Seat key={cell.key} number={cell.seat.seat_number} name={guest_name} color = {color}/>
                 }else{
-                    return <Cell row_number={cell.row} col_number={cell.col} key={cell.key}/>
+                    return <Cell 
+                        row_number={cell.row} 
+                        col_number={cell.col} 
+                        key={cell.key} 
+                        index={cell.key} 
+                        selectable={true}
+                    />
                 }                  
             })} 
         </div>)
     }
+    return 'loading ...'
     // return (<>
     //     rop {console.log(map_res.data)}
     // </>)
