@@ -1,4 +1,4 @@
-import "./seat.css"
+import "../style/seat.css"
 
 function Seat(props){
     var font_size = '15px'

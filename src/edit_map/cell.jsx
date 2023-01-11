@@ -1,4 +1,4 @@
-import "./cell.css"
+import "../style/cell.css"
 
 function Cell(props){
     var class_rows = `row-${props.row_number}`

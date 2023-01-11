@@ -1,4 +1,4 @@
-import './top_bar.css'
+import '../style/top_bar.css'
 import { useQuery } from 'react-query'
 import { Link } from "react-router-dom";
 import api from '../scripts/api/api';

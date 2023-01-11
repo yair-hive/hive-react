@@ -12,6 +12,9 @@ table {
     table-layout: fixed;
     margin: 5px;
 }
+.td_x{
+    background-color: red;
+}
 th {
     border: 1px solid black;
     background-color: gray;
@@ -67,4 +70,10 @@ td > input{
 }
 [belong = 'no belong'] > .seat_num{
     background-color: grey;
+}
+td.seat_number{
+    background-color: gray;
+}
+.as_number{
+    background-color: green;
 }

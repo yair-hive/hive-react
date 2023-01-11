@@ -12,7 +12,8 @@
 }
 .num_box{
     border-radius: 0.25rem 0.25rem 0 0;
-    background-color: rgba(0, 214, 214, 0.7);
+    background-color: rgba(76, 129, 129, 0.8);
+    color: white;
 }
 .name_box{
     display: flex;

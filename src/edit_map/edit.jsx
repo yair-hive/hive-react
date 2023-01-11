@@ -4,7 +4,7 @@ import Cell from './cell'
 import Seat from './seat'
 import api from '../scripts/api/api'
 
-function Map(){
+function MapEdit(){
     let {map_name} = useParams()
 
     const  map_res  = useQuery(['get_map', map_name], async ()=>{
@@ -17,27 +17,23 @@ function Map(){
         return await api.seat.get_all(map_id)
     }, {
         enabled: !!map_id,
-        refetchOnMount: false
     })
 
     const belongs_res = useQuery(['get_belongs', map_name], async ()=>{
         return await api.seat.get_belong(map_id)
     }, {
         enabled: !!map_id,
-        refetchOnMount: false
     })
 
     const guests_res = useQuery(['get_guests', map_name], async ()=>{
         return await api.guest.get_all({map_id: map_id})
     }, {
         enabled: !!map_id,
-        refetchOnMount: false
     })
     const guests_groups_res = useQuery(['guests_groups', map_name], async ()=>{
         return await api.guest.get_all_groups(map_id)
     }, {
         enabled: !!map_id,
-        refetchOnMount: false
     })
 
     const create_cells = function(){
@@ -78,7 +74,7 @@ function Map(){
 
     if(map_res.data && seats_res.data && belongs_res.data && guests_res.data && guests_groups_res.data){
         return (
-        <div id="map" className="map" style={{'--map-rows' : map_res.data.rows_number, '--map-cols' : map_res.data.columns_number}}> 
+        <div id="map" className="map" style={ {'--map-rows' : map_res.data.rows_number, '--map-cols' : map_res.data.columns_number}}> 
             {create_cells().map(cell => {
                 var new_guests = {} 
                 guests_res.data.map(gue => {
@@ -118,4 +114,4 @@ function Map(){
     return 'loading ...'
 }
 
-export default Map
+export default MapEdit

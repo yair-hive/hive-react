@@ -1,8 +1,11 @@
-import SelectionArea, {SelectionEvent} from '@viselect/react';
-import "./map_cont.css"
+import SelectionArea from '@viselect/react';
+import { useParams } from 'react-router-dom';
+import "../style/map_cont.css"
+import MapEdit from './edit';
 import Map from "./map"
 
 function MapContainer(){
+    const {edit} = useParams()
     function onStart({event, selection}){
         if (!event.ctrlKey && !event.metaKey){
             selection.clearSelection();
@@ -13,13 +16,15 @@ function MapContainer(){
         added.forEach(ele => ele.classList.add('selected'))
         removed.forEach(ele => ele.classList.remove('selected'))
     }
+    var map = <Map></Map>
+    if(edit) map = <MapEdit></MapEdit>
     return (<SelectionArea
         selectables=".selectable"
         onStart={onStart}
         onMove={onMove}
         >
         <div className="map_container">
-            <Map></Map>
+           {map} 
         </div>
     </SelectionArea>)
 }
