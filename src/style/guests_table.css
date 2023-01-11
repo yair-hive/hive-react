@@ -65,15 +65,15 @@ td > input{
     padding-right: 5px;
     font-size: 14px;
 }
-[belong = 'belong'] > .seat_num{
-    background-color: green;
-}
-[belong = 'no belong'] > .seat_num{
-    background-color: grey;
-}
 td.seat_number{
     background-color: gray;
 }
 .as_number{
     background-color: green;
+}
+td[belong = 'belong']{
+    background-color: green;
+}
+td[belong = 'no belong']{
+    background-color: grey;
 }

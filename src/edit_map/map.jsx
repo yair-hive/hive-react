@@ -1,44 +1,12 @@
-import { useQuery } from 'react-query'
-import { useParams } from 'react-router-dom'
 import Cell from './cell'
 import Seat from './seat'
-import api from '../scripts/api/api'
 
-function Map(){
-    let {map_name} = useParams()
-
-    const  map_res  = useQuery(['get_map', map_name], async ()=>{
-        return await api.map.get(map_name)
-    })
-
-    const map_id = map_res.data?.id
-
-    const seats_res = useQuery(['get_seats', map_name], async ()=>{
-        return await api.seat.get_all(map_id)
-    }, {
-        enabled: !!map_id,
-        refetchOnMount: false
-    })
-
-    const belongs_res = useQuery(['get_belongs', map_name], async ()=>{
-        return await api.seat.get_belong(map_id)
-    }, {
-        enabled: !!map_id,
-        refetchOnMount: false
-    })
-
-    const guests_res = useQuery(['get_guests', map_name], async ()=>{
-        return await api.guest.get_all({map_id: map_id})
-    }, {
-        enabled: !!map_id,
-        refetchOnMount: false
-    })
-    const guests_groups_res = useQuery(['guests_groups', map_name], async ()=>{
-        return await api.guest.get_all_groups(map_id)
-    }, {
-        enabled: !!map_id,
-        refetchOnMount: false
-    })
+function Map(props){
+    const  map_res  = props.map_res
+    const seats_res = props.seats_res
+    const belongs_res = props.belongs_res 
+    const guests_res = props.guests_res
+    const guests_groups_res = props.guests_groups_res
 
     const create_cells = function(){
         // console.log(guests_res.data)

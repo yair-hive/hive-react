@@ -4,7 +4,7 @@ import api from '../scripts/api/api'
 import { useParams } from "react-router-dom"
 import TableRow from "./table_row"
 
-function GuestsTable(){
+function GuestsTable(props){
     let {map_name} = useParams()
 
     const  map_res  = useQuery(['get_map', map_name], async ()=>{
@@ -59,7 +59,7 @@ function GuestsTable(){
                 i++
                 var seat_id = false
                 if(new_belong[guest.id]) seat_id = new_belong[guest.id].seat
-                rows.push(<TableRow guest={guest} key={i} group={new_groups[guest.guest_group]} seat={new_seats[seat_id]}></TableRow>)
+                rows.push(<TableRow belongsStatus = {props.belongsStatus} guest={guest} key={i} group={new_groups[guest.guest_group]} seat={new_seats[seat_id]}></TableRow>)
             }
         }
         return rows

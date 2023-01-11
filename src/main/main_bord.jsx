@@ -7,11 +7,8 @@ import { Routes, Route, } from "react-router-dom";
 import MapContainer from '../edit_map/map_container';
 
 function MainBord(){
-    function onKeyDow(event){
-        console.log(event.code)
-    }
     return (
-        <div className='main_bord' onKeyDown={onKeyDow}>
+        <div className='main_bord'>
             <Routes>
                 <Route path='/' element={<Home/>} />
                 <Route path='/maps/:map_name/*' element={<MapContainer/>} />

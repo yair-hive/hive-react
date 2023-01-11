@@ -1,12 +1,14 @@
 function TableRow(props){
-    var seat_number, seat_td_class
+    var seat_number, belong
     if(props.seat) {
         seat_number = props.seat.seat_number
-        seat_td_class = 'as_number'
+        belong = 'belong'
     } 
+    if(props.seat && props.belongsStatus == 'לא משובצים') return
+    if(!props.seat && props.belongsStatus == 'משובצים') return
     return(
         <tr>
-            <td className={seat_td_class+' seat_number'}>{seat_number}</td>
+            <td className={'seat_number'} belong={belong}>{seat_number}</td>
             <td></td>
             <td>{props.guest.last_name}</td>
             <td>{props.guest.first_name}</td>
