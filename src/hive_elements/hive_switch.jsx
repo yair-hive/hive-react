@@ -34,7 +34,7 @@ function HiveSwitch(props){
     function create_elements(){
         var i = 0
         var class_name
-        return props.options.map(element => {
+        return props.options?.map(element => {
             var isActive = false
             if(element === intActive) isActive = true
             class_name = 'hive-switch-m'
