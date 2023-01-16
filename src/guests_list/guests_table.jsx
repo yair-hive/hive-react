@@ -70,14 +70,16 @@ function GuestsTable(props){
             var new_seat_tags = {}
             seat_tags_res.data.map(tag => {
                 new_seat_tags[tag.seat] = []
+                return tag
             })
             var new_tags = {}
             tags_res.data.map(tag => {
                 new_tags[tag.id] = tag
+                return tag
             })
             seat_tags_res.data.map(tag => {
                 var tag_id = tag.group_id
-                var tag_name = new_tags[tag_id].group_name
+                var tag_name = new_tags[tag_id]
                 new_seat_tags[tag.seat]?.push(tag_name)
             })
             for(let guest of guests_res.data){
@@ -87,11 +89,13 @@ function GuestsTable(props){
                 rows.push(<TableRow 
                         belongsStatus = {props.belongsStatus} 
                         groupsStatus = {props.groupsStatus}
+                        tagsStatus = {props.tagsStatus}
                         guest={guest} 
                         key={i} 
                         group={new_groups[guest.guest_group]} 
                         seat={new_seats[seat_id]}
                         tags = {new_seat_tags[seat_id]}
+                        tags_data = {new_tags}
                     />)
             }
         }

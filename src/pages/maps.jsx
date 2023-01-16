@@ -4,6 +4,7 @@ import MapContainer from "../edit_map/map_container";
 import api from '../scripts/api/api'
 import { useState } from "react";
 import HiveButton from "../hive_elements/hive_button";
+import "../style/side_menu.css"
 
 function Maps(){
 
