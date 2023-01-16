@@ -1,3 +1,5 @@
+import { useState } from 'react'
+import DropDown from '../hive_elements/dropDown'
 import Cell from './cell'
 import Seat from './seat'
 
@@ -7,6 +9,9 @@ function Map(props){
     const belongs_res = props.belongs_res 
     const guests_res = props.guests_res
     const guests_groups_res = props.guests_groups_res
+
+    const [dropDownStatus, setDropDownStatus] = useState(false)
+    const [dropDownPos, setDropDownPos] = useState(null)
 
     const create_cells = function(){
         // console.log(guests_res.data)
@@ -45,7 +50,8 @@ function Map(props){
     }
 
     if(map_res.data && seats_res.data && belongs_res.data && guests_res.data && guests_groups_res.data){
-        return (
+        return (<>
+                    <DropDown status={dropDownStatus} pos={dropDownPos}/>
         <div id="map" className="map" style={{'--map-rows' : map_res.data.rows_number, '--map-cols' : map_res.data.columns_number}}> 
             {create_cells().map(cell => {
                 var new_guests = {} 
@@ -70,7 +76,14 @@ function Map(props){
                         }
                     }
                     // console.log(guest_name)
-                    return <Seat key={cell.key} number={cell.seat.seat_number} name={guest_name} color = {color}/>
+                    return <Seat 
+                                key={cell.key} 
+                                number={cell.seat.seat_number} 
+                                name={guest_name} 
+                                color = {color}
+                                setDropDownStatus={setDropDownStatus}
+                                setDropDownPos = {setDropDownPos}
+                            />
                 }else{
                     return <Cell 
                         row_number={cell.row} 
@@ -81,7 +94,8 @@ function Map(props){
                     />
                 }                  
             })} 
-        </div>)
+        </div>
+        </>)
     }
     return 'loading ...'
 }

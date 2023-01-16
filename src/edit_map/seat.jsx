@@ -1,6 +1,8 @@
+import { useRef } from "react"
 import "../style/seat.css"
 
 function Seat(props){
+    const nameBoxRef = useRef(null)
     var font_size = '15px'
     if(props.name){
         if(props.name.length > 14) font_size = '11px'
@@ -18,6 +20,11 @@ function Seat(props){
             color = 'white'
         }
     }
+    function nameBoxOnClick(){
+        console.log('cl')
+        props.setDropDownStatus(true)
+        props.setDropDownPos(nameBoxRef.current.getBoundingClientRect())
+    }
     const NAME_BOX_STYLE = {
         backgroundColor: props.color,
         fontSize: font_size,
@@ -28,7 +35,7 @@ function Seat(props){
             <div className="num_box">
                 {props.number}    
             </div> 
-            <div className="name_box" style={NAME_BOX_STYLE}>
+            <div className="name_box" style={NAME_BOX_STYLE} ref={nameBoxRef} onClick={nameBoxOnClick}>
                 {props.name}
             </div>          
         </div>
