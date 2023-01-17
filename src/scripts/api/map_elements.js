@@ -1,4 +1,5 @@
-const api_url = 'http://localhost/hive-php/php/api.php'
+const parsedUrl = new URL(window.location.href)
+const api_url = "http://"+parsedUrl.hostname+'/hive-php/php/api.php'
 
 export const map_elements = {
     add: (name, from_row, from_col, to_row, to_col, map)=>{

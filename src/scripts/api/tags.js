@@ -1,4 +1,5 @@
-const api_url = 'http://localhost/hive-php/php/api.php'
+const parsedUrl = new URL(window.location.href)
+const api_url = "http://"+parsedUrl.hostname+'/hive-php/php/api.php'
 
 export const tags = {
     add: (seat, group, map)=>{
