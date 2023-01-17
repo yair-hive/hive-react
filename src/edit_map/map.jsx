@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import DropDown from '../hive_elements/dropDown'
+import AddGuestDropDown from './add_guest_drop_down'
 import Cell from './cell'
 import Seat from './seat'
 
@@ -51,7 +52,7 @@ function Map(props){
 
     if(map_res.data && seats_res.data && belongs_res.data && guests_res.data && guests_groups_res.data){
         return (<>
-                    <DropDown status={dropDownStatus} pos={dropDownPos}/>
+        <AddGuestDropDown status={dropDownStatus} pos={dropDownPos}/>
         <div id="map" className="map" style={{'--map-rows' : map_res.data.rows_number, '--map-cols' : map_res.data.columns_number}}> 
             {create_cells().map(cell => {
                 var new_guests = {} 

@@ -108,7 +108,7 @@ function Maps(){
 
     return (
         <>
-        <div className='main_bord'>
+        <div className='main_bord' id="main_bord">
             <MapContainer 
                 map_res = {map_res} 
                 seats_res = {seats_res} 

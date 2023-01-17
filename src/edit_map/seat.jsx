@@ -21,9 +21,8 @@ function Seat(props){
         }
     }
     function nameBoxOnClick(){
-        console.log('cl')
+        props.setDropDownPos(nameBoxRef.current)
         props.setDropDownStatus(true)
-        props.setDropDownPos(nameBoxRef.current.getBoundingClientRect())
     }
     const NAME_BOX_STYLE = {
         backgroundColor: props.color,
