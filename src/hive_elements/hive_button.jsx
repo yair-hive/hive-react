@@ -6,7 +6,9 @@ function HiveButton(props){
     if(props.className) class_name = class_name + ' ' + props.className
     var button_name = props.name
     var onClick = function(){
-        props.onClick(button_name)
+        if(props.onClick){
+            props.onClick(button_name)
+        }
     }
     return (
         <div name={props.name} className={class_name} onClick={onClick}>{props.children}</div>

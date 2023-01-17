@@ -16,6 +16,8 @@ function DropDown(props){
             var drop_down_top = parent.bottom
             var drop_down_width = parent_width + list_width_over
             var drop_down_left = parent.left - list_width_over_d 
+
+            console.log(drop_down_top)
             
             setStyle({
                 width : drop_down_width+'px',
@@ -31,18 +33,14 @@ function DropDown(props){
     
 
     useEffect(()=>{
-        if(props.pos){
-            document.addEventListener('resize', offsetCalculate)
-            return ()=> document.removeEventListener('resize', offsetCalculate)
-        }
+        document.addEventListener('resize', offsetCalculate)
+        return ()=> document.removeEventListener('resize', offsetCalculate)
     }, [])
 
     useEffect(()=>{
         var main_bord = document.getElementById('main_bord')
-        if(props.pos){
-            main_bord.addEventListener('scroll', offsetCalculate)
-            return ()=> main_bord.removeEventListener('scroll', offsetCalculate)
-        }
+        main_bord.addEventListener('scroll', offsetCalculate)
+        return ()=> main_bord.removeEventListener('scroll', offsetCalculate)
     }, [])
 
     if(!props.status) return
