@@ -10,7 +10,10 @@ function MapContainer(props){
     const belongs_res = props.belongs_res 
     const guests_res = props.guests_res
     const guests_groups_res = props.guests_groups_res
+    const tags_res = props.tags_res
+    const tags_belong_res = props.tags_belong_res
     const {edit} = useParams()
+    
     function onStart({event, selection}){
         if (!event.ctrlKey && !event.metaKey){
             selection.clearSelection();
@@ -27,6 +30,9 @@ function MapContainer(props){
                 belongs_res={belongs_res} 
                 guests_res={guests_res} 
                 guests_groups_res = {guests_groups_res} 
+                tags_res={tags_res}
+                tags_belong_res={tags_belong_res}
+                editStatus={props.editStatus}
             />
     if(edit) map = <MapEdit></MapEdit>
     return (<SelectionArea

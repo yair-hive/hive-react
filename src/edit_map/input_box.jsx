@@ -1,0 +1,46 @@
+import { useRef } from "react"
+import { useEffect } from "react"
+
+function InputBox(props) {
+
+    const inputRef = useRef(null)
+
+    function offsetCalculate(){
+        if(props.pos){
+            var parent = props.pos.getBoundingClientRect()  
+
+            inputRef.current.style.width = parent.width+'px'
+            inputRef.current.style.top = parent.top+'px'
+            inputRef.current.style.left = parent.left+'px'
+                
+        }
+    }
+
+    useEffect(()=>{
+        offsetCalculate()
+    }, [props.pos])
+    
+
+    useEffect(()=>{
+        document.addEventListener('resize', offsetCalculate)
+        return ()=> document.removeEventListener('resize', offsetCalculate)
+    }, [props.pos])
+
+    useEffect(()=>{
+        var main_bord = document.getElementById('main_bord')
+        main_bord.addEventListener('scroll', offsetCalculate)
+        return ()=> main_bord.removeEventListener('scroll', offsetCalculate)
+    }, [props.pos])
+
+    if(!props.status) return
+
+    function onInput(event){
+        props.setInputStr(event.target.value)
+    }
+
+    return ( 
+        <input ref = {inputRef} dir='rtl' className="input_box" onInput={onInput}></input>
+    );
+}
+
+export default InputBox;

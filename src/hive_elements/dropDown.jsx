@@ -1,13 +1,12 @@
+import { useRef } from 'react'
 import { useEffect } from 'react'
-import { useState } from 'react'
 import '../style/drop_down.css'
 
 function DropDown(props){
 
-    const [style, setStyle] = useState(null)
+    const divRef = useRef(null)
 
     function offsetCalculate(){
-        console.log('ggs')
         if(props.pos){
             var parent = props.pos.getBoundingClientRect()
             var parent_width = parent.width
@@ -16,14 +15,10 @@ function DropDown(props){
             var drop_down_top = parent.bottom
             var drop_down_width = parent_width + list_width_over
             var drop_down_left = parent.left - list_width_over_d 
-
-            console.log(drop_down_top)
-            
-            setStyle({
-                width : drop_down_width+'px',
-                top : drop_down_top+'px',
-                left : drop_down_left+'px'
-            })
+                             
+            divRef.current.style.width = drop_down_width+'px'
+            divRef.current.style.top = drop_down_top+'px'
+            divRef.current.style.left = drop_down_left+'px'
         }
     }
 
@@ -35,17 +30,19 @@ function DropDown(props){
     useEffect(()=>{
         document.addEventListener('resize', offsetCalculate)
         return ()=> document.removeEventListener('resize', offsetCalculate)
-    }, [])
+    }, [props.pos])
 
     useEffect(()=>{
         var main_bord = document.getElementById('main_bord')
         main_bord.addEventListener('scroll', offsetCalculate)
         return ()=> main_bord.removeEventListener('scroll', offsetCalculate)
-    }, [])
+    }, [props.pos])
 
     if(!props.status) return
 
-    return (<div className="drop_down" style={style}></div>)
+    return (<div className="drop_down" ref={divRef}>
+        {props.children}
+    </div>)
 
 }
 

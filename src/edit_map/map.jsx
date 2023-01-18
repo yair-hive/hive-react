@@ -1,15 +1,17 @@
 import { useState } from 'react'
-import DropDown from '../hive_elements/dropDown'
 import AddGuestDropDown from './add_guest_drop_down'
 import Cell from './cell'
 import Seat from './seat'
 
 function Map(props){
+
     const  map_res  = props.map_res
     const seats_res = props.seats_res
     const belongs_res = props.belongs_res 
     const guests_res = props.guests_res
     const guests_groups_res = props.guests_groups_res
+    const tags_res = props.tags_res
+    const tags_belong_res = props.tags_belong_res
 
     const [dropDownStatus, setDropDownStatus] = useState(false)
     const [dropDownPos, setDropDownPos] = useState(null)
@@ -31,7 +33,7 @@ function Map(props){
                             if(seat.row_num == rowsCounter && seat.col_num == colsCounter){
                                 var guest = null
                                 if(new_belongs[seat.id]) guest = new_belongs[seat.id].guest
-                                cells[key]= {row: rowsCounter, col: colsCounter, key: key, seat: {seat_number: seat.seat_number, belong: guest}}
+                                cells[key]= {row: rowsCounter, col: colsCounter, key: key, seat: {seat_id: seat.id, seat_number: seat.seat_number, belong: guest}}
                                 break;
                             }else{
                                 cells[key]= {row: rowsCounter, col: colsCounter, key: key, seat: false}
@@ -50,9 +52,9 @@ function Map(props){
         }
     }
 
-    if(map_res.data && seats_res.data && belongs_res.data && guests_res.data && guests_groups_res.data){
+    if(map_res.data && seats_res.data && belongs_res.data && guests_res.data && guests_groups_res.data && tags_res.data && tags_belong_res.data){
         return (<>
-        <AddGuestDropDown status={dropDownStatus} pos={dropDownPos}/>
+        <AddGuestDropDown status={dropDownStatus} pos={dropDownPos} guests_res={guests_res}/>
         <div id="map" className="map" style={{'--map-rows' : map_res.data.rows_number, '--map-cols' : map_res.data.columns_number}}> 
             {create_cells().map(cell => {
                 var new_guests = {} 
@@ -65,10 +67,21 @@ function Map(props){
                     new_groups[group.id] = group
                     return group
                 })
+                var new_tags_belong = {}
+                tags_belong_res.data.map(bel => {
+                    new_tags_belong[bel.seat] = []
+                    return bel
+                })
+                tags_belong_res.data.map(bel => {
+                    bel.tag_data = tags_res.data[bel.group_id]
+                    new_tags_belong[bel.seat].push(bel)
+                    return bel
+                })
                 // console.log(new_groups)
                 if(cell.seat){
                     var guest_name = null
                     var color = null
+                    var tags = null
                     if(cell.seat.belong) {
                         var guest = new_guests[cell.seat.belong]
                         if(guest){
@@ -76,14 +89,18 @@ function Map(props){
                             if(guest.guest_group) color = new_groups[guest.guest_group].color
                         }
                     }
+                    var seat_tags = new_tags_belong[cell.seat.seat_id] 
+                    if(seat_tags) tags = seat_tags
                     // console.log(guest_name)
                     return <Seat 
                                 key={cell.key} 
                                 number={cell.seat.seat_number} 
                                 name={guest_name} 
                                 color = {color}
+                                tags={tags}
                                 setDropDownStatus={setDropDownStatus}
                                 setDropDownPos = {setDropDownPos}
+                                edit={props.editStatus}
                             />
                 }else{
                     return <Cell 
