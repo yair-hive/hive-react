@@ -4,6 +4,12 @@
     margin: 2.5px;
     border-radius: 0.25rem;
 }
+.seat.selected {
+    border-style: solid;
+    background-color: #4f90f2;
+    border-width: 0.5px;
+    border-color: #ffffff;
+} 
 .num_box, .name_box{
     width: 120px;
     height: 25px;

@@ -1,7 +1,11 @@
+import { useContext } from "react";
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import HiveButton from "../hive_elements/hive_button";
 import HiveSwitch from "../hive_elements/hive_switch";
+import { SelectablesContext } from "../pages/maps";
+import { EditContext } from "../pages/maps"
+
 import "../style/side_menu.css"
 
 function SideMenu(props) {
@@ -15,6 +19,9 @@ function SideMenu(props) {
     const guests_groups_res = props.guests_groups_res
 
     const [input_str, setInputStr] = useState('')
+
+    const selecteblsState = useContext(SelectablesContext)
+    const edit = useContext(EditContext)
     
     function guestsList(){
         function createMatchList(guests_data){
@@ -77,6 +84,48 @@ function SideMenu(props) {
         setInputStr(event.target.value)
     }
 
+    function selecteblsSwitch(){
+        if(selecteblsState){
+            return (
+                <HiveSwitch
+                    options={[
+                        {value: 'seat', name: 'כיסאות'}, 
+                        {value: 'cell', name: 'תאים'}
+                    ]} 
+                    active={'cell'} 
+                    setActive={selecteblsState[1]} 
+                    bordKey="KeyX" 
+                />
+            )
+        }
+    }
+
+    function noEditSubMenu(){
+        if(edit === 'אל תערוך'){
+            return(
+                <div className="sub_menu">
+                    <Link to={"/guests/"+map_name}><HiveButton>שמות</HiveButton></Link>
+                    <HiveButton> שבץ </HiveButton>
+                    <input type='text' onInput={onInput}></input>
+                    <ul className="results" dir="rtl">{guestsList()}</ul>
+                </div>
+            )
+        }
+    }
+
+    function editSubMenu(){
+        if(edit === 'ערוך'){
+            return(
+                <div className="sub_menu">
+                    {selecteblsSwitch()}
+                    <HiveButton> הוסף </HiveButton>
+                    <HiveButton> מחק </HiveButton>
+                    <HiveButton> תגיות </HiveButton>
+                </div>
+            )
+        }
+    }
+
     return ( 
         <>
         <HiveSwitch 
@@ -85,12 +134,8 @@ function SideMenu(props) {
             setActive={props.setEditStatus} 
             bordKey="KeyQ" 
         />
-        <div className="sub_menu">
-            <Link to={"/guests/"+map_name}><HiveButton>שמות</HiveButton></Link>
-            <HiveButton> שבץ </HiveButton>
-            <input type='text' onInput={onInput}></input>
-            <ul className="results" dir="rtl">{guestsList()}</ul>
-        </div>
+        {editSubMenu()}
+        {noEditSubMenu()}
         </>
     );
 }

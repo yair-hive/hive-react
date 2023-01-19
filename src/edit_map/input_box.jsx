@@ -39,7 +39,7 @@ function InputBox(props) {
     }
 
     return ( 
-        <input ref = {inputRef} dir='rtl' className="input_box" onInput={onInput}></input>
+        <input ref = {inputRef} dir='rtl' className="input_box name_box" onInput={onInput}></input>
     );
 }
 

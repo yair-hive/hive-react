@@ -1,7 +1,12 @@
+import { useContext } from "react"
 import { useRef } from "react"
+import { EditContext, SelectablesContext } from "../pages/maps"
 import "../style/seat.css"
 
 function Seat(props){
+
+    const edit = useContext(EditContext)
+    const selecteblsState = useContext(SelectablesContext)
 
     const nameBoxRef = useRef(null)
     var font_size = '15px'
@@ -59,7 +64,7 @@ function Seat(props){
         }
     }
     function name_box(){
-        if(props.edit === 'ערוך'){
+        if(edit === 'ערוך'){
             return(
                 <div className="name_box">
                     <div className="tags_cont">
@@ -74,8 +79,12 @@ function Seat(props){
             </div>  
         )
     } 
+    var className = "seat"
+    if(selecteblsState){
+        if(selecteblsState[0] === 'seat' && edit == 'ערוך') className = className+" selectable"
+    }
     return (<div>
-        <div className="seat">
+        <div className={className}>
             <div className="num_box">
                 {props.number}    
             </div> 

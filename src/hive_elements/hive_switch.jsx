@@ -35,13 +35,22 @@ function HiveSwitch(props){
         var i = 0
         var class_name
         return props.options?.map(element => {
+            var name, value
+            if(typeof element == 'string'){
+                name = element
+                value = element
+            }
+            if(typeof element == 'object'){
+                name = element.name
+                value = element.value
+            }
             var isActive = false
-            if(element === intActive) isActive = true
+            if(value === intActive) isActive = true
             class_name = 'hive-switch-m'
             if(i === 0) class_name = 'hive-switch-l'
             if(i === (props.options.length -1)) class_name = 'hive-switch-r'
             i++
-            return <HiveButton onClick = {onClick} name={element} key={i} className={class_name} active={isActive}> {element} </HiveButton>
+            return <HiveButton onClick = {onClick} name={value} key={i} className={class_name} active={isActive}> {name} </HiveButton>
         })
     }
     return(

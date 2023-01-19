@@ -1,16 +1,23 @@
+import { useContext } from "react"
+import { EditContext, SelectablesContext } from "../pages/maps"
 import "../style/cell.css"
 
 function Cell(props){
+
+    const edit = useContext(EditContext)
+    const selecteblsState = useContext(SelectablesContext)
+
     var class_rows = `row-${props.row_number}`
     var class_cols = `col-${props.col_number}`
     var selectable = ""
     var selected = ""
-    if(props.selectable){
-        selectable = "selectable"
+
+    if(selecteblsState){
+        if(selecteblsState[0] === 'cell' && edit == 'ערוך'){
+            selectable  = "selectable"
+        }
     }
-    if(props.selected){
-        selected= "selected"
-    }
+
     var class_name_string = `${class_rows} ${class_cols} cell ${selectable} ${selected}`
 
     return (
