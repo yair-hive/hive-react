@@ -84,7 +84,7 @@ function Seat(props){
         if(selecteblsState[0] === 'seat' && edit == 'ערוך') className = className+" selectable"
     }
     return (<div>
-        <div className={className}>
+        <div className={className} seat_id={props.seat_id}>
             <div className="num_box">
                 {props.number}    
             </div> 

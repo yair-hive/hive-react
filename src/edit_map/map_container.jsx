@@ -9,7 +9,7 @@ import Map from "./map"
 function MapContainer(props){
     const selecteblsState = useContext(SelectablesContext)
     const edit = useContext(EditContext)
-    const  map_res  = props.map_res
+    const map_res  = props.map_res
     const seats_res = props.seats_res
     const belongs_res = props.belongs_res 
     const guests_res = props.guests_res
@@ -20,7 +20,6 @@ function MapContainer(props){
     function onStart({event, selection}){
         if (!event.ctrlKey && !event.metaKey){
             selection.clearSelection();
-            console.log(selection)
             document.querySelectorAll('.selected').forEach(e => e.classList.remove('selected'))
         }
     }
@@ -46,19 +45,21 @@ function MapContainer(props){
     if(selecteblsState){
         selectables = `.${selecteblsState[0]}`
     }
-    function on({selection}){
+    function SelectionOpt(props){
         if(edit == 'ערוך'){
-            selection.enable()
+        return (
+            <SelectionArea
+                selectables={'.selectable'}
+                onStart={onStart}
+                onMove={onMove}
+            >
+                {props.children}
+            </SelectionArea>
+            )
         }
-        if(edit == 'אל תערוך'){
-            selection.disable()
-        }
+        return props.children
     }
-    function SelectionOpt(){}
-    return (<SelectionArea
-        selectables={'.selectable'}
-        onStart={onStart}
-        onMove={onMove}
+    return (<SelectionOpt
         >
         <div className="map_container">
             <Map
@@ -72,7 +73,7 @@ function MapContainer(props){
                 editStatus={props.editStatus}
             />
         </div>
-    </SelectionArea>)
+    </SelectionOpt>)
 }
 
 export default MapContainer

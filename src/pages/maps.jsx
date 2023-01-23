@@ -10,6 +10,7 @@ import React from "react";
 
 export const EditContext = React.createContext('אל תערוך')
 export const SelectablesContext = React.createContext(null)
+export const MapIdContext = React.createContext(null)
 
 function Maps(){
 
@@ -67,6 +68,7 @@ function Maps(){
         <>
         <EditContext.Provider value={editStatus}>
         <SelectablesContext.Provider value={selecteblsState}>
+        <MapIdContext.Provider value={map_id}>
             <div className='main_bord' id="main_bord">
                 <MapContainer 
                     map_res = {map_res} 
@@ -90,6 +92,7 @@ function Maps(){
                     setEditStatus={setEditStatus}
                 />
             </div>
+        </MapIdContext.Provider>
         </SelectablesContext.Provider>
         </EditContext.Provider>
         </>

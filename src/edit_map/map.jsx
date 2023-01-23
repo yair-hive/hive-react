@@ -1,12 +1,19 @@
 import { useContext, useEffect } from 'react'
 import { useState } from 'react'
-import { EditContext } from '../pages/maps'
+import { QueryClient, useQueryClient } from 'react-query'
+import { useParams } from 'react-router-dom'
+import { EditContext, MapIdContext, SelectablesContext } from '../pages/maps'
+import api from '../scripts/api/api'
 import AddGuestDropDown from './add_guest_drop_down'
 import Cell from './cell'
 import RowColSelector from './row_col_selector'
 import Seat from './seat'
 
 function Map(props){
+
+    let {map_name} = useParams()
+
+    const queryClient = useQueryClient()
 
     const  map_res  = props.map_res
     const seats_res = props.seats_res
@@ -19,18 +26,56 @@ function Map(props){
     const [dropDownStatus, setDropDownStatus] = useState(false)
     const [dropDownPos, setDropDownPos] = useState(null)
     const edit = useContext(EditContext)
+    const selecteblsState = useContext(SelectablesContext)
+    const map_id = useContext(MapIdContext)
 
-    function onMousedown(event){
-        var classList = event.target.classList
-        if(!event.ctrlKey && !event.metaKey && !classList.contains('hive-button')){
-            if(!classList.contains('name_box') && !classList.contains('drop_down') && !classList.contains('match_list')){
-                setDropDownStatus(false)
-            }                               
-        }
-    }
     useEffect(()=>{
+
+        function onMousedown(event){
+            var classList = event.target.classList
+            if(!event.ctrlKey && !event.metaKey && !classList.contains('hive-button')){
+                if(!classList.contains('name_box') && !classList.contains('drop_down') && !classList.contains('match_list')){
+                    setDropDownStatus(false)
+                }                               
+            }
+        }
+        async function onMapAdd(event){
+            if(event.code == 'Enter' && map_id){
+                if(selecteblsState){
+                    if(selecteblsState[0] == 'cell'){
+                        var cells_list = []
+                        var selected = document.querySelectorAll('.selected')
+                        for(let cell of selected){
+                            var cell_data = {}
+                            cell_data.row = cell.getAttribute('cell-row') 
+                            cell_data.col = cell.getAttribute('cell-col')
+                            cells_list.push(cell_data)
+                        }
+                        var data = JSON.stringify(cells_list)
+                        await api.seat.create_multiple(map_id, data)
+                        queryClient.invalidateQueries(['get_seats', map_name])
+                    }
+                    if(selecteblsState[0] == 'seat'){
+                        var col_name = prompt('Please enter number')
+                        var seatNumber = Number(col_name) + 1
+                        var elements = document.querySelectorAll('.selected')
+                        for(let element of elements){
+                            var seat_id = element.getAttribute('seat_id')
+                            await api.seat.create_number(seat_id, seatNumber)     
+                            seatNumber++
+                        }
+                        queryClient.invalidateQueries(['get_seats', map_name])
+                    }
+                }
+            }
+        }
+
         document.addEventListener('mousedown', onMousedown)
-        return ()=> document.removeEventListener('mousedown', onMousedown)
+        document.addEventListener('keydown', onMapAdd)
+        return ()=>{
+            document.removeEventListener('mousedown', onMousedown)
+            document.removeEventListener('keydown', onMapAdd)
+        }
     }, [])
 
     const create_cells = function(){
@@ -149,6 +194,7 @@ function Map(props){
                                 setDropDownStatus={setDropDownStatus}
                                 setDropDownPos = {setDropDownPos}
                                 edit={props.editStatus}
+                                seat_id = {cell.seat.seat_id}
                             />
                 }else{
                     return <Cell 

@@ -1,5 +1,5 @@
 const parsedUrl = new URL(window.location.href)
-const api_url = "http://"+parsedUrl.hostname+'/hive-php/php/api.php'
+const api_url = "http://"+parsedUrl.hostname+'/php/api.php'
 
 exports.get_map = function(map_name){
     const options = {
