@@ -25,6 +25,9 @@ input:focus{
     padding: 0;
     list-style: none;
 }
+.rolling_list_item.active{
+    background-color: #4f90f275;
+}
 .drop_down > ul > li{
     display: flex;
     flex-direction: row-reverse;

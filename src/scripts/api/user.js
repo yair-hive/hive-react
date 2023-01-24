@@ -1,5 +1,5 @@
 const parsedUrl = new URL(window.location.href)
-const api_url = "http://"+parsedUrl.hostname+'/php/api.php'
+const api_url = "http://hive.com/php/api.php"
 
 export const user = {
     get: ()=>{

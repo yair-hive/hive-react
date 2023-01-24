@@ -1,7 +1,8 @@
 import { useContext, useEffect } from 'react'
 import { useState } from 'react'
-import { QueryClient, useQueryClient } from 'react-query'
+import { useQueryClient } from 'react-query'
 import { useParams } from 'react-router-dom'
+import { useSocket } from '../app'
 import { EditContext, MapIdContext, SelectablesContext } from '../pages/maps'
 import api from '../scripts/api/api'
 import AddGuestDropDown from './add_guest_drop_down'
@@ -28,6 +29,7 @@ function Map(props){
     const edit = useContext(EditContext)
     const selecteblsState = useContext(SelectablesContext)
     const map_id = useContext(MapIdContext)
+    const hiveSocket = useSocket()
 
     useEffect(()=>{
 
@@ -53,7 +55,9 @@ function Map(props){
                         }
                         var data = JSON.stringify(cells_list)
                         await api.seat.create_multiple(map_id, data)
-                        queryClient.invalidateQueries(['get_seats', map_name])
+                        // queryClient.invalidateQueries(['get_seats', map_name])
+                        var msg = JSON.stringify({action: 'invalidate', quert_key: ['get_seats', map_name]})
+                        hiveSocket.send(msg)
                     }
                     if(selecteblsState[0] == 'seat'){
                         var col_name = prompt('Please enter number')

@@ -1,5 +1,6 @@
 import { useState } from "react"
 import DropDown from "../hive_elements/dropDown"
+import RolligList from "../hive_elements/rolling_list"
 import InputBox from "./input_box"
 
 function AddGuestDropDown(props){
@@ -15,7 +16,7 @@ function AddGuestDropDown(props){
             for(var corrent of guests_res.data){
                 corrent.name = corrent.last_name+' '+corrent.first_name
                 if(search_reg.test(corrent.name)){
-                    match_list.push(corrent)
+                    match_list.push(corrent.name)
                 }
             }
         }
@@ -27,7 +28,7 @@ function AddGuestDropDown(props){
         var i = 0
         for(let corrent of MatchList){
             i++
-            var li = <li key={i} className="match_list"> {corrent.name} </li>                           
+            var li = <li key={i} className="match_list"> {corrent} </li>                           
             arr.push(li)
         }
         return arr
@@ -37,9 +38,10 @@ function AddGuestDropDown(props){
         <>
         <InputBox status={props.status} pos={props.pos} setInputStr={setInputStr}></InputBox>
         <DropDown status={props.status} pos={props.pos}>
-            <ul>
+            {/* <ul>
                 {createGuestsList()}
-            </ul>
+            </ul> */}
+            <RolligList items={createMatchList()}/>
         </DropDown>
         </>
     )
