@@ -9,8 +9,9 @@ function DropDown(props){
     function offsetCalculate(){
         if(props.pos){
             var parent = props.pos.getBoundingClientRect()
+            var drop = divRef.current.getBoundingClientRect()
             var parent_width = parent.width
-            var list_width_over = 60
+            var list_width_over = drop.width - parent_width
             var list_width_over_d = list_width_over / 2
             var drop_down_top = parent.bottom
             var drop_down_width = parent_width + list_width_over

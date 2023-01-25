@@ -14,16 +14,20 @@ input:focus{
     font-size: 11px;
     text-align: right;
     font-weight: bold;
-    overflow: auto;
+    width: auto;
+    width: 180px;
     background-color: rgb(202, 248, 248);
     border-radius: 3px;
     box-shadow: 0px 3px 3px 0px rgba(0, 0, 0, 0.3);
-    max-height: 200px;
 }
 .drop_down > ul{
     margin: 0;
     padding: 0;
     list-style: none;
+}
+.rolling_list{
+    overflow: auto;
+    max-height: 200px;
 }
 .rolling_list_item.active{
     background-color: #4f90f275;
@@ -35,9 +39,6 @@ input:focus{
     font-size: 14px;
     padding: 5px 15px 5px 15px;
     list-style: none;
-}
-.drop_down > ul > li:hover{
-    background-color: #4f90f275;
 }
 .group_name{
     color: rgb(124, 116, 116);

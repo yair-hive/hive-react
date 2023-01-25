@@ -29,6 +29,7 @@ function Seat(props){
     function nameBoxOnClick(){
         props.setDropDownPos(nameBoxRef.current)
         props.setDropDownStatus(true)
+        props.setSelectedSeat(props.seat_id)
     }
     const NAME_BOX_STYLE = {
         backgroundColor: props.color,

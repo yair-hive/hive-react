@@ -16,7 +16,9 @@ function Map(props){
 
     const queryClient = useQueryClient()
 
-    const  map_res  = props.map_res
+    const [selected_seat, setSelectedSeat] = useState(null)
+
+    const map_res  = props.map_res
     const seats_res = props.seats_res
     const belongs_res = props.belongs_res 
     const guests_res = props.guests_res
@@ -36,7 +38,7 @@ function Map(props){
         function onMousedown(event){
             var classList = event.target.classList
             if(!event.ctrlKey && !event.metaKey && !classList.contains('hive-button')){
-                if(!classList.contains('name_box') && !classList.contains('drop_down') && !classList.contains('match_list')){
+                if(!classList.contains('name_box') && !classList.contains('drop_down') && !classList.contains('rolling_list_item')){
                     setDropDownStatus(false)
                 }                               
             }
@@ -68,7 +70,8 @@ function Map(props){
                             await api.seat.create_number(seat_id, seatNumber)     
                             seatNumber++
                         }
-                        queryClient.invalidateQueries(['get_seats', map_name])
+                        var msg = JSON.stringify({action: 'invalidate', quert_key: ['get_seats', map_name]})
+                        hiveSocket.send(msg)
                     }
                 }
             }
@@ -145,7 +148,7 @@ function Map(props){
 
     if(map_res.data && seats_res.data && belongs_res.data && guests_res.data && guests_groups_res.data && tags_res.data && tags_belong_res.data){
         return (<>
-        <AddGuestDropDown status={dropDownStatus} pos={dropDownPos} guests_res={guests_res}/>
+        <AddGuestDropDown status={dropDownStatus} pos={dropDownPos} guests_res={guests_res} selected_seat={selected_seat} map={map_res}/>
         <div id="map" className="map" style={STYLE}> 
             {create_cells().map(cell => {
                 var new_guests = {} 
@@ -197,6 +200,7 @@ function Map(props){
                                 tags={tags}
                                 setDropDownStatus={setDropDownStatus}
                                 setDropDownPos = {setDropDownPos}
+                                setSelectedSeat={setSelectedSeat}
                                 edit={props.editStatus}
                                 seat_id = {cell.seat.seat_id}
                             />
