@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useQueryClient } from 'react-query'
 import { useParams } from 'react-router-dom'
 import { useSocket } from '../app'
-import { EditContext, MapIdContext, SelectablesContext } from '../pages/maps'
+import { ActionsContext, EditContext, MapIdContext, SelectablesContext } from '../pages/maps'
 import api from '../scripts/api/api'
 import AddGuestDropDown from './add_guest_drop_down'
 import Cell from './cell'
@@ -17,6 +17,7 @@ function Map(props){
     const queryClient = useQueryClient()
 
     const [selected_seat, setSelectedSeat] = useState(null)
+    const [action, setAction] = useContext(ActionsContext)
 
     const map_res  = props.map_res
     const seats_res = props.seats_res
@@ -46,7 +47,7 @@ function Map(props){
         async function onMapAdd(event){
             if(event.code == 'Enter' && map_id){
                 if(selecteblsState){
-                    if(selecteblsState[0] == 'cell'){
+                    if(action == 'cell'){
                         var cells_list = []
                         var selected = document.querySelectorAll('.selected')
                         for(let cell of selected){
@@ -61,7 +62,7 @@ function Map(props){
                         var msg = JSON.stringify({action: 'invalidate', quert_key: ['get_seats', map_name]})
                         hiveSocket.send(msg)
                     }
-                    if(selecteblsState[0] == 'seat'){
+                    if(action == 'number'){
                         var col_name = prompt('Please enter number')
                         var seatNumber = Number(col_name) + 1
                         var elements = document.querySelectorAll('.selected')

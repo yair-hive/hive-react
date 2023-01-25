@@ -11,12 +11,14 @@ import React from "react";
 export const EditContext = React.createContext('אל תערוך')
 export const SelectablesContext = React.createContext(null)
 export const MapIdContext = React.createContext(null)
+export const ActionsContext = React.createContext(null)
 
 function Maps(){
 
     let {map_name} = useParams()
     const [editStatus, setEditStatus] = useState('אל תערוך')
     const selecteblsState = useState('cell')
+    const actionsState = useState(null)
 
     const  map_res  = useQuery(['get_map', map_name], async ()=>{
         return await api.map.get(map_name)
@@ -66,6 +68,7 @@ function Maps(){
 
     return (
         <>
+        <ActionsContext.Provider value={actionsState}>
         <EditContext.Provider value={editStatus}>
         <SelectablesContext.Provider value={selecteblsState}>
         <MapIdContext.Provider value={map_id}>
@@ -95,6 +98,7 @@ function Maps(){
         </MapIdContext.Provider>
         </SelectablesContext.Provider>
         </EditContext.Provider>
+        </ActionsContext.Provider>
         </>
     )
 }

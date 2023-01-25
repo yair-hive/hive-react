@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import HiveButton from "../hive_elements/hive_button";
 import HiveSwitch from "../hive_elements/hive_switch";
-import { SelectablesContext } from "../pages/maps";
+import { ActionsContext, SelectablesContext } from "../pages/maps";
 import { EditContext } from "../pages/maps"
 
 import "../style/side_menu.css"
@@ -21,6 +21,7 @@ function SideMenu(props) {
     const [input_str, setInputStr] = useState('')
 
     const selecteblsState = useContext(SelectablesContext)
+    const [action, setAction] = useContext(ActionsContext)
     const edit = useContext(EditContext)
     
     function guestsList(){
@@ -100,6 +101,35 @@ function SideMenu(props) {
         }
     }
 
+    function actionSwitch(){
+        if(selecteblsState[0] == 'cell'){
+            return (
+                <HiveSwitch
+                options={[
+                    {value: 'seat', name: 'כיסאות'}, 
+                    {value: 'element', name: 'אלמנטים'}
+                ]} 
+                active={'seat'} 
+                setActive={setAction} 
+                bordKey="KeyB" 
+            />
+            )
+        }
+        if(selecteblsState[0] == 'seat'){
+            return (
+                <HiveSwitch
+                options={[
+                    {value: 'numbers', name: 'מספרים'}, 
+                    {value: 'tags', name: 'תגיות'}
+                ]} 
+                active={'numbers'} 
+                setActive={setAction}
+                bordKey="KeyB" 
+            />
+            )
+        }
+    }
+
     function noEditSubMenu(){
         if(edit === 'אל תערוך'){
             return(
@@ -118,6 +148,7 @@ function SideMenu(props) {
             return(
                 <div className="sub_menu">
                     {selecteblsSwitch()}
+                    {actionSwitch()}
                     <HiveButton> הוסף </HiveButton>
                     <HiveButton> מחק </HiveButton>
                     <HiveButton> תגיות </HiveButton>
