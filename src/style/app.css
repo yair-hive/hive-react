@@ -13,6 +13,11 @@ html, body, #root{
   grid-template-rows: 8% 92%;
   grid-template-columns: 78% 22%;
 }
+.selection_bond{
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+}
 .top_bar{
   display: flex;
   align-items: center;

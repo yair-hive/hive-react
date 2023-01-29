@@ -3,22 +3,25 @@ import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import HiveButton from "../hive_elements/hive_button";
 import HiveSwitch from "../hive_elements/hive_switch";
-import { ActionsContext, SelectablesContext } from "../pages/maps";
+import PopUp from "../hive_elements/pop_up";
+import { ActionsContext, SelectablesContext, TagsPopUpContext } from "../pages/maps";
 import { EditContext } from "../pages/maps"
 
 import "../style/side_menu.css"
+import TagsPop from "./tags_pop";
 
 function SideMenu(props) {
 
     let {map_name} = useParams()
 
-    const  map_res  = props.map_res
+    const map_res  = props.map_res
     const seats_res = props.seats_res
     const belongs_res = props.belongs_res 
     const guests_res = props.guests_res
     const guests_groups_res = props.guests_groups_res
 
     const [input_str, setInputStr] = useState('')
+    const [tagsPopStatus, setTagsPopStatus] = useContext(TagsPopUpContext)
 
     const selecteblsState = useContext(SelectablesContext)
     const [action, setAction] = useContext(ActionsContext)
@@ -142,7 +145,6 @@ function SideMenu(props) {
             )
         }
     }
-
     function editSubMenu(){
         if(edit === 'ערוך'){
             return(
@@ -151,7 +153,8 @@ function SideMenu(props) {
                     {actionSwitch()}
                     <HiveButton> הוסף </HiveButton>
                     <HiveButton> מחק </HiveButton>
-                    <HiveButton> תגיות </HiveButton>
+                    <HiveButton onClick={()=> {setTagsPopStatus(true)}}> תגיות </HiveButton>
+                    <TagsPop status={tagsPopStatus} setState = {setTagsPopStatus}/>
                 </div>
             )
         }

@@ -1,6 +1,6 @@
-import { useContext, useEffect } from 'react'
-import { useState } from 'react'
-import { useQueryClient } from 'react-query'
+import { useSelection } from '@viselect/react'
+import { useReducer } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useSocket } from '../app'
 import { ActionsContext, EditContext, MapIdContext, SelectablesContext } from '../pages/maps'
@@ -10,14 +10,39 @@ import Cell from './cell'
 import RowColSelector from './row_col_selector'
 import Seat from './seat'
 
+function cells_reducer(state, action){
+
+    function get_seat_index(row, col){
+        return (row * state.cols) + col
+    }
+
+    if(action.type === 'create_array'){
+        var cells_number = action.rows * action.cols
+        return ({
+            rows: action.rows,
+            cols: action.cols,
+            list: Array(cells_number).fill(null)
+        })
+    }
+    if(action.type === 'add_seats'){
+        if(typeof state.list == 'object'){
+            var new_arr = state.list.slice()
+            for(let seat of action.seats){
+                new_arr[get_seat_index(seat.row_num, seat.col_num)] = seat
+            }
+            return new_arr
+        }
+    }
+}
+
 function Map(props){
 
     let {map_name} = useParams()
 
-    const queryClient = useQueryClient()
-
     const [selected_seat, setSelectedSeat] = useState(null)
     const [action, setAction] = useContext(ActionsContext)
+    const [cells_list, dispatch] = useReducer(cells_reducer, {})
+    const selection = useSelection()
 
     const map_res  = props.map_res
     const seats_res = props.seats_res
@@ -35,10 +60,19 @@ function Map(props){
     const hiveSocket = useSocket()
 
     useEffect(()=>{
+        if(edit == 'ערוך') {
+            if(selection.enable) selection.enable()
+        }
+        if(edit == 'אל תערוך') {
+            if(selection.disable) selection.disable()
+        }
+    }, [selection])
+
+    useEffect(()=>{
 
         function onMousedown(event){
             var classList = event.target.classList
-            if(!event.ctrlKey && !event.metaKey && !classList.contains('hive-button')){
+            if(!event.ctrlKey && !event.metaKey && !classList.contains('hive_button')){
                 if(!classList.contains('name_box') && !classList.contains('drop_down') && !classList.contains('rolling_list_item')){
                     setDropDownStatus(false)
                 }                               
@@ -47,7 +81,7 @@ function Map(props){
         async function onMapAdd(event){
             if(event.code == 'Enter' && map_id){
                 if(selecteblsState){
-                    if(action == 'cell'){
+                    if(action == 'seat'){
                         var cells_list = []
                         var selected = document.querySelectorAll('.selected')
                         for(let cell of selected){
@@ -62,7 +96,7 @@ function Map(props){
                         var msg = JSON.stringify({action: 'invalidate', quert_key: ['get_seats', map_name]})
                         hiveSocket.send(msg)
                     }
-                    if(action == 'number'){
+                    if(action == 'numbers'){
                         var col_name = prompt('Please enter number')
                         var seatNumber = Number(col_name) + 1
                         var elements = document.querySelectorAll('.selected')
@@ -74,6 +108,33 @@ function Map(props){
                         var msg = JSON.stringify({action: 'invalidate', quert_key: ['get_seats', map_name]})
                         hiveSocket.send(msg)
                     }
+                    if(action == 'tags'){
+                        var selected = document.querySelectorAll('.selected')
+                        var group_name = prompt('הכנס שם תווית')
+                        for(let i = 0; i < selected.length; i++){
+                            var seat = selected[i]
+                            var seat_id = seat.getAttribute('seat_id')
+                            api.tags.add(seat_id, group_name, map_id).then(()=>{
+                                var msg = JSON.stringify({action: 'invalidate', quert_key: ['tags', map_name]})
+                                hiveSocket.send(msg)
+                                var msg = JSON.stringify({action: 'invalidate', quert_key: ['tags_belong', map_name]})
+                                hiveSocket.send(msg)
+                            })
+                        }
+                    }
+                }
+            }
+            if(event.code == 'Delete' && map_id){
+                if(action == 'numbers'){
+                    var selected = document.querySelectorAll('.selected')
+                    for(let seat of selected){
+                        var seat_id = seat.getAttribute('seat_id')
+                        console.log(seat_id)
+                        await api.seat.delete(seat_id)
+                        await api.seat.delete_belong(seat_id)
+                    }
+                    var msg = JSON.stringify({action: 'invalidate', quert_key: ['get_seats', map_name]})
+                    hiveSocket.send(msg)
                 }
             }
         }
@@ -85,6 +146,41 @@ function Map(props){
             document.removeEventListener('keydown', onMapAdd)
         }
     }, [])
+
+    function new_create_cells(){
+        var cells_elements = []
+        var i = 0
+        if(typeof cells_list.list == 'object'){
+            for(let cell of cells_list.list){
+                i++
+                if(cell === null){
+                    cells_elements.push(<Cell key={i}/>)
+                }
+            }
+            return cells_elements
+        }
+    }
+
+    useEffect(()=>{
+        if(map_res.data){
+            dispatch({
+                type: 'create_array',
+                rows: map_res.data.rows_number,
+                cols: map_res.data.columns_number
+            })
+        }
+    }, [map_res.data])
+
+    useEffect(()=>{
+        if(seats_res.data){
+            dispatch({
+                type: 'add_seats',
+                seats: seats_res.data
+            })
+        }
+    }, [seats_res.data, map_res.data])
+
+    // useEffect(()=>{console.log(cells_list.list)}, [cells_list])
 
     const create_cells = function(){
         // console.log(guests_res.data)
@@ -146,6 +242,8 @@ function Map(props){
             '--map-cols' : Number(map_res.data?.columns_number)+1
         }
     }
+
+    // return (<div id="map" className="map" style={STYLE}> {new_create_cells()} </div>)
 
     if(map_res.data && seats_res.data && belongs_res.data && guests_res.data && guests_groups_res.data && tags_res.data && tags_belong_res.data){
         return (<>

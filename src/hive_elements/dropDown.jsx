@@ -34,7 +34,7 @@ function DropDown(props){
     }, [props.pos])
 
     useEffect(()=>{
-        var main_bord = document.getElementById('main_bord')
+        var main_bord = document.getElementsByClassName('main_bord')[0]
         main_bord.addEventListener('scroll', offsetCalculate)
         return ()=> main_bord.removeEventListener('scroll', offsetCalculate)
     }, [props.pos])

@@ -3,15 +3,17 @@ import { useQuery } from 'react-query'
 import MapContainer from "../edit_map/map_container";
 import api from '../scripts/api/api'
 import HiveButton from "../hive_elements/hive_button";
+import SelectionArea from '@viselect/react';
 import "../style/side_menu.css"
 import SideMenu from "../edit_map/side_menu";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import React from "react";
 
 export const EditContext = React.createContext('אל תערוך')
 export const SelectablesContext = React.createContext(null)
 export const MapIdContext = React.createContext(null)
 export const ActionsContext = React.createContext(null)
+export const TagsPopUpContext = React.createContext(null)
 
 function Maps(){
 
@@ -19,6 +21,35 @@ function Maps(){
     const [editStatus, setEditStatus] = useState('אל תערוך')
     const selecteblsState = useState('cell')
     const actionsState = useState(null)
+    const tagsPopState = useState(false)
+
+    function onStart({event, selection}){
+        if (!event.ctrlKey && !event.metaKey){
+            selection.clearSelection();
+            document.querySelectorAll('.selected').forEach(e => e.classList.remove('selected'))
+        }
+    }
+    function onMove({ store: { changed: { added, removed } } }){
+        added.forEach(ele => ele.classList.add('selected'))
+        removed.forEach(ele => ele.classList.remove('selected'))
+    }
+
+    function SelectionOpt(props){
+        // if(editStatus == 'ערוך'){
+        return (
+            <SelectionArea
+                selectables={'.selectable'}
+                onStart={onStart}
+                onMove={onMove}
+                behaviour={{scrolling: {startScrollMargins: {x: 150, y: 0}}}}
+                className='selection_bond main_bord'
+            >
+                {props.children}
+            </SelectionArea>
+            )
+        // }
+        return (<div className="main_bord"> {props.children} </div>)
+    }
 
     const  map_res  = useQuery(['get_map', map_name], async ()=>{
         return await api.map.get(map_name)
@@ -72,17 +103,18 @@ function Maps(){
         <EditContext.Provider value={editStatus}>
         <SelectablesContext.Provider value={selecteblsState}>
         <MapIdContext.Provider value={map_id}>
-            <div className='main_bord' id="main_bord">
-                <MapContainer 
-                    map_res = {map_res} 
-                    seats_res = {seats_res} 
-                    belongs_res={belongs_res} 
-                    guests_res={guests_res} 
-                    guests_groups_res = {guests_groups_res}
-                    tags_res={tags_res}
-                    tags_belong_res={tags_belong_res}
-                />
-            </div>
+        <TagsPopUpContext.Provider value={tagsPopState}>
+        <SelectionOpt>
+            <MapContainer 
+                map_res = {map_res} 
+                seats_res = {seats_res} 
+                belongs_res={belongs_res} 
+                guests_res={guests_res} 
+                guests_groups_res = {guests_groups_res}
+                tags_res={tags_res}
+                tags_belong_res={tags_belong_res}
+            />
+        </SelectionOpt>
             <div className="side_menu">
                 <SideMenu
                     map_res = {map_res} 
@@ -95,6 +127,7 @@ function Maps(){
                     setEditStatus={setEditStatus}
                 />
             </div>
+        </TagsPopUpContext.Provider>
         </MapIdContext.Provider>
         </SelectablesContext.Provider>
         </EditContext.Provider>

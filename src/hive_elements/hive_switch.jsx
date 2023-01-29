@@ -7,6 +7,11 @@ function HiveSwitch(props){
 
     const [intActive, setIntActive] = useState(props.active)
 
+    useEffect(()=>{
+        setIntActive(props.active)
+        props.setActive(props.active)
+    },[props.active])
+
     function onKeyDown(event){
         if(event.ctrlKey || event.metaKey){
             if(event.code == props.bordKey){

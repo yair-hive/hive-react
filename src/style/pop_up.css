@@ -33,14 +33,15 @@
     user-select: none;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-around;
     font-size: 20px;
     border-radius: 10px 10px 0 0;
-    background-color: rgb(139, 79, 79);
+    background-color: rgb(68, 150, 93);
     width: 100%;
     height: 50px;
 }
 .pop_up_head > .X_button{
+    align-self: flex-start;
     height: 50px;
     width: 50px;
     padding: 0;
@@ -50,10 +51,32 @@
     align-items: center;
     justify-content: center;
     position: relative;
-    right: 205px;
+    right: 102px;
     border-radius: 10px 0 0 0;
     font-size: 30px;
 }
 .X_button:hover{
     background-color: rgb(146, 30, 30);
+}
+td{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+td > input{
+    border: none;
+    border-width: 0;
+    outline: none;
+    font-size: 18px;
+    background-color: rgb(120, 154, 216);
+    height: 100%;
+    text-align: center;
+    min-width: 70px;
+}
+td.td_color{
+    padding: 0;
+}
+.td_x{
+    background-color: rgb(192, 17, 17);
 }

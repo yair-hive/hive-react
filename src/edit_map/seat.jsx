@@ -4,7 +4,6 @@ import { EditContext, SelectablesContext } from "../pages/maps"
 import "../style/seat.css"
 
 function Seat(props){
-
     const edit = useContext(EditContext)
     const selecteblsState = useContext(SelectablesContext)
 

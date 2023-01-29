@@ -42,7 +42,7 @@ function TopBar(){
                 setState = {set_maps_pop_up_status}
                 title = 'מפות'
             >
-                <Maps_list />
+                <Maps_list onMapClick={()=> set_maps_pop_up_status(false)}/>
             </PopUp>
         </div>
     )
