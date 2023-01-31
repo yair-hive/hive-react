@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useQuery } from "react-query";
 import { Link, useParams } from "react-router-dom";
+import AddGuest from "../components/add_guest";
+import GroupsPop from "../components/groups_pop";
 import ImportGuests from "../components/import_guests";
 import GuestsTable from "../guests_list/guests_table";
 import HiveButton from "../hive_elements/hive_button";
@@ -16,6 +18,7 @@ function Guests(){
     const [groupsStatus, setGroupsStatus] = useState('הכל')
     const [tagsStatus, setTagsStatus] = useState('הכל')
     const [importPop, setImportPop] = useState(false)
+    const [groupsPop, setGroupsPop] = useState(false)
     const [addGuestPop, setAddGuestPop] = useState(false)
 
     const  map_res  = useQuery(['get_map', map_name], async ()=>{
@@ -63,30 +66,11 @@ function Guests(){
                 <HiveButton> חזור למפה </HiveButton>
             </Link>
             <HiveButton onClick={()=> setAddGuestPop(true)}> הוסף בחורים </HiveButton>
-            <PopUp
-                status={addGuestPop} 
-                setState = {setAddGuestPop}
-                title = 'הוסף'
-            >
-                <form id='add_guest_form'>
-                    <label for='first_name'> שם פרטי </label>
-                    <br /> 
-                    <input type='text' name='first_name' />  
-                    <br />           
-                    <label for="last_name"> שם משפחה </label>
-                    <br /> 
-                    <input type='text' name='last_name' />
-                    <br /> 
-                    <label for='guest_group'> שיעור </label>
-                    <br /> 
-                    <input type='text' name='guest_group' />
-                    <br /> 
-                    <div id='add_guest_button' class='hive_button'> הוסף </div> 
-                </form>
-            </PopUp>
+            <AddGuest status={addGuestPop} setState = {setAddGuestPop}/>
             <HiveButton onClick={()=> setImportPop(true)}> ייבא בחורים </HiveButton>
             <ImportGuests status={importPop} setState = {setImportPop}/>
-            <HiveButton> קבוצות </HiveButton>
+            <HiveButton onClick={()=> setGroupsPop(true)}> קבוצות </HiveButton>
+            <GroupsPop status={groupsPop} setState = {setGroupsPop}/>
             <HiveSwitch 
                 options={['משובצים', 'לא משובצים', 'הכל']} 
                 active={'הכל'} 

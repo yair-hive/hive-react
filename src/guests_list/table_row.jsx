@@ -1,4 +1,14 @@
+import { useState } from "react"
+import api from "../scripts/api/api"
+import { TdFirst, TdGroup, TdLast, TdScore } from "./tds_components"
+
 function TableRow(props){
+
+    const [first, setFirst] = useState()
+    const [group, setGroup] = useState()
+    const [isFirstInput, setFirstInput] = useState(false)
+    const [isGroupInput, setGroupInput] = useState(false)
+
     var seat_number, belong
     if(props.seat) {
         seat_number = props.seat.seat_number
@@ -47,18 +57,23 @@ function TableRow(props){
     props.tags?.map((tag)=> {
         tags_string = tags_string +' | '+ tag
     })
+
+    function on_td_x(){
+        api.guest.delete(props.guest.id)
+    }
+
     return(
         <tr>
             <td className={'seat_number'} belong={belong}>{seat_number}</td>
             <td>
                 <div className="tags_cont">{tags_elements}</div>
             </td>
-            <td>{props.guest.last_name}</td>
-            <td>{props.guest.first_name}</td>
-            <td>{props.group.group_name}</td>
-            <td>{Number(props.guest.score) + Number(props.group.score)}</td>
+            <TdLast last_name={props.guest.last_name} guest_id={props.guest.id}/>
+            <TdFirst first_name={props.guest.first_name} guest_id={props.guest.id}/>
+            <TdGroup group={props.group.group_name} guest_id={props.guest.id}/>
+            <TdScore score={Number(props.guest.score) + Number(props.group.score)} guest_id={props.guest.id}/>
             <td></td>
-            <td className="td_x"> x </td>
+            <td className="td_x" onClick={on_td_x}> x </td>
         </tr>
     )
 }

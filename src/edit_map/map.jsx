@@ -66,6 +66,7 @@ function Map(props){
         if(edit == 'אל תערוך') {
             if(selection.disable) selection.disable()
         }
+        console.log(selection)
     }, [selection])
 
     useEffect(()=>{

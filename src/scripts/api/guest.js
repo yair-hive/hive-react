@@ -39,7 +39,8 @@ export const guest = {
         var req_body = Object.assign(action_params, req)
         options.body = JSON.stringify(req_body)  
         return fetch(api_url, options)
-        .then(res => res.text())
+        // .then(res => res.text())
+        .then(res => res.json())
         .then(res => console.log(res))
         // .then(res => alert(res))
         // .then(res => res.json())
@@ -238,4 +239,63 @@ export const guest = {
             return res.msg
         })
     },
+    update_first_name: (first_name, guest_id)=>{
+        const options = {
+            method: 'POST',
+            credentials: 'include',
+            body: "category=guest&action=update_first_name&guest_id="+guest_id+"&first_name="+first_name,
+            headers: {
+                'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            }
+        };
+        return fetch(api_url, options)
+        // .then(res => res.text())
+        // .then(res => alert(res))
+        .then(res => res.json())
+        .then((res)=>{
+            if(res.msg == 'ok') return
+            alert(res.msg)
+            return res.msg
+        })
+    },
+    update_last_name: (last_name, guest_id)=>{
+        console.log(last_name)
+        const options = {
+            method: 'POST',
+            credentials: 'include',
+            body: "category=guest&action=update_last_name&guest_id="+guest_id+"&last_name="+last_name,
+            headers: {
+                'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            }
+        };
+        return fetch(api_url, options)
+        // .then(res => res.text())
+        // .then(res => alert(res))
+        .then(res => res.json())
+        .then((res)=>{
+            if(res.msg == 'ok') return
+            alert(res.msg)
+            return res.msg
+        })
+    },
+    update_group_name: (group_name, guest_id)=>{
+        const options = {
+            method: 'POST',
+            credentials: 'include',
+            body: "category=guest&action=update_group_name&guest_id="+guest_id+"&group_name="+group_name,
+            headers: {
+                'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            }
+        };
+        return fetch(api_url, options)
+        // .then(res => res.text())
+        // .then(res => alert(res))
+        .then(res => res.json())
+        .then((res)=>{
+            if(res.msg == 'ok') return
+            alert(res.msg)
+            return res.msg
+        })
+    },
+    
 }

@@ -14,7 +14,7 @@ const queryClient = new QueryClient({
   },
 })
 
-const ws = new WebSocket('ws://hive.com:3001')
+const ws = new WebSocket('ws://hive.com:3020')
 export const HiveSocket = React.createContext(null)
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
