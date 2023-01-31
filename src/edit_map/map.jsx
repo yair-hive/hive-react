@@ -67,7 +67,7 @@ function Map(props){
             if(selection.disable) selection.disable()
         }
         console.log(selection)
-    }, [selection])
+    }, [edit])
 
     useEffect(()=>{
 
