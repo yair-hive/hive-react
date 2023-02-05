@@ -6,6 +6,7 @@ import HiveSwitch from "../hive_elements/hive_switch";
 import PopUp from "../hive_elements/pop_up";
 import { ActionsContext, SelectablesContext, TagsPopUpContext } from "../pages/maps";
 import { EditContext } from "../pages/maps"
+import { useGroupsQuery, useGuestBelogsQuery, useGuestsQuery, useMapQuery, useSeatsQuery } from "../querys";
 
 import "../style/side_menu.css"
 import TagsPop from "./tags_pop";
@@ -14,11 +15,11 @@ function SideMenu(props) {
 
     let {map_name} = useParams()
 
-    const map_res  = props.map_res
-    const seats_res = props.seats_res
-    const belongs_res = props.belongs_res 
-    const guests_res = props.guests_res
-    const guests_groups_res = props.guests_groups_res
+    const map  = useMapQuery()
+    const seats = useSeatsQuery()
+    const belongs = useGuestBelogsQuery()
+    const guests = useGuestsQuery()
+    const groups = useGroupsQuery()
 
     const [input_str, setInputStr] = useState('')
     const [tagsPopStatus, setTagsPopStatus] = useContext(TagsPopUpContext)
@@ -34,7 +35,7 @@ function SideMenu(props) {
             if(input_str.length != 0){
                 var search_reg = new RegExp(search_str)
                 for(var corrent of guests_data){
-                    if(search_reg.test(corrent.full_name)){
+                    if(search_reg.test(corrent.name)){
                         match_list.push(corrent)
                     }
                 }
@@ -42,22 +43,16 @@ function SideMenu(props) {
             return match_list
         }
 
-        if(map_res.data && seats_res.data && belongs_res.data && guests_res.data && guests_groups_res.data){
-            var new_belongs = {}
-            var new_seats = {}
-            var new_groups = {}
-            belongs_res.data.map(bel => {new_belongs[bel.guest] = bel})
-            seats_res.data.map(seat => {new_seats[seat.id] = seat})
-            guests_groups_res.data.map(group => {new_groups[group.id] = group})
+        if(map.data && seats.data && belongs.data && guests.data && groups.data){
             var guests_with_belong = []
-            for(let guest of guests_res.data){
-                var seat = new_belongs[guest.id]
+            var guest_array = Object.entries(guests.data)
+            for(let [index, guest] of guest_array){
+                var seat = belongs.data[guest.id]
                 if(seat) {
                     seat = seat.seat
-                    var seat_number = new_seats[seat].seat_number
+                    var seat_number = seats.data[seat].seat_number
                     guest.group_id = guest.guest_group
-                    guest.group_name = new_groups[guest.group_id].group_name
-                    guest.full_name = guest.last_name  + ' ' + guest.first_name
+                    guest.group_name = groups.data[guest.group_id].group_name
                     guest.seat_number = seat_number
                     guests_with_belong.push(guest)
                 }
@@ -68,7 +63,7 @@ function SideMenu(props) {
             for(let match of matchList){
                 i++
                 var match_element = <li key={i}>
-                    <span>{match.full_name}</span>
+                    <span>{match.name}</span>
                     <span>
                         <span className="seat_number">
                             {`| ${match.seat_number} | `}

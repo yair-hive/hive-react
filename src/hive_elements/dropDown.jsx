@@ -39,7 +39,7 @@ function DropDown(props){
         return ()=> main_bord.removeEventListener('scroll', offsetCalculate)
     }, [props.pos])
 
-    if(!props.status) return
+    if(!props.pos) return
 
     return (<div className="drop_down" ref={divRef}>
         {props.children}

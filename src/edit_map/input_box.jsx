@@ -32,7 +32,7 @@ function InputBox(props) {
         return ()=> main_bord.removeEventListener('scroll', offsetCalculate)
     }, [props.pos])
 
-    if(!props.status) return
+    if(!props.pos) return
 
     function onInput(event){
         props.setInputStr(event.target.value)

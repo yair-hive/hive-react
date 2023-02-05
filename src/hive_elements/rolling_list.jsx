@@ -47,7 +47,6 @@ function RolligList(props) {
             onItem()
         }
     }
-    useEffect(()=>console.log(index))
     useEffect(()=>{
         document.addEventListener('keydown', onKeyDown)
         return ()=> document.removeEventListener('keydown', onKeyDown)

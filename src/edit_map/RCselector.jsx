@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { EditContext } from '../pages/maps';
 import '../style/row_col_selector.css'
 
-function RowColSelector(props) {
+function RCselector(props) {
     const edit = useContext(EditContext)
 
     if(edit === 'ערוך'){
@@ -18,4 +18,4 @@ function RowColSelector(props) {
     }
 }
 
-export default RowColSelector;
+export default RCselector;

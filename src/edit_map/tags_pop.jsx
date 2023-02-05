@@ -3,6 +3,7 @@ import { useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";
 import { useSocket } from "../app";
 import PopUp from "../hive_elements/pop_up";
+import { useTagsQuery } from "../querys";
 import api from "../scripts/api/api";
 
 function ColorInput(props){
@@ -36,27 +37,25 @@ function ColorInput(props){
 
 function TagsPop(props) {
 
-    const queryClient = useQueryClient()
-    let {map_name} = useParams()
+    const tags = useTagsQuery()
 
     function create_tag_tds(){
-        // var get_belongs = queryClient.getQueryData(['get_belongs', map_name])
-        // console.log(get_belongs)
-        var tags = queryClient.getQueryData(['tags', map_name])
-        var tr_elements = []
-        var new_tags = Object.entries(tags)
-        for(let [tag_key, tag] of new_tags){
-            var tr = (
-                <tr key={tag_key}>
-                    <td className="td_x"> X </td>
-                    <td className="td_color"> <ColorInput color = {tag.color} tag_id={tag.id}/> </td>
-                    <td> {tag.score} </td>
-                    <td> {tag.tag_name} </td>
-                </tr>
-            )
-            tr_elements.push(tr)
+        if(tags.data){
+            var tr_elements = []
+            var new_tags = Object.entries(tags.data)
+            for(let [tag_key, tag] of new_tags){
+                var tr = <tr key={tag_key}>
+                        <td className="td_x"> X </td>
+                        <td className="td_color"> <ColorInput color = {tag.color} tag_id={tag.id}/> </td>
+                        <td> {tag.score} </td>
+                        <td> {tag.tag_name} </td>
+                    </tr>
+                tr_elements.push(tr)
+            }
+            return tr_elements
         }
-        return tr_elements
+        return 'loading...'
+
     }
     return (
     <PopUp 

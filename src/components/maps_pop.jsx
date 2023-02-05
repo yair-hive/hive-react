@@ -14,7 +14,7 @@ function MapsPop(props){
             var maps_array = []
             var key = 0
             for(let map of maps_list){
-                maps_array.push(<li key={key++}> <Link to={`/maps/${map.map_name}`} onClick={props.onMapClick}> {map.map_name} </Link></li>)
+                maps_array.push(<li key={key++} onClick={()=> props.setState(false)}> <Link to={`/maps/${map.map_name}`} onClick={props.onMapClick}> {map.map_name} </Link></li>)
             }
             return maps_array
         }

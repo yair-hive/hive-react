@@ -1,5 +1,6 @@
 const parsedUrl = new URL(window.location.href)
 const api_url = "http://hive.com/php/api.php"
+const api_url_1 = "http://hive.com/api/index.php"
 
 export const seat = {
     get_all: (map_id)=>{
@@ -14,6 +15,27 @@ export const seat = {
         };
           
         return fetch(api_url, options)
+        // .then(res => res.text())
+        // .then(res => alert(res))
+        .then(res => res.json())
+        .then((res)=>{
+            if(res.msg == 'ok') return res.data
+            alert(res.msg)
+            return res.msg
+        })
+    },
+    get_all_1: ({queryKey})=>{
+        const options = {
+            method: 'POST',
+            credentials: 'include',
+            body: "category=seat&action=get_all&map_name="+queryKey[1],
+            
+            headers: {
+                'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            }
+        };
+          
+        return fetch(api_url_1, options)
         // .then(res => res.text())
         // .then(res => alert(res))
         .then(res => res.json())

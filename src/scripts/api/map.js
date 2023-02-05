@@ -1,5 +1,6 @@
 const parsedUrl = new URL(window.location.href)
 const api_url = "http://hive.com/php/api.php"
+const api_url_1 = "http://hive.com/api/index.php"
 
 export const map = {
     get_all: ()=>{

@@ -1,63 +1,96 @@
 import { useSelection } from '@viselect/react'
-import { useReducer } from 'react'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState, useReducer } from 'react'
+import React from 'react'
 import { useParams } from 'react-router-dom'
 import { useSocket } from '../app'
 import { ActionsContext, EditContext, MapIdContext, SelectablesContext } from '../pages/maps'
 import api from '../scripts/api/api'
 import AddGuestDropDown from './add_guest_drop_down'
-import Cell from './cell'
-import RowColSelector from './row_col_selector'
-import Seat from './seat'
+import NewCell from './new_cell'
+import { useMapQuery, useSeatsQuery } from '../querys'
+import "../style/map_cont.css"
+
+export const DropContext = React.createContext(null)
 
 function cells_reducer(state, action){
-
-    function get_seat_index(row, col){
-        return (row * state.cols) + col
-    }
-
+    var list = []
+    var RCindex = []
+    var i = 0
     if(action.type === 'create_array'){
-        var cells_number = action.rows * action.cols
+        for(let row = 0; row <=  action.rows; row++){
+            RCindex[row] = []
+            if(row != 0){
+                for(let col = 0; col <= action.cols; col++){
+                    if(col != 0){
+                        RCindex[row][col] = i
+                        list[i] = {row: row, col: col}
+                        i++
+                    }else{
+                        RCindex[row][col] = i
+                        list[i] = {RC: true, row: row, col: col}
+                        i++
+                    }
+                }
+            }else{
+                for(let col = 0; col <= action.cols; col++){
+                    RCindex[row][col] = i
+                    list[i] = {RC: true, row: row, col: col}
+                    i++
+                }
+            }
+        }
         return ({
             rows: action.rows,
             cols: action.cols,
-            list: Array(cells_number).fill(null)
+            list: list,
+            RCindex: RCindex
         })
     }
     if(action.type === 'add_seats'){
-        if(typeof state.list == 'object'){
-            var new_arr = state.list.slice()
-            for(let seat of action.seats){
-                new_arr[get_seat_index(seat.row_num, seat.col_num)] = seat
-            }
-            return new_arr
+        var new_arr = state.list.slice()
+        var i = 0 
+        var seats_array = Object.entries(action.seats)
+        for(let [key, seat] of seats_array){
+            new_arr[state.RCindex[seat.row_num][seat.col_num]] = seat
+            i++
         }
+        state.list = new_arr
+        return state
     }
 }
 
-function Map(props){
+function Map(){
 
     let {map_name} = useParams()
+
+    const map = useMapQuery()
+    const seats = useSeatsQuery()
 
     const [selected_seat, setSelectedSeat] = useState(null)
     const [action, setAction] = useContext(ActionsContext)
     const [cells_list, dispatch] = useReducer(cells_reducer, {})
     const selection = useSelection()
 
-    const map_res  = props.map_res
-    const seats_res = props.seats_res
-    const belongs_res = props.belongs_res 
-    const guests_res = props.guests_res
-    const guests_groups_res = props.guests_groups_res
-    const tags_res = props.tags_res
-    const tags_belong_res = props.tags_belong_res
-
-    const [dropDownStatus, setDropDownStatus] = useState(false)
     const [dropDownPos, setDropDownPos] = useState(null)
     const edit = useContext(EditContext)
     const selecteblsState = useContext(SelectablesContext)
     const map_id = useContext(MapIdContext)
     const hiveSocket = useSocket()
+
+    function onMousedown(event){
+        if(event.keyCode != 13){
+            var classList = event.target.classList
+            if(!event.ctrlKey && !event.metaKey && !classList.contains('hive_button')){
+                if(!event.target.classList.contains('cell')){
+                    document.querySelectorAll('.selected').forEach(e => e.classList.remove('selected'))
+                }                               
+            }
+        }
+    }
+    useEffect(()=>{
+        document.addEventListener('mousedown', onMousedown)
+        return ()=> document.removeEventListener('mousedown', onMousedown)
+    }, [])
 
     useEffect(()=>{
         if(edit == 'ערוך') {
@@ -66,7 +99,6 @@ function Map(props){
         if(edit == 'אל תערוך') {
             if(selection.disable) selection.disable()
         }
-        console.log(selection)
     }, [edit])
 
     useEffect(()=>{
@@ -75,7 +107,7 @@ function Map(props){
             var classList = event.target.classList
             if(!event.ctrlKey && !event.metaKey && !classList.contains('hive_button')){
                 if(!classList.contains('name_box') && !classList.contains('drop_down') && !classList.contains('rolling_list_item')){
-                    setDropDownStatus(false)
+                    setDropDownPos(false)
                 }                               
             }
         }
@@ -153,171 +185,54 @@ function Map(props){
         var i = 0
         if(typeof cells_list.list == 'object'){
             for(let cell of cells_list.list){
+                cells_elements.push(<NewCell cell={cell} key={i}/>)
                 i++
-                if(cell === null){
-                    cells_elements.push(<Cell key={i}/>)
-                }
             }
             return cells_elements
         }
     }
 
     useEffect(()=>{
-        if(map_res.data){
+        if(map.data){
             dispatch({
                 type: 'create_array',
-                rows: map_res.data.rows_number,
-                cols: map_res.data.columns_number
+                rows: map.data.rows_number,
+                cols: map.data.columns_number
             })
         }
-    }, [map_res.data])
+    }, [map.data])
 
     useEffect(()=>{
-        if(seats_res.data){
+        if(seats.data && map.data){
             dispatch({
                 type: 'add_seats',
-                seats: seats_res.data
+                seats: seats.data
             })
         }
-    }, [seats_res.data, map_res.data])
-
-    // useEffect(()=>{console.log(cells_list.list)}, [cells_list])
-
-    const create_cells = function(){
-        // console.log(guests_res.data)
-        if(belongs_res.data){
-            var new_belongs = {}
-            belongs_res.data.map(bel => {
-                new_belongs[bel.seat] = bel
-                return bel
-            })
-            var cells = []
-            var key = 0
-            for(var rowsCounter = 0; rowsCounter <= map_res.data.rows_number; rowsCounter++){
-                if(rowsCounter != 0){
-                    for(var colsCounter = 0; colsCounter <= map_res.data.columns_number; colsCounter++){
-                        if(colsCounter != 0){
-                            if(seats_res.data.length > 0){
-                                for(let seat of seats_res.data){
-                                    if(seat.row_num == rowsCounter && seat.col_num == colsCounter){
-                                        var guest = null
-                                        if(new_belongs[seat.id]) guest = new_belongs[seat.id].guest
-                                        cells[key]= {row: rowsCounter, col: colsCounter, key: key, seat: {seat_id: seat.id, seat_number: seat.seat_number, belong: guest}}
-                                        break;
-                                    }else{
-                                        cells[key]= {row: rowsCounter, col: colsCounter, key: key, seat: false}
-                                    }
-                                }
-                            }else{
-                                cells[key]= {row: rowsCounter, col: colsCounter, key: key, seat: false}
-                            }
-                        }else{
-                            cells[key] = {selector: true, number: rowsCounter, key: key}
-                        }
-                        key++          
-                    }
-                }else{
-                    for(var colsCounter = 0; colsCounter <= map_res.data.columns_number; colsCounter++){
-                        cells[key] = {selector: true, number: colsCounter, key: key}
-                        key++
-                    }
-                }                        
-            }
-            // console.log(map_res.data)
-            // console.log(seats_res.data)
-            // console.log(cells)
-            return cells
-        }
-    }
+    }, [seats.data, map.data])
 
     var STYLE
     if(edit === 'אל תערוך'){
         STYLE = {
-            '--map-rows' : map_res.data?.rows_number, 
-            '--map-cols' : map_res.data?.columns_number
+            '--map-rows' : map.data?.rows_number, 
+            '--map-cols' : map.data?.columns_number
         }
     }
     if(edit === 'ערוך'){
         STYLE = {
-            '--map-rows' : Number(map_res.data?.rows_number)+1, 
-            '--map-cols' : Number(map_res.data?.columns_number)+1
+            '--map-rows' : Number(map.data?.rows_number)+1, 
+            '--map-cols' : Number(map.data?.columns_number)+1
         }
     }
 
-    // return (<div id="map" className="map" style={STYLE}> {new_create_cells()} </div>)
-
-    if(map_res.data && seats_res.data && belongs_res.data && guests_res.data && guests_groups_res.data && tags_res.data && tags_belong_res.data){
-        return (<>
-        <AddGuestDropDown status={dropDownStatus} pos={dropDownPos} guests_res={guests_res} selected_seat={selected_seat} map={map_res}/>
-        <div id="map" className="map" style={STYLE}> 
-            {create_cells().map(cell => {
-                var new_guests = {} 
-                guests_res.data.map(gue => {
-                    new_guests[gue.id] = gue
-                    return gue
-                })
-                var new_groups = {}
-                guests_groups_res.data.map(group => {
-                    new_groups[group.id] = group
-                    return group
-                })
-                if(cell.selector){
-                    return <RowColSelector 
-                        key = {cell.key}
-                        number = {cell.number}
-                    />
-                }
-                var new_tags_belong = {}
-                tags_belong_res.data.map(bel => {
-                    new_tags_belong[bel.seat] = []
-                    return bel
-                })
-                tags_belong_res.data.map(bel => {
-                    bel.tag_data = tags_res.data[bel.group_id]
-                    new_tags_belong[bel.seat].push(bel)
-                    return bel
-                })
-                // console.log(new_groups)
-                if(cell.seat){
-                    var guest_name = null
-                    var color = null
-                    var tags = null
-                    if(cell.seat.belong) {
-                        var guest = new_guests[cell.seat.belong]
-                        if(guest){
-                            guest_name = guest.last_name + ' ' + guest.first_name
-                            if(guest.guest_group) color = new_groups[guest.guest_group].color
-                        }
-                    }
-                    var seat_tags = new_tags_belong[cell.seat.seat_id] 
-                    if(seat_tags) tags = seat_tags
-                    // console.log(guest_name)
-                    return <Seat 
-                                key={cell.key} 
-                                number={cell.seat.seat_number} 
-                                name={guest_name} 
-                                color = {color}
-                                tags={tags}
-                                setDropDownStatus={setDropDownStatus}
-                                setDropDownPos = {setDropDownPos}
-                                setSelectedSeat={setSelectedSeat}
-                                edit={props.editStatus}
-                                seat_id = {cell.seat.seat_id}
-                            />
-                }else{
-                    return <Cell 
-                        row_number={cell.row} 
-                        col_number={cell.col} 
-                        key={cell.key} 
-                        index={cell.key} 
-                        selectable={true}
-                    />
-                }                  
-            })} 
-        </div>
-        </>)
-    }
-    return 'loading ...'
+        return (<div className="map_container">
+            <DropContext.Provider value={[dropDownPos, setDropDownPos]}>
+            <AddGuestDropDown pos={dropDownPos} selected_seat={selected_seat} map={map}/>
+                <div id="map" className="map" style={STYLE}> 
+                    {new_create_cells()}
+                </div>
+            </DropContext.Provider>
+        </div>)
 }
 
 export default Map

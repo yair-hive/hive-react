@@ -161,3 +161,12 @@ export function TdScore(props){
 
     return <td onClick={onTdClick}>{score}</td>
 }
+
+export function TdX(props){
+ 
+    function on_td_x(){
+        api.guest.delete(props.guest_id)
+    }
+
+    return (<td className="td_x" onClick={on_td_x}> x </td>)
+}
