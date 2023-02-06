@@ -6,7 +6,7 @@ import TagsCount from "../components/tags_count"
 import { EditContext, SelectablesContext } from "../pages/maps"
 import { useSeatBelogsQuery, useGroupsQuery, useGuestsQuery, useTagsQuery, useTagsBelongsQuery } from "../querys"
 import "../style/seat.css"
-import { DropContext } from "./map"
+import { DropContext, SelectedContext } from "./map"
 
 function getColor(backColor){
 var color = 'black'
@@ -41,6 +41,7 @@ function Seat(props){
     const [guest, setGuest] = useState({})
     const [group, setGroup] = useState({})
     const [tags, setTags] = useState()
+    const [selected_seat, setSelectedSeat] = useContext(SelectedContext)
 
     var color, font_size = ''
     if(group?.color) color = getColor(group?.color)
@@ -74,7 +75,7 @@ function Seat(props){
 
     function nameBoxOnClick(){
         setDropDownPos(nameBoxRef.current)
-        // props.setSelectedSeat(props.seat_id)
+        setSelectedSeat(props.seat_id)
     }
     const NAME_BOX_STYLE = {
         backgroundColor: group?.color,

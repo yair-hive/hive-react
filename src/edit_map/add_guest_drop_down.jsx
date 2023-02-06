@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom"
 import { useSocket } from "../app"
 import DropDown from "../hive_elements/dropDown"
 import RolligList from "../hive_elements/rolling_list"
+import { useAddGuest } from "../mutations"
 import { useGuestsQuery } from "../querys"
 import api from "../scripts/api/api"
 import InputBox from "./input_box"
@@ -15,23 +16,29 @@ function AddGuestDropDown(props){
 
     const [inputStr, setInputStr] = useState('')
     const hiveSocket = useSocket()
+    const add_guest = useAddGuest()
 
     function onItem(item){
-        api.guest.create_belong(item.value, props.selected_seat, props.map.data.id)
-        .then((res)=> {
-            if(res.msg === 'exists'){
-                if(window.confirm('המשתמש כבר משובץ האם אתה רוצה לשבץ מחדש?')){
-                    api.guest.update_belong(item.value, props.selected_seat, props.map.data.id)
-                    .then(()=>{
-                        var msg = JSON.stringify({action: 'invalidate', quert_key: ['get_belongs', map_name]})
-                        hiveSocket.send(msg)
-                    })
-                }
-            }else{
-                var msg = JSON.stringify({action: 'invalidate', quert_key: ['get_belongs', map_name]})
-                hiveSocket.send(msg)
-            }
+        add_guest.mutate({
+            guest_id: item.value, 
+            seat_id: props.selected_seat
         })
+        // api.guest.create_belong(item.value, props.selected_seat, props.map.data.id)
+        // .then((res)=> {
+        //     if(res.msg === 'exists'){
+        //         if(window.confirm('המשתמש כבר משובץ האם אתה רוצה לשבץ מחדש?')){
+        //             api.guest.update_belong(item.value, props.selected_seat, props.map.data.id)
+        //             .then((res)=>{
+        //                 console.log(res)
+        //                 var msg = JSON.stringify({action: 'invalidate', quert_key: ['get_belongs', map_name]})
+        //                 hiveSocket.send(msg)
+        //             })
+        //         }
+        //     }else{
+        //         var msg = JSON.stringify({action: 'invalidate', quert_key: ['get_belongs', map_name]})
+        //         hiveSocket.send(msg)
+        //     }
+        // })
     }
 
     function createMatchList(){

@@ -20,7 +20,7 @@ function Maps(){
     let {map_name} = useParams()
     const [editStatus, setEditStatus] = useState('אל תערוך')
     const selecteblsState = useState('cell')
-    const actionsState = useState(null)
+    const actionsState = useState('numbers')
     const tagsPopState = useState(false)
 
     function onStart({event, selection}){

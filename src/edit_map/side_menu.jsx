@@ -50,7 +50,7 @@ function SideMenu(props) {
                 var seat = belongs.data[guest.id]
                 if(seat) {
                     seat = seat.seat
-                    var seat_number = seats.data[seat].seat_number
+                    var seat_number = seats.data[seat]?.seat_number
                     guest.group_id = guest.guest_group
                     guest.group_name = groups.data[guest.group_id].group_name
                     guest.seat_number = seat_number

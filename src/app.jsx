@@ -20,6 +20,7 @@ function App() {
   useEffect(()=>{
     hiveSocket.onmessage = function(msg){
       var data = JSON.parse(msg.data)
+      console.log(data)
       if(data.action == 'invalidate'){
         queryClient.invalidateQueries(data.query_key)
       }

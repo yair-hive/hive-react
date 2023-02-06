@@ -24,5 +24,13 @@ export const seat_new = {
         const json_res = await res.json();
         if (json_res.msg != 'ok') throw new Error(json_res.msg);
         else return json_res.data;
-    }
+    },
+    create_multiple: async (map_name, data)=>{
+        const options = {...global_options}
+        options.body = "category=seat&action=create_multiple&map_name="+map_name+"&data="+data
+        const res = await fetch(api_url, options);
+        const json_res = await res.json();
+        if (json_res.msg != 'ok') throw new Error(json_res.msg);
+        else return json_res;
+    },
 }
