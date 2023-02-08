@@ -9,6 +9,14 @@ const global_options = {
 };
 
 export const tag_new = {
+    add_multiple: async (seats, group, map_name)=>{       
+        const options = {...global_options}
+        options.body = "category=tag&action=add_multiple_tags&seats="+seats+"&group="+group+"&map_name="+map_name        
+        const res = await fetch(api_url, options);
+        const json_res = await res.json();
+        if (json_res.msg != 'ok') throw new Error(json_res.msg);
+        else return json_res.data
+    },
     get_all: async function({queryKey}){
         const options = {...global_options}
         var action_params = {

@@ -9,18 +9,20 @@ import "../style/seat.css"
 import { DropContext, SelectedContext } from "./map"
 
 function getColor(backColor){
-var color = 'black'
-    var c = backColor.substring(1);      // strip #
-    var rgb = parseInt(c, 16);   // convert rrggbb to decimal
-    var r = (rgb >> 16) & 0xff;  // extract red
-    var g = (rgb >>  8) & 0xff;  // extract green
-    var b = (rgb >>  0) & 0xff;  // extract blue
-
-    var luma = 0.2126 * r + 0.7152 * g + 0.0722 * b; // per ITU-R BT.709
-    if (luma < 160) {
-        color = 'white'
+    if(backColor){
+        var color = 'black'
+        var c = backColor.substring(1);      // strip #
+        var rgb = parseInt(c, 16);   // convert rrggbb to decimal
+        var r = (rgb >> 16) & 0xff;  // extract red
+        var g = (rgb >>  8) & 0xff;  // extract green
+        var b = (rgb >>  0) & 0xff;  // extract blue
+    
+        var luma = 0.2126 * r + 0.7152 * g + 0.0722 * b; // per ITU-R BT.709
+        if (luma < 160) {
+            color = 'white'
+        }
+        return color
     }
-    return color
 }
 
 function getFontSize(str){
@@ -37,48 +39,39 @@ function Seat(props){
     const guests = useGuestsQuery()
     const groups = useGroupsQuery()
     const tagsBelongs = useTagsBelongsQuery()
-    const [guest_id, setGuestId] = useState(null) 
-    const [guest, setGuest] = useState({})
-    const [group, setGroup] = useState({})
-    const [tags, setTags] = useState()
     const [selected_seat, setSelectedSeat] = useContext(SelectedContext)
 
+    var guest_id
+    if(belongs.data){
+        var seat_belong = belongs.data[props.seat_id]
+        guest_id = seat_belong?.guest
+    }
+
+    var guest
+    if(guests.data && guest_id){
+        guest = guests.data[guest_id]
+    }
+
+    var group_color = undefined
+    if(guest && groups.data){
+        group_color = groups.data[guest.guest_group]?.color
+    }
     var color, font_size = ''
-    if(group?.color) color = getColor(group?.color)
+    color = getColor(group_color)
     if(guest?.name) font_size = getFontSize(guest?.name)
 
-    useEffect(()=>{
-        if(belongs.data){
-            var seat_belong = belongs.data[props.seat_id]
-            setGuestId(seat_belong?.guest)
-        }
-    }, [belongs.data])
-
-    useEffect(()=>{
-        if(tagsBelongs.data){
-            var seat_tags = tagsBelongs.data[props.seat_id]
-            if(seat_tags) setTags(seat_tags)
-        }
-    }, [tagsBelongs])
-
-    useEffect(()=>{
-        if(guests.data && guest_id){
-            setGuest(guests.data[guest_id])
-        }
-    }, [guests.data, guest_id])
-
-    useEffect(()=>{
-        if(guest && groups.data){
-            setGroup(groups.data[guest.guest_group])
-        }
-    }, [guest, groups.data])
+    var tags
+    if(tagsBelongs.data){
+        var seat_tags = tagsBelongs.data[props.seat_id]
+        if(seat_tags) tags = seat_tags
+    }
 
     function nameBoxOnClick(){
         setDropDownPos(nameBoxRef.current)
         setSelectedSeat(props.seat_id)
     }
     const NAME_BOX_STYLE = {
-        backgroundColor: group?.color,
+        backgroundColor: group_color,
         fontSize: font_size,
         color: color
     }
@@ -86,10 +79,11 @@ function Seat(props){
     function name_box(){
         if(edit === 'ערוך'){
             return <div className="name_box"> <TagsCount tags={tags}/></div>
+            // return <div className="name_box"> {props.seat.col_score} & {props.seat.row_score} & {props.seat.pass_score}</div>
         }
         return(
             <div className="name_box" style={NAME_BOX_STYLE} ref={nameBoxRef} onClick={nameBoxOnClick}>
-                {guest.name}
+                {guest?.name}
             </div>  
         )
     } 

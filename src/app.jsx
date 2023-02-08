@@ -4,7 +4,7 @@ import { Route, Routes } from 'react-router-dom';
 import Maps from './pages/maps';
 import Guests from './pages/guests';
 import Login from './pages/login';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { useEffect } from 'react';
 import { useQueryClient } from 'react-query';
 import { HiveSocket } from '.';
@@ -14,9 +14,12 @@ export function useSocket(){
   return useContext(HiveSocket)
 }
 
+export const MBloaderContext = React.createContext(false)
+
 function App() {
   const hiveSocket = useSocket()
   const queryClient = useQueryClient()
+  const MBloaderState = useState(false)
   useEffect(()=>{
     hiveSocket.onmessage = function(msg){
       var data = JSON.parse(msg.data)
@@ -30,6 +33,7 @@ function App() {
     }
   }, [])
   return (
+    <MBloaderContext.Provider value={MBloaderState}>
       <div className="content">
         <TopBar />
         <Routes>
@@ -38,6 +42,7 @@ function App() {
           <Route path='login' element={<Login/>} />
         </Routes>
       </div>
+    </MBloaderContext.Provider>
   );
 }
 

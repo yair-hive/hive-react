@@ -9,6 +9,14 @@ const global_options = {
 };
 
 export const seat_new = {
+    get_all_1: async ({queryKey})=>{
+        const options = {method: 'GET'}
+        // options.body = `category=seat&action=get_all&map_name=${queryKey[1]}`       
+        const res = await fetch("http://localhost:3020/actions/seats_score/"+queryKey[1], options);
+        const json_res = await res.json();
+        if (json_res.msg != 'ok') throw new Error(json_res.msg);
+        else return json_res.data;
+    },
     get_all: async ({queryKey})=>{
         const options = {...global_options}
         options.body = `category=seat&action=get_all&map_name=${queryKey[1]}`         
@@ -32,5 +40,13 @@ export const seat_new = {
         const json_res = await res.json();
         if (json_res.msg != 'ok') throw new Error(json_res.msg);
         else return json_res;
+    },
+    create_multiple_numbers: async (data)=>{
+        const options = {...global_options}
+        options.body = "category=seat&action=add_multiple_numbers&data="+data
+        const res = await fetch(api_url, options);
+        const json_res = await res.json();
+        if (json_res.msg != 'ok') throw new Error(json_res.msg);
+        else return json_res.data;
     },
 }

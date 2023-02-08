@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import HiveButton from "../hive_elements/hive_button";
 import HiveSwitch from "../hive_elements/hive_switch";
 import PopUp from "../hive_elements/pop_up";
+import { useScheduling } from "../mutations";
 import { ActionsContext, SelectablesContext, TagsPopUpContext } from "../pages/maps";
 import { EditContext } from "../pages/maps"
 import { useGroupsQuery, useGuestBelogsQuery, useGuestsQuery, useMapQuery, useSeatsQuery } from "../querys";
@@ -20,6 +21,8 @@ function SideMenu(props) {
     const belongs = useGuestBelogsQuery()
     const guests = useGuestsQuery()
     const groups = useGroupsQuery()
+
+    const scheduling = useScheduling()
 
     const [input_str, setInputStr] = useState('')
     const [tagsPopStatus, setTagsPopStatus] = useContext(TagsPopUpContext)
@@ -118,7 +121,8 @@ function SideMenu(props) {
                 <HiveSwitch
                 options={[
                     {value: 'numbers', name: 'מספרים'}, 
-                    {value: 'tags', name: 'תגיות'}
+                    {value: 'tags', name: 'תגיות'},
+                    {value: 'seat', name: 'כיסאות'}
                 ]} 
                 active={'numbers'} 
                 setActive={setAction}
@@ -133,7 +137,7 @@ function SideMenu(props) {
             return(
                 <div className="sub_menu">
                     <Link to={"/guests/"+map_name}><HiveButton>שמות</HiveButton></Link>
-                    <HiveButton> שבץ </HiveButton>
+                    <HiveButton onClick={scheduling.mutate}> שבץ </HiveButton>
                     <input type='text' onInput={onInput}></input>
                     <ul className="results" dir="rtl">{guestsList()}</ul>
                 </div>

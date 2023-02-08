@@ -8,6 +8,7 @@ import SideMenu from "../edit_map/side_menu";
 import { useEffect, useState } from "react";
 import React from "react";
 import Map from "../edit_map/map";
+import MBloader from "../hive_elements/MBloader";
 
 export const EditContext = React.createContext('אל תערוך')
 export const SelectablesContext = React.createContext(null)
@@ -54,6 +55,7 @@ function Maps(){
                 behaviour={{scrolling: {startScrollMargins: {x: 150, y: 0}}}}
                 className='selection_bond main_bord'
             >
+                <MBloader />
                 <Map />       
             </SelectionArea>
             <div className="side_menu">

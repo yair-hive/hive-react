@@ -9,7 +9,7 @@ import AddGuestDropDown from './add_guest_drop_down'
 import NewCell from './new_cell'
 import { useMapQuery, useSeatsQuery } from '../querys'
 import "../style/map_cont.css"
-import { useAddSeats } from '../mutations'
+import { useAddNumbers, useAddSeats, useAddTags } from '../mutations'
 
 export const DropContext = React.createContext(null)
 export const SelectedContext = React.createContext(null)
@@ -26,6 +26,9 @@ function Map(){
     const selection = useSelection()
 
     const add_seats = useAddSeats()
+    const add_numbers = useAddNumbers()
+    const add_tags = useAddTags()
+
     const [dropDownPos, setDropDownPos] = useState(null)
     const edit = useContext(EditContext)
     const selecteblsState = useContext(SelectablesContext)
@@ -73,32 +76,29 @@ function Map(){
                     var col_name = prompt('Please enter number')
                     var seatNumber = Number(col_name) + 1
                     var elements = document.querySelectorAll('.selected')
+                    var data = []
                     for(let element of elements){
                         var seat_id = element.getAttribute('seat_id')
-                        await api.seat.create_number(seat_id, seatNumber)     
+                        data.push({id:seat_id, number:seatNumber})     
                         seatNumber++
                     }
-                    var msg = JSON.stringify({action: 'invalidate', quert_key: ['get_seats', map_name]})
-                    hiveSocket.send(msg)
+                    add_numbers.mutate({data:data})
                 }
                 if(action == 'tags'){
                     var selected = document.querySelectorAll('.selected')
-                    var group_name = prompt('הכנס שם תווית')
+                    var tag_name = prompt('הכנס שם תווית')
+                    var seats = []
                     for(let i = 0; i < selected.length; i++){
                         var seat = selected[i]
                         var seat_id = seat.getAttribute('seat_id')
-                        api.tags.add(seat_id, group_name, map_id).then(()=>{
-                            var msg = JSON.stringify({action: 'invalidate', quert_key: ['tags', map_name]})
-                            hiveSocket.send(msg)
-                            var msg = JSON.stringify({action: 'invalidate', quert_key: ['tags_belong', map_name]})
-                            hiveSocket.send(msg)
-                        })
+                        seats.push(seat_id)
                     }
+                    add_tags.mutate({seats: seats, tag_name:tag_name})
                 }
             }
         }
         if(event.code == 'Delete' && map_id){
-            if(action == 'numbers'){
+            if(action == 'seat'){
                 var selected = document.querySelectorAll('.selected')
                 for(let seat of selected){
                     var seat_id = seat.getAttribute('seat_id')
@@ -142,7 +142,7 @@ function Map(){
                         }
                     }
                 }else{
-                    for(let col = 0; col <= action.cols; col++){
+                    for(let col = 0; col <= map.data.columns_number; col++){
                         RCindex[row][col] = i
                         list[i] = {RC: true, row: row, col: col}
                         i++
