@@ -41,7 +41,11 @@ function SideMenu(props) {
         source.onmessage = (event) => {
             const data = JSON.parse(event.data);
             setMBStatus(data.progress);
-            if(data.progress == 100) queryClient.invalidateQueries(['seat_belongs', map_name])
+            if(data.progress == 100){
+                queryClient.invalidateQueries(['seat_belongs', map_name])
+                source.close()
+                setMBStatus(0)
+            }
         };
 
         source.onerror = (error) => {

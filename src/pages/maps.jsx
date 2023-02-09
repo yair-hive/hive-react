@@ -44,7 +44,14 @@ function Maps(){
     const map_id = map_res.data?.id
 
     var className='selection_bond main_bord'
-    if(MBloaderStatus !== 0 && MBloaderStatus !== 100) className += ' in_of'
+    if(MBloaderStatus !== 0 && MBloaderStatus !== 100){
+        var mb = document.getElementsByClassName('selection_bond')[0]
+        mb.scrollTop = 0
+        mb.scrollLeft = 0
+        className += ' in_of'
+    }
+
+
 
     return (
         <>
