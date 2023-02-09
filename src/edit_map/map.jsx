@@ -36,10 +36,10 @@ function Map(){
     const hiveSocket = useSocket()
 
     if(edit == 'ערוך') {
-        if(selection.enable) selection.enable()
+        if(selection?.enable) selection.enable()
     }
     if(edit == 'אל תערוך') {
-        if(selection.disable) selection.disable()
+        if(selection?.disable) selection.disable()
     }
 
     function onMousedown(event){

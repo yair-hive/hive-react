@@ -18,6 +18,16 @@ html, body, #root{
   width: 100%;
   overflow: auto;
 }
+.main_bord{
+  display: block;
+  overflow: auto;
+  justify-content: center;
+  align-items: flex-start;
+  background-color: rgb(54, 48, 45);
+}
+.selection_bond.in_of{
+  overflow: hidden;
+}
 .top_bar{
   display: flex;
   align-items: center;
@@ -54,13 +64,6 @@ html, body, #root{
   display: inline-block;
   align-items: center;
   justify-content: center;
-}
-.main_bord{
-  display: block;
-  overflow: auto;
-  justify-content: center;
-  align-items: flex-start;
-  background-color: rgb(54, 48, 45);
 }
 .side_menu{
   z-index: 20;

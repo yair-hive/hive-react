@@ -5,7 +5,8 @@ import HiveButton from "../hive_elements/hive_button";
 import SelectionArea from '@viselect/react';
 import "../style/side_menu.css"
 import SideMenu from "../edit_map/side_menu";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { MBloaderContext, useSocket } from "../app";
 import React from "react";
 import Map from "../edit_map/map";
 import MBloader from "../hive_elements/MBloader";
@@ -23,6 +24,7 @@ function Maps(){
     const selecteblsState = useState('cell')
     const actionsState = useState('numbers')
     const tagsPopState = useState(false)
+    const [MBloaderStatus, setMBloaderStatus] = useContext(MBloaderContext)
 
     function onStart({event, selection}){
         if (!event.ctrlKey && !event.metaKey){
@@ -41,6 +43,9 @@ function Maps(){
 
     const map_id = map_res.data?.id
 
+    var className='selection_bond main_bord'
+    if(MBloaderStatus !== 0 && MBloaderStatus !== 100) className += ' in_of'
+
     return (
         <>
         <ActionsContext.Provider value={actionsState}>
@@ -53,10 +58,10 @@ function Maps(){
                 onStart={onStart}
                 onMove={onMove}
                 behaviour={{scrolling: {startScrollMargins: {x: 150, y: 0}}}}
-                className='selection_bond main_bord'
+                className={className}
             >
                 <MBloader />
-                <Map />       
+                <Map /> 
             </SelectionArea>
             <div className="side_menu">
                 <SideMenu setEditStatus={setEditStatus} />

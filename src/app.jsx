@@ -14,12 +14,12 @@ export function useSocket(){
   return useContext(HiveSocket)
 }
 
-export const MBloaderContext = React.createContext(false)
+export const MBloaderContext = React.createContext(0)
 
 function App() {
   const hiveSocket = useSocket()
   const queryClient = useQueryClient()
-  const MBloaderState = useState(false)
+  const MBloaderState = useState(0)
   useEffect(()=>{
     hiveSocket.onmessage = function(msg){
       var data = JSON.parse(msg.data)

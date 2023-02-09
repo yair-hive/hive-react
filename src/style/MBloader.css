@@ -1,8 +1,5 @@
 .loader-box{
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  margin: -24px 0 0 -24px;
+  transform: scale(3);
 }
 .loader {
     width: 48px;
@@ -36,4 +33,7 @@
   background-color: rgb(54, 41, 41);
   height: 100%;
   width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

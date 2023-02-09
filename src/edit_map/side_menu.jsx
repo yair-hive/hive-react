@@ -5,12 +5,14 @@ import HiveButton from "../hive_elements/hive_button";
 import HiveSwitch from "../hive_elements/hive_switch";
 import PopUp from "../hive_elements/pop_up";
 import { useScheduling } from "../mutations";
+import { MBloaderContext } from '../app'
 import { ActionsContext, SelectablesContext, TagsPopUpContext } from "../pages/maps";
 import { EditContext } from "../pages/maps"
 import { useGroupsQuery, useGuestBelogsQuery, useGuestsQuery, useMapQuery, useSeatsQuery } from "../querys";
 
 import "../style/side_menu.css"
 import TagsPop from "./tags_pop";
+import { useQueryClient } from "react-query";
 
 function SideMenu(props) {
 
@@ -22,14 +24,30 @@ function SideMenu(props) {
     const guests = useGuestsQuery()
     const groups = useGroupsQuery()
 
-    const scheduling = useScheduling()
+    // const scheduling = useScheduling()
 
     const [input_str, setInputStr] = useState('')
     const [tagsPopStatus, setTagsPopStatus] = useContext(TagsPopUpContext)
 
     const selecteblsState = useContext(SelectablesContext)
     const [action, setAction] = useContext(ActionsContext)
+    const [MBstatus, setMBStatus] = useContext(MBloaderContext)
+    const queryClient = useQueryClient()
     const edit = useContext(EditContext)
+
+    function scheduling(){
+        const source = new EventSource(`http://localhost:3020/actions/scheduling/${map_name}`);
+
+        source.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            setMBStatus(data.progress);
+            if(data.progress == 100) queryClient.invalidateQueries(['seat_belongs', map_name])
+        };
+
+        source.onerror = (error) => {
+            console.error('An error occurred:', error);
+        };
+    }
     
     function guestsList(){
         function createMatchList(guests_data){
@@ -137,7 +155,7 @@ function SideMenu(props) {
             return(
                 <div className="sub_menu">
                     <Link to={"/guests/"+map_name}><HiveButton>שמות</HiveButton></Link>
-                    <HiveButton onClick={scheduling.mutate}> שבץ </HiveButton>
+                    <HiveButton onClick={scheduling}> שבץ </HiveButton>
                     <input type='text' onInput={onInput}></input>
                     <ul className="results" dir="rtl">{guestsList()}</ul>
                 </div>
