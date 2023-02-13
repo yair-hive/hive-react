@@ -1,5 +1,5 @@
 import { useSelection } from '@viselect/react'
-import { useContext, useEffect, useState, useReducer } from 'react'
+import { useContext, useEffect, useState} from 'react'
 import React from 'react'
 import { useParams } from 'react-router-dom'
 import { useSocket } from '../app'
@@ -35,10 +35,10 @@ function Map(){
     const map_id = useContext(MapIdContext)
     const hiveSocket = useSocket()
 
-    if(edit == 'ערוך') {
+    if(edit === 'ערוך') {
         if(selection?.enable) selection.enable()
     }
-    if(edit == 'אל תערוך') {
+    if(edit === 'אל תערוך') {
         if(selection?.disable) selection.disable()
     }
 
@@ -59,55 +59,57 @@ function Map(){
         }
     }
     async function onMapAdd(event){
-        if(event.code == 'Enter'){
-            if(selecteblsState){
-                if(action == 'seat'){
-                    var cells_list = []
-                    var selected = document.querySelectorAll('.selected')
-                    for(let cell of selected){
-                        var cell_data = {}
-                        cell_data.row = cell.getAttribute('cell-row') 
-                        cell_data.col = cell.getAttribute('cell-col')
-                        cells_list.push(cell_data)
+        if(edit == 'ערוך'){
+            if(event.code == 'Enter'){
+                if(selecteblsState){
+                    if(action == 'seat'){
+                        var cells_list = []
+                        var selected = document.querySelectorAll('.selected')
+                        for(let cell of selected){
+                            var cell_data = {}
+                            cell_data.row = cell.getAttribute('cell-row') 
+                            cell_data.col = cell.getAttribute('cell-col')
+                            cells_list.push(cell_data)
+                        }
+                        add_seats.mutate(cells_list)
                     }
-                    add_seats.mutate(cells_list)
-                }
-                if(action == 'numbers'){
-                    var col_name = prompt('Please enter number')
-                    var seatNumber = Number(col_name) + 1
-                    var elements = document.querySelectorAll('.selected')
-                    var data = []
-                    for(let element of elements){
-                        var seat_id = element.getAttribute('seat_id')
-                        data.push({id:seat_id, number:seatNumber})     
-                        seatNumber++
+                    if(action == 'numbers'){
+                        var col_name = prompt('Please enter number')
+                        var seatNumber = Number(col_name) + 1
+                        var elements = document.querySelectorAll('.selected')
+                        var data = []
+                        for(let element of elements){
+                            var seat_id = element.getAttribute('seat_id')
+                            data.push({id:seat_id, number:seatNumber})     
+                            seatNumber++
+                        }
+                        add_numbers.mutate({data:data})
                     }
-                    add_numbers.mutate({data:data})
-                }
-                if(action == 'tags'){
-                    var selected = document.querySelectorAll('.selected')
-                    var tag_name = prompt('הכנס שם תווית')
-                    var seats = []
-                    for(let i = 0; i < selected.length; i++){
-                        var seat = selected[i]
-                        var seat_id = seat.getAttribute('seat_id')
-                        seats.push(seat_id)
+                    if(action == 'tags'){
+                        var selected = document.querySelectorAll('.selected')
+                        var tag_name = prompt('הכנס שם תווית')
+                        var seats = []
+                        for(let i = 0; i < selected.length; i++){
+                            var seat = selected[i]
+                            var seat_id = seat.getAttribute('seat_id')
+                            seats.push(seat_id)
+                        }
+                        add_tags.mutate({seats: seats, tag_name:tag_name})
                     }
-                    add_tags.mutate({seats: seats, tag_name:tag_name})
                 }
             }
-        }
-        if(event.code == 'Delete' && map_id){
-            if(action == 'seat'){
-                var selected = document.querySelectorAll('.selected')
-                for(let seat of selected){
-                    var seat_id = seat.getAttribute('seat_id')
-                    console.log(seat_id)
-                    await api.seat.delete(seat_id)
-                    await api.seat.delete_belong(seat_id)
+            if(event.code == 'Delete' && map_id){
+                if(action == 'seat'){
+                    var selected = document.querySelectorAll('.selected')
+                    for(let seat of selected){
+                        var seat_id = seat.getAttribute('seat_id')
+                        console.log(seat_id)
+                        await api.seat.delete(seat_id)
+                        await api.seat.delete_belong(seat_id)
+                    }
+                    var msg = JSON.stringify({action: 'invalidate', quert_key: ['get_seats', map_name]})
+                    hiveSocket.send(msg)
                 }
-                var msg = JSON.stringify({action: 'invalidate', quert_key: ['get_seats', map_name]})
-                hiveSocket.send(msg)
             }
         }
     }

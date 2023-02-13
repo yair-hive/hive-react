@@ -1,7 +1,10 @@
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useParams } from "react-router-dom"
 import { useSocket } from "../app"
+import { useDeleteGuest } from "../mutations"
+import { useRequestsQuery } from "../querys"
 import api from "../scripts/api/api"
+import TagsCount from "../components/tags_count"
 
 export function TdLast(props){
 
@@ -13,6 +16,10 @@ export function TdLast(props){
     function onTdClick(){
         setLastInput(true)
     }
+
+    useEffect(()=>{
+        setLast(props.last_name)
+    }, [props.last_name])
 
     function onInputBlur(){
         setLastInput(false)
@@ -43,13 +50,14 @@ export function TdLast(props){
 
     return <td onClick={onTdClick}>{last}</td>
 }
-
 export function TdFirst(props){
 
     const [isFirstInput, setFirstInput] = useState(false)
     const [first, setFirst] = useState(props.first_name)
     const hiveSocket = useSocket()
     const {map_name} = useParams()
+
+    useEffect(()=> setFirst(props.first_name), [props.first_name])
 
     function onTdClick(){
         setFirstInput(true)
@@ -84,13 +92,14 @@ export function TdFirst(props){
 
     return <td onClick={onTdClick}>{first}</td>
 }
-
 export function TdGroup(props){
 
     const [isGroupInput, setGroupInput] = useState(false)
     const [group, setGroup] = useState(props.group)
     const hiveSocket = useSocket()
     const {map_name} = useParams()
+
+    useEffect(()=> setGroup(props.group), [props.group])
 
     function onTdClick(){
         setGroupInput(true)
@@ -125,24 +134,30 @@ export function TdGroup(props){
 
     return <td onClick={onTdClick}>{group}</td>
 }
-
 export function TdScore(props){
 
     const [isScoreInput, setScoreInput] = useState(false)
-    const [score, setScore] = useState(props.score)
+    const [score, setScore] = useState(props.guest_score + props.group_score)
     const hiveSocket = useSocket()
     const {map_name} = useParams()
+
+    useEffect(()=> setScore(props.guest_score + props.group_score), [props.guest_score, props.group_score])
 
     function onTdClick(){
         setScoreInput(true)
     }
 
     function onInputBlur(){
+        api.guest.update_guest_score(props.guest_id, (score -props.group_score))
+        .then(()=> {
+            var msg = JSON.stringify({action: 'invalidate', quert_key: ['get_guests', map_name]})
+            hiveSocket.send(msg)
+        })
         setScoreInput(false)
     }
 
     function onInputChange(event){
-        setScore(event.target.value)
+        setScore(Number(event.target.value))
     }
 
     if(isScoreInput){ 
@@ -161,12 +176,44 @@ export function TdScore(props){
 
     return <td onClick={onTdClick}>{score}</td>
 }
-
 export function TdX(props){
+
+    const delete_guest = useDeleteGuest()
  
     function on_td_x(){
-        api.guest.delete(props.guest_id)
+        delete_guest.mutate({guest_id: props.guest_id})
     }
 
     return (<td className="td_x" onClick={on_td_x}> x </td>)
+}
+export function TdRequests(props){
+
+    const requests = useRequestsQuery()
+    const tdRef = useRef(null)
+
+    function onClick(){
+        props.setDropPos(tdRef.current)
+        props.setSelectedGuest(props.guest_id)
+    }
+
+    var requests_object
+
+    if(requests.data){
+        requests_object = {}
+        requests.data = requests.data.map(request => {
+            request.group_id = request.request
+            return request
+        })
+        requests.data.forEach(request => requests_object[request.guest] = [])
+        requests.data.forEach(request => requests_object[request.guest].push(request))
+    }
+
+    var this_requests
+    if(requests_object) this_requests = requests_object[props.guest_id]
+
+    return (
+        <td ref={tdRef} onClick={onClick}>
+            <TagsCount tags = {this_requests}/>
+        </td>
+    )
 }

@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { useParams } from "react-router-dom"
 import { useSocket } from "../app"
 import DropDown from "../hive_elements/dropDown"
@@ -7,6 +7,7 @@ import { useAddGuest } from "../mutations"
 import { useGuestsQuery } from "../querys"
 import api from "../scripts/api/api"
 import InputBox from "./input_box"
+import { DropContext } from "./map"
 
 function AddGuestDropDown(props){
 
@@ -17,12 +18,14 @@ function AddGuestDropDown(props){
     const [inputStr, setInputStr] = useState('')
     const hiveSocket = useSocket()
     const add_guest = useAddGuest()
+    const [dropDownPos, setDropDownPos] = useContext(DropContext)
 
     function onItem(item){
         add_guest.mutate({
             guest_id: item.value, 
             seat_id: props.selected_seat
         })
+        setDropDownPos(null)
         // api.guest.create_belong(item.value, props.selected_seat, props.map.data.id)
         // .then((res)=> {
         //     if(res.msg === 'exists'){
@@ -60,7 +63,7 @@ function AddGuestDropDown(props){
         <>
         <InputBox pos={props.pos} setInputStr={setInputStr}></InputBox>
         <DropDown pos={props.pos}>
-            <RolligList items={createMatchList()} onItem={onItem}/>
+            <RolligList items={createMatchList()} onItemClick={onItem}/>
         </DropDown>
         </>
     )

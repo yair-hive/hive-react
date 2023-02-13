@@ -14,13 +14,14 @@ export function useAddSeats(){
         return api.seat_new.create_multiple(map_name, seats)
     }, {
         onSuccess: (data, variables)=>{
-            console.log(data)
-            console.log(variables)
-            queryClient.setQueryData(["seats", map_name], old =>{
-                console.log(old)
-                // old.push(...variables)
-            })
-            queryClient.invalidateQueries(['seats', map_name])
+            // queryClient.setQueryData(["seats", map_name], old =>{
+            //     console.log(old)
+            //     // old.push(...variables)
+            // })
+            // queryClient.invalidateQueries(['seats', map_name])
+            var msg = JSON.stringify({action: 'invalidate', quert_key: ['seats', map_name]})
+            hiveSocket.send(msg)
+
         }
     })
     return mutation
@@ -32,14 +33,24 @@ export function useAddGuest(){
     
     const mutation = useMutation(async ({guest_id, seat_id}) => {
         const res = await api.guest_new.create_belong(guest_id, seat_id, map_name);
-        if (res.msg === 'exists') {
+        if(res.msg === 'exists') {
             if (window.confirm('המשתמש כבר משובץ האם אתה רוצה לשבץ מחדש?')) {
                 await api.guest_new.update_belong(guest_id, seat_id, map_name);
             }
         }
     }, {
-        onSuccess: ()=>{
-            queryClient.invalidateQueries(['seat_belongs', map_name])
+        onSuccess: (data, variables,)=>{
+            var {guest_id, seat_id} = variables
+            queryClient.setQueryData(['belongs', map_name], old => {
+                old.forEach((item, index) => {
+                    if(item.guest == guest_id) old.splice(index, 1)
+                    if(item.seat == seat_id) item.guest = guest_id
+                })
+                return old
+            })
+            // queryClient.invalidateQueries(['belongs', map_name])
+            var msg = JSON.stringify({action: 'invalidate', quert_key: ['belongs', map_name]})
+            hiveSocket.send(msg)
         }
     })
     return mutation
@@ -96,4 +107,28 @@ export function useScheduling(){
         }
     })
     return mutation
+}
+export function useDeleteGuest(){
+    const {map_name} = useParams()
+    const hiveSocket = useSocket()
+    const queryClient = useQueryClient()
+    
+    const mutation = useMutation(({guest_id}) => {
+        return api.guest.delete(guest_id)
+    }, {
+        onMutate: (variables)=>{
+            queryClient.setQueryData(['guests', map_name], old => {
+                old.forEach((guest, index)=>{
+                    if(guest.id === variables.guest_id){
+                        old.splice(index, 1)
+                    }
+                })
+                return old
+            })
+        },
+        onSuccess: ()=>{
+            queryClient.invalidateQueries(['guests', map_name])
+        }
+    })
+    return mutation   
 }

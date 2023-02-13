@@ -25,11 +25,11 @@ input:focus{
     padding: 0;
     list-style: none;
 }
-.rolling_list{
+.rolling-list{
     overflow: auto;
     max-height: 200px;
 }
-.rolling_list_item.active{
+.rolling-list-item.active{
     background-color: #4f90f275;
 }
 .drop_down > ul > li{

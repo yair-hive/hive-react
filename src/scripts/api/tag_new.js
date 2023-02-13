@@ -38,4 +38,27 @@ export const tag_new = {
         if (json_res.msg != 'ok') throw new Error(json_res.msg);
         else return json_res.data
     },
+    get_requests: async ({queryKey})=>{
+        const options = {...global_options}
+        var action_params = {
+            category: 'tag', 
+            action: 'get_requests', 
+            map_name: queryKey[1]
+        }
+        options.body = JSON.stringify(action_params)
+        const res = await fetch(api_url, options);
+        const json_res = await res.json();
+        if (json_res.msg != 'ok') throw new Error(json_res.msg);
+        else return json_res.data
+    },
+    add_request: async function(data){
+        var action_params = {category: 'tag', action: 'add_request'}
+        var body = Object.assign(action_params, data)
+        const options = {...global_options}
+        options.body = JSON.stringify(body)
+        const res = await fetch(api_url, options);
+        const json_res = await res.json();
+        if (json_res.msg != 'ok') throw new Error(json_res.msg);
+        else return json_res.data
+    },
 }

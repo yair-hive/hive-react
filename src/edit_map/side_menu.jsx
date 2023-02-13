@@ -5,10 +5,10 @@ import HiveButton from "../hive_elements/hive_button";
 import HiveSwitch from "../hive_elements/hive_switch";
 import PopUp from "../hive_elements/pop_up";
 import { useScheduling } from "../mutations";
-import { MBloaderContext } from '../app'
+import { MBloaderContext, useSocket } from '../app'
 import { ActionsContext, SelectablesContext, TagsPopUpContext } from "../pages/maps";
 import { EditContext } from "../pages/maps"
-import { useGroupsQuery, useGuestBelogsQuery, useGuestsQuery, useMapQuery, useSeatsQuery } from "../querys";
+import { useBelogsQuery, useGroupsQuery, useGuestBelogsQuery, useGuestsQuery, useMapQuery, useSeatsQuery } from "../querys";
 
 import "../style/side_menu.css"
 import TagsPop from "./tags_pop";
@@ -20,7 +20,7 @@ function SideMenu(props) {
 
     const map  = useMapQuery()
     const seats = useSeatsQuery()
-    const belongs = useGuestBelogsQuery()
+    const belongs = useBelogsQuery()
     const guests = useGuestsQuery()
     const groups = useGroupsQuery()
 
@@ -32,17 +32,20 @@ function SideMenu(props) {
     const selecteblsState = useContext(SelectablesContext)
     const [action, setAction] = useContext(ActionsContext)
     const [MBstatus, setMBStatus] = useContext(MBloaderContext)
+    const hiveSocket = useSocket()
     const queryClient = useQueryClient()
     const edit = useContext(EditContext)
 
     function scheduling(){
-        const source = new EventSource(`http://localhost:3020/actions/scheduling/${map_name}`);
+        const source = new EventSource(`http://hive.com:3020/actions/scheduling/${map_name}`);
 
         source.onmessage = (event) => {
             const data = JSON.parse(event.data);
             setMBStatus(data.progress);
             if(data.progress == 100){
-                queryClient.invalidateQueries(['seat_belongs', map_name])
+                queryClient.invalidateQueries(['belongs', map_name])
+                var msg = JSON.stringify({action: 'invalidate', quert_key: ['belongs', map_name]})
+                hiveSocket.send(msg)
                 source.close()
                 setMBStatus(0)
             }
@@ -69,15 +72,17 @@ function SideMenu(props) {
         }
 
         if(map.data && seats.data && belongs.data && guests.data && groups.data){
+            var belongs_object = {}
+            belongs.data.forEach(belong => belongs_object[belong.guest] = belong)
             var guests_with_belong = []
-            var guest_array = Object.entries(guests.data)
-            for(let [index, guest] of guest_array){
-                var seat = belongs.data[guest.id]
+            for(let guest of guests.data){
+                var seat = belongs_object[guest.id]
                 if(seat) {
                     seat = seat.seat
                     var seat_number = seats.data[seat]?.seat_number
                     guest.group_id = guest.guest_group
                     guest.group_name = groups.data[guest.group_id].group_name
+                    guest.name = guest.last_name + ' ' + guest.first_name
                     guest.seat_number = seat_number
                     guests_with_belong.push(guest)
                 }

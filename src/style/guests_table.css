@@ -14,6 +14,11 @@ table {
 }
 .td_x{
     background-color: red;
+    cursor: pointer;
+    user-select: none;
+}
+.td_x:hover{
+    background-color: rgb(107, 89, 89);
 }
 th {
     border: 1px solid black;

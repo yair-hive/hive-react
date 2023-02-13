@@ -4,7 +4,7 @@ import { useEffect } from "react"
 import { useRef } from "react"
 import TagsCount from "../components/tags_count"
 import { EditContext, SelectablesContext } from "../pages/maps"
-import { useSeatBelogsQuery, useGroupsQuery, useGuestsQuery, useTagsQuery, useTagsBelongsQuery } from "../querys"
+import { useSeatBelogsQuery, useGroupsQuery, useGuestsQuery, useTagsQuery, useTagsBelongsQuery, useBelogsQuery } from "../querys"
 import "../style/seat.css"
 import { DropContext, SelectedContext } from "./map"
 
@@ -35,7 +35,7 @@ function Seat(props){
     const selecteblsState = useContext(SelectablesContext)
     const [dropDownPos, setDropDownPos] = useContext(DropContext)
     const nameBoxRef = useRef(null)
-    const belongs = useSeatBelogsQuery()
+    const belongs = useBelogsQuery()
     const guests = useGuestsQuery()
     const groups = useGroupsQuery()
     const tagsBelongs = useTagsBelongsQuery()
@@ -43,13 +43,26 @@ function Seat(props){
 
     var guest_id
     if(belongs.data){
-        var seat_belong = belongs.data[props.seat_id]
+        var belongs_object = {}
+        belongs.data.forEach(belong => belongs_object[belong.seat] = belong)
+        var seat_belong = belongs_object[props.seat_id]
         guest_id = seat_belong?.guest
     }
 
+    var guests_object
+    if(guests.data){
+        guests_object = {}
+        guests.data.forEach(guest => guests_object[guest.id] = guest)
+    }
+
     var guest
-    if(guests.data && guest_id){
-        guest = guests.data[guest_id]
+    if(guests_object && guest_id){
+        guest = guests_object[guest_id]
+    }
+
+    var guest_name
+    if(guest){
+        guest_name = guest.last_name + ' ' + guest.first_name
     }
 
     var group_color = undefined
@@ -58,7 +71,7 @@ function Seat(props){
     }
     var color, font_size = ''
     color = getColor(group_color)
-    if(guest?.name) font_size = getFontSize(guest?.name)
+    if(guest_name) font_size = getFontSize(guest_name)
 
     var tags
     if(tagsBelongs.data){
@@ -83,7 +96,7 @@ function Seat(props){
         }
         return(
             <div className="name_box" style={NAME_BOX_STYLE} ref={nameBoxRef} onClick={nameBoxOnClick}>
-                {guest?.name}
+                {guest_name}
             </div>  
         )
     } 

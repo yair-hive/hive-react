@@ -10,6 +10,10 @@ export function useSeatsQuery(){
     const {map_name} = useParams()
     return useQuery(['seats', map_name], api.seat_new.get_all)
 }
+export function useBelogsQuery(){
+    const {map_name} = useParams()
+    return useQuery(['belongs', map_name], api.seat_new.get_belong)
+}
 export function useSeatBelogsQuery(){
     const {map_name} = useParams()
     return useQuery(['seat_belongs', map_name], api.seat_new.get_belong)
@@ -33,4 +37,8 @@ export function useTagsQuery(){
 export function useTagsBelongsQuery(){
     const {map_name} = useParams()
     return useQuery(['tags_belongs', map_name], api.tag_new.get_belongs)
+}
+export function useRequestsQuery(){
+    const {map_name} = useParams()
+    return useQuery(['requests', map_name], api.tag_new.get_requests)
 }

@@ -1,17 +1,18 @@
 import { useQueryClient } from "react-query"
 import { useParams } from "react-router-dom"
 import PopUp from "../hive_elements/pop_up"
+import { useGroupsQuery } from "../querys"
 
 function GroupsPop(props){
 
     const {map_name} = useParams()
     const queryClient = useQueryClient()
-    const groups = queryClient.getQueryData(['guests_groups', map_name])
+    const groups = useGroupsQuery()
 
     function create_rows(){
-        if(groups){
+        if(groups.data){
             var rows = []
-            var groups_array = Object.entries(groups)
+            var groups_array = Object.entries(groups.data)
             for(let [key, group] of groups_array){
                 var tr = (<tr key={key}>
                     <td> X </td>
