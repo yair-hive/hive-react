@@ -279,11 +279,11 @@ export const guest = {
             return res.msg
         })
     },
-    update_group_name: (group_name, guest_id)=>{
+    update_group_name: (group_name, guest_id, map_name)=>{
         const options = {
             method: 'POST',
             credentials: 'include',
-            body: "category=guest&action=update_group_name&guest_id="+guest_id+"&group_name="+group_name,
+            body: "category=guest&action=update_group_name&guest_id="+guest_id+"&group_name="+group_name+"&map_name="+map_name,
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
             }

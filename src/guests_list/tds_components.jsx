@@ -36,13 +36,18 @@ export function TdLast(props){
 
     if(isLastInput){ 
         return (
-        <td>
+        <td style={{
+            backgroundColor: 'white'
+        }}>
             <input 
                 type='text' 
                 autoFocus 
                 value={last} 
                 onBlur={onInputBlur}
                 onChange={onInputChange}
+                style={{
+                    width: `${last.length}ch`
+                }}
             />
         </td>
         )
@@ -78,13 +83,18 @@ export function TdFirst(props){
 
     if(isFirstInput){ 
         return (
-        <td>
+        <td style={{
+            backgroundColor: 'white'
+        }}>
             <input 
                 type='text' 
                 autoFocus 
                 value={first} 
                 onBlur={onInputBlur}
                 onChange={onInputChange}
+                style={{
+                    width: `${first.length}ch`
+                }}
             />
         </td>
         )
@@ -107,9 +117,9 @@ export function TdGroup(props){
 
     function onInputBlur(){
         setGroupInput(false)
-        api.guest.update_group_name(group, props.guest_id)
+        api.guest.update_group_name(group, props.guest_id, map_name)
         .then(()=>{
-            var msg = JSON.stringify({action: 'invalidate', quert_key: ['get_guests', map_name]})
+            var msg = JSON.stringify({action: 'invalidate', query_key: ['get_guests', map_name]})
             hiveSocket.send(msg)
         })
     }
@@ -120,13 +130,18 @@ export function TdGroup(props){
 
     if(isGroupInput){ 
         return (
-        <td>
+        <td style={{
+            backgroundColor: 'white'
+        }}>
             <input 
                 type='text' 
                 autoFocus 
                 value={group} 
                 onBlur={onInputBlur}
                 onChange={onInputChange}
+                style={{
+                    width: `${group.length}ch`
+                }}
             />
         </td>
         )
@@ -162,13 +177,18 @@ export function TdScore(props){
 
     if(isScoreInput){ 
         return (
-        <td>
+        <td style={{
+            backgroundColor: 'white'
+        }}>
             <input 
                 type='text' 
                 autoFocus 
                 value={score} 
                 onBlur={onInputBlur}
                 onChange={onInputChange}
+                style={{
+                    width: `${score.toString().length}ch`
+                }}
             />
         </td>
         )

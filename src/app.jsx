@@ -32,6 +32,16 @@ function App() {
       console.log(msg)
     }
   }, [])
+
+  useEffect(()=>{
+    function onEnter(event){
+      if(event.code == 'Enter'){
+        document.activeElement.blur()
+      }
+    }
+    document.addEventListener('keydown', onEnter)
+    return ()=> document.removeEventListener('keydown', onEnter)
+  }, [])
   return (
     <MBloaderContext.Provider value={MBloaderState}>
       <div className="content">
