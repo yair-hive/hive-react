@@ -61,6 +61,10 @@ td {
     align-items: center;
     justify-content: center;
 }
+.td_requests{
+    cursor: pointer;
+    user-select: none;
+}
 .tag_box{
     white-space: nowrap;
     background-color: #4f90f2;

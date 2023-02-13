@@ -4,7 +4,7 @@ import { useSocket } from "../app"
 import { useDeleteGuest } from "../mutations"
 import { useRequestsQuery } from "../querys"
 import api from "../scripts/api/api"
-import TagsCount from "../components/tags_count"
+import RequestsCount from "../components/requestsCount"
 
 export function TdLast(props){
 
@@ -191,19 +191,18 @@ export function TdRequests(props){
     const requests = useRequestsQuery()
     const tdRef = useRef(null)
 
-    function onClick(){
-        props.setDropPos(tdRef.current)
-        props.setSelectedGuest(props.guest_id)
+    function onClick(event){
+        var classList = event.target.classList
+        if(!classList.contains('delete')){
+            props.setDropPos(tdRef.current)
+            props.setSelectedGuest(props.guest_id)
+        }
     }
 
     var requests_object
 
     if(requests.data){
         requests_object = {}
-        requests.data = requests.data.map(request => {
-            request.group_id = request.request
-            return request
-        })
         requests.data.forEach(request => requests_object[request.guest] = [])
         requests.data.forEach(request => requests_object[request.guest].push(request))
     }
@@ -212,8 +211,8 @@ export function TdRequests(props){
     if(requests_object) this_requests = requests_object[props.guest_id]
 
     return (
-        <td ref={tdRef} onClick={onClick}>
-            <TagsCount tags = {this_requests}/>
+        <td ref={tdRef} onClick={onClick} className='td_requests'>
+            <RequestsCount requests={this_requests}/>
         </td>
     )
 }

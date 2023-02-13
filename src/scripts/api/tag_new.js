@@ -61,4 +61,13 @@ export const tag_new = {
         if (json_res.msg != 'ok') throw new Error(json_res.msg);
         else return json_res.data
     },
+    delete_request: async function ({request_id}){
+        const body = {category: 'tag', action: 'delete_request', request_id: request_id}
+        const options = {...global_options}
+        options.body = JSON.stringify(body)
+        const res = await fetch(api_url, options);
+        const json_res = await res.json();
+        if (json_res.msg != 'ok') throw new Error(json_res.msg);
+        else return json_res.data
+    }
 }

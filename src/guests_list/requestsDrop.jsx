@@ -32,7 +32,7 @@ function RequestsDrop(props){
         .then(()=>{
             props.setPos(null)
             props.setSelected(null)
-            var msg = JSON.stringify({action: 'invalidate', quert_key: ['requests', map_name]})
+            var msg = JSON.stringify({action: 'invalidate', query_key: ['requests', map_name]})
             hiveSocket.send(msg)
         })
     }
