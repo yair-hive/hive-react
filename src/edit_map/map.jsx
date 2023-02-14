@@ -9,7 +9,7 @@ import AddGuestDropDown from './add_guest_drop_down'
 import NewCell from './new_cell'
 import { useElementsQuery, useMapQuery, useSeatsQuery } from '../querys'
 import "../style/map_cont.css"
-import { useMapAdd } from '../mutations'
+import { useMapAdd, useMapDelete } from '../mutations'
 
 export const DropContext = React.createContext(null)
 export const SelectedContext = React.createContext(null)
@@ -27,6 +27,7 @@ function Map(){
     const selection = useSelection()
 
     const map_add = useMapAdd()
+    const map_delete = useMapDelete()
 
     const [dropDownPos, setDropDownPos] = useState(null)
     const edit = useContext(EditContext)
@@ -63,18 +64,8 @@ function Map(){
             if(event.code == 'Enter'){
                 map_add(action)
             }
-            if(event.code == 'Delete' && map_id){
-                if(action == 'seat'){
-                    var selected = document.querySelectorAll('.selected')
-                    for(let seat of selected){
-                        var seat_id = seat.getAttribute('seat_id')
-                        console.log(seat_id)
-                        await api.seat.delete(seat_id)
-                        await api.seat.delete_belong(seat_id)
-                    }
-                    var msg = JSON.stringify({action: 'invalidate', query_key: ['seats', map_name]})
-                    hiveSocket.send(msg)
-                }
+            if(event.code == 'Delete'){
+                map_delete(action)
             }
         }
     }

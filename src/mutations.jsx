@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";
 import { MBloaderContext, useSocket } from "./app";
 import { map_add } from "./edit_map/map_add";
+import { map_delete } from "./edit_map/map_delete";
 import api from "./scripts/api/api";
 
 export function useMapAdd(){
@@ -49,7 +50,6 @@ export function useMapAdd(){
         })
     }
     return  function(action){
-        console.log(action)
         return mutations[action].mutate(map_add[action]())
     }
 }
@@ -61,45 +61,28 @@ export function useMapDelete(){
     const queryClient = useQueryClient()
 
     const mutations = {   
-        seats: useMutation(seats => {
-            seats = JSON.stringify(seats)
-            return api.seat_new.create_multiple(map_name, seats)
+        seats: useMutation(seats_ids => {
+            seats_ids = JSON.stringify(seats_ids)
+            return api.seat_new.delete_multiple(seats_ids)
         }, {
             onSuccess: ()=>{
                 var msg = JSON.stringify({action: 'invalidate', query_key: ['seats', map_name]})
-                hiveSocket.send(msg)
-    
+                hiveSocket.send(msg)   
             }
         }),       
-        tags: useMutation(({seats, tag_name}) => {
-            seats = JSON.stringify(seats)
-            return api.tag_new.add_multiple(seats, tag_name, map_name)
-        }, {
-            onSuccess: ()=>{
-                queryClient.invalidateQueries(['tags', map_name])
-                queryClient.invalidateQueries(['tags_belongs', map_name])
-            }
-        }),        
-        numbers: useMutation(({data}) => {
-            data = JSON.stringify(data)
-            return api.seat_new.create_multiple_numbers(data)
-        }, {
-            onSuccess: ()=>{
-                queryClient.invalidateQueries(['seats', map_name])
-            }
-        }),       
-        elements: useMutation(({data}) => {
-            const {name, from_row, from_col, to_row, to_col} = data
-            return api.elements.add(name, from_row, from_col, to_row, to_col, map_name)
+        elements: useMutation((elements_ids) => {
+            elements_ids = JSON.stringify(elements_ids)
+            return api.elements.delete_multiple(elements_ids)
         }, {
             onSuccess: ()=>{
                 queryClient.invalidateQueries(['elements', map_name])
             }
-        })
+        }),
+        tags: 'TODO',        
+        numbers: 'TODO',
     }
     return  function(action){
-        console.log(action)
-        return mutations[action].mutate(map_add[action]())
+        return mutations[action].mutate(map_delete[action]())
     }
 }
 

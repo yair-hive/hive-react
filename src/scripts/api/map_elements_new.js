@@ -39,11 +39,11 @@ export const map_elements_new = {
             return res.msg
         })
     },
-    delete: (ob_id)=>{
+    delete_multiple: (elements_ids)=>{
         const options = {
             method: 'POST',
             credentials: 'include',
-            body: "category=map_element&action=delete&ob_id="+ob_id,
+            body: "category=map_element&action=delete_multiple&elements_ids="+elements_ids,
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
             }

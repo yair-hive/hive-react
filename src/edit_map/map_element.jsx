@@ -35,6 +35,7 @@ function MapElement({cell}){
         <div 
             className={`map-element ${(selectebls === 'cells' ? 'selectable' : '')}`}
             ref={Pref}
+            element_id={cell.id}
             style={{
                 gridRowStart: from_row,
                 gridColumnStart: from_col,

@@ -49,4 +49,12 @@ export const seat_new = {
         if (json_res.msg != 'ok') throw new Error(json_res.msg);
         else return json_res.data;
     },
+    delete_multiple: async (seats_ids)=>{
+        const options = {...global_options}
+        options.body = "category=seat&action=delete_multiple&seats_ids="+seats_ids
+        const res = await fetch(api_url, options);
+        const json_res = await res.json();
+        if (json_res.msg != 'ok') throw new Error(json_res.msg);
+        else return json_res.data;
+    },
 }
