@@ -42,3 +42,7 @@ export function useRequestsQuery(){
     const {map_name} = useParams()
     return useQuery(['requests', map_name], api.tag_new.get_requests)
 }
+export function useElementsQuery(){
+    const {map_name} = useParams()
+    return useQuery(['elements', map_name], api.elements.get)
+}

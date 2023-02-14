@@ -7,7 +7,7 @@ import { ActionsContext, EditContext, MapIdContext, SelectablesContext } from '.
 import api from '../scripts/api/api'
 import AddGuestDropDown from './add_guest_drop_down'
 import NewCell from './new_cell'
-import { useMapQuery, useSeatsQuery } from '../querys'
+import { useElementsQuery, useMapQuery, useSeatsQuery } from '../querys'
 import "../style/map_cont.css"
 import { useAddNumbers, useAddSeats, useAddTags } from '../mutations'
 
@@ -20,6 +20,7 @@ function Map(){
 
     const map = useMapQuery()
     const seats = useSeatsQuery()
+    const elements = useElementsQuery()
 
     const [selected_seat, setSelectedSeat] = useState(null)
     const [action, setAction] = useContext(ActionsContext)
@@ -158,6 +159,16 @@ function Map(){
             for(let [key, seat] of seats_array){
                 list[RCindex[seat.row_num][seat.col_num]] = seat
                 i++
+            }
+        }
+        if(map.data && elements.data){
+            for(let element of elements.data){
+                for(let row = element.from_row; row <= element.to_row; row++){
+                    for(let col = element.from_col; col <= element.to_col; col++){
+                        list[RCindex[row][col]] = null
+                    }
+                }
+                list[RCindex[element.from_row][element.from_col]] = element
             }
         }
         var i = 0

@@ -1,0 +1,19 @@
+.map-element{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 50px;
+    text-align: center;
+    background-color: rgb(54, 48, 45);
+    margin: 2.5px;
+}
+.map-element.selected{
+    border-radius: 0.25rem;
+    border-style: solid;
+    border-width: 0.1px;
+    border-color: #7a8392;
+    background-color: #555b66;
+}
+.map-element > div {
+    rotate: 90;
+}
