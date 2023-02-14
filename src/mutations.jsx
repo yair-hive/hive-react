@@ -2,30 +2,107 @@ import { useContext } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";
 import { MBloaderContext, useSocket } from "./app";
+import { map_add } from "./edit_map/map_add";
 import api from "./scripts/api/api";
 
-export function useAddSeats(){
+export function useMapAdd(){
+
     const {map_name} = useParams()
     const hiveSocket = useSocket()
     const queryClient = useQueryClient()
 
-    const mutation = useMutation(seats => {
-        seats = JSON.stringify(seats)
-        return api.seat_new.create_multiple(map_name, seats)
-    }, {
-        onSuccess: (data, variables)=>{
-            // queryClient.setQueryData(["seats", map_name], old =>{
-            //     console.log(old)
-            //     // old.push(...variables)
-            // })
-            // queryClient.invalidateQueries(['seats', map_name])
-            var msg = JSON.stringify({action: 'invalidate', quert_key: ['seats', map_name]})
-            hiveSocket.send(msg)
-
-        }
-    })
-    return mutation
+    const mutations = {   
+        seats: useMutation(seats => {
+            seats = JSON.stringify(seats)
+            return api.seat_new.create_multiple(map_name, seats)
+        }, {
+            onSuccess: ()=>{
+                var msg = JSON.stringify({action: 'invalidate', query_key: ['seats', map_name]})
+                hiveSocket.send(msg)
+    
+            }
+        }),       
+        tags: useMutation(({seats, tag_name}) => {
+            seats = JSON.stringify(seats)
+            return api.tag_new.add_multiple(seats, tag_name, map_name)
+        }, {
+            onSuccess: ()=>{
+                queryClient.invalidateQueries(['tags', map_name])
+                queryClient.invalidateQueries(['tags_belongs', map_name])
+            }
+        }),        
+        numbers: useMutation(({data}) => {
+            data = JSON.stringify(data)
+            return api.seat_new.create_multiple_numbers(data)
+        }, {
+            onSuccess: ()=>{
+                queryClient.invalidateQueries(['seats', map_name])
+            }
+        }),       
+        elements: useMutation(({data}) => {
+            const {name, from_row, from_col, to_row, to_col} = data
+            return api.elements.add(name, from_row, from_col, to_row, to_col, map_name)
+        }, {
+            onSuccess: ()=>{
+                queryClient.invalidateQueries(['elements', map_name])
+            }
+        })
+    }
+    return  function(action){
+        console.log(action)
+        return mutations[action].mutate(map_add[action]())
+    }
 }
+
+export function useMapDelete(){
+
+    const {map_name} = useParams()
+    const hiveSocket = useSocket()
+    const queryClient = useQueryClient()
+
+    const mutations = {   
+        seats: useMutation(seats => {
+            seats = JSON.stringify(seats)
+            return api.seat_new.create_multiple(map_name, seats)
+        }, {
+            onSuccess: ()=>{
+                var msg = JSON.stringify({action: 'invalidate', query_key: ['seats', map_name]})
+                hiveSocket.send(msg)
+    
+            }
+        }),       
+        tags: useMutation(({seats, tag_name}) => {
+            seats = JSON.stringify(seats)
+            return api.tag_new.add_multiple(seats, tag_name, map_name)
+        }, {
+            onSuccess: ()=>{
+                queryClient.invalidateQueries(['tags', map_name])
+                queryClient.invalidateQueries(['tags_belongs', map_name])
+            }
+        }),        
+        numbers: useMutation(({data}) => {
+            data = JSON.stringify(data)
+            return api.seat_new.create_multiple_numbers(data)
+        }, {
+            onSuccess: ()=>{
+                queryClient.invalidateQueries(['seats', map_name])
+            }
+        }),       
+        elements: useMutation(({data}) => {
+            const {name, from_row, from_col, to_row, to_col} = data
+            return api.elements.add(name, from_row, from_col, to_row, to_col, map_name)
+        }, {
+            onSuccess: ()=>{
+                queryClient.invalidateQueries(['elements', map_name])
+            }
+        })
+    }
+    return  function(action){
+        console.log(action)
+        return mutations[action].mutate(map_add[action]())
+    }
+}
+
 export function useAddGuest(){
     const {map_name} = useParams()
     const hiveSocket = useSocket()
@@ -51,37 +128,6 @@ export function useAddGuest(){
             // queryClient.invalidateQueries(['belongs', map_name])
             var msg = JSON.stringify({action: 'invalidate', quert_key: ['belongs', map_name]})
             hiveSocket.send(msg)
-        }
-    })
-    return mutation
-}
-export function useAddTags(){
-    const {map_name} = useParams()
-    const hiveSocket = useSocket()
-    const queryClient = useQueryClient()
-    
-    const mutation = useMutation(({seats, tag_name}) => {
-        seats = JSON.stringify(seats)
-        return api.tag_new.add_multiple(seats, tag_name, map_name)
-    }, {
-        onSuccess: ()=>{
-            queryClient.invalidateQueries(['tags', map_name])
-            queryClient.invalidateQueries(['tags_belongs', map_name])
-        }
-    })
-    return mutation
-}
-export function useAddNumbers(){
-    const {map_name} = useParams()
-    const hiveSocket = useSocket()
-    const queryClient = useQueryClient()
-    
-    const mutation = useMutation(({data}) => {
-        data = JSON.stringify(data)
-        return api.seat_new.create_multiple_numbers(data)
-    }, {
-        onSuccess: ()=>{
-            queryClient.invalidateQueries(['seats', map_name])
         }
     })
     return mutation

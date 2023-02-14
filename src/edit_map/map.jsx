@@ -9,14 +9,14 @@ import AddGuestDropDown from './add_guest_drop_down'
 import NewCell from './new_cell'
 import { useElementsQuery, useMapQuery, useSeatsQuery } from '../querys'
 import "../style/map_cont.css"
-import { useAddNumbers, useAddSeats, useAddTags } from '../mutations'
+import { useMapAdd } from '../mutations'
 
 export const DropContext = React.createContext(null)
 export const SelectedContext = React.createContext(null)
 
 function Map(){
 
-    let {map_name} = useParams()
+    const {map_name} = useParams()
 
     const map = useMapQuery()
     const seats = useSeatsQuery()
@@ -26,9 +26,7 @@ function Map(){
     const [action, setAction] = useContext(ActionsContext)
     const selection = useSelection()
 
-    const add_seats = useAddSeats()
-    const add_numbers = useAddNumbers()
-    const add_tags = useAddTags()
+    const map_add = useMapAdd()
 
     const [dropDownPos, setDropDownPos] = useState(null)
     const edit = useContext(EditContext)
@@ -59,45 +57,11 @@ function Map(){
             }
         }
     }
-    async function onMapAdd(event){
-        if(edit == 'ערוך'){
+
+    async function onKeyDown(event){
+        if(edit === 'ערוך'){
             if(event.code == 'Enter'){
-                if(selecteblsState){
-                    if(action == 'seat'){
-                        var cells_list = []
-                        var selected = document.querySelectorAll('.selected')
-                        for(let cell of selected){
-                            var cell_data = {}
-                            cell_data.row = cell.getAttribute('cell-row') 
-                            cell_data.col = cell.getAttribute('cell-col')
-                            cells_list.push(cell_data)
-                        }
-                        add_seats.mutate(cells_list)
-                    }
-                    if(action == 'numbers'){
-                        var col_name = prompt('Please enter number')
-                        var seatNumber = Number(col_name) + 1
-                        var elements = document.querySelectorAll('.selected')
-                        var data = []
-                        for(let element of elements){
-                            var seat_id = element.getAttribute('seat_id')
-                            data.push({id:seat_id, number:seatNumber})     
-                            seatNumber++
-                        }
-                        add_numbers.mutate({data:data})
-                    }
-                    if(action == 'tags'){
-                        var selected = document.querySelectorAll('.selected')
-                        var tag_name = prompt('הכנס שם תווית')
-                        var seats = []
-                        for(let i = 0; i < selected.length; i++){
-                            var seat = selected[i]
-                            var seat_id = seat.getAttribute('seat_id')
-                            seats.push(seat_id)
-                        }
-                        add_tags.mutate({seats: seats, tag_name:tag_name})
-                    }
-                }
+                map_add(action)
             }
             if(event.code == 'Delete' && map_id){
                 if(action == 'seat'){
@@ -108,7 +72,7 @@ function Map(){
                         await api.seat.delete(seat_id)
                         await api.seat.delete_belong(seat_id)
                     }
-                    var msg = JSON.stringify({action: 'invalidate', quert_key: ['get_seats', map_name]})
+                    var msg = JSON.stringify({action: 'invalidate', query_key: ['seats', map_name]})
                     hiveSocket.send(msg)
                 }
             }
@@ -117,10 +81,10 @@ function Map(){
 
     useEffect(()=>{
         document.addEventListener('mousedown', onMousedown)
-        document.addEventListener('keydown', onMapAdd)
+        document.addEventListener('keydown', onKeyDown)
         return ()=>{
             document.removeEventListener('mousedown', onMousedown)
-            document.removeEventListener('keydown', onMapAdd)
+            document.removeEventListener('keydown', onKeyDown)
         }
     }, [action])
 

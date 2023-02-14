@@ -1,11 +1,11 @@
 const api_url = "http://hive.com/api/index.php"
 
 export const map_elements_new = {
-    add: (name, from_row, from_col, to_row, to_col, map)=>{
+    add: (name, from_row, from_col, to_row, to_col, map_name)=>{
         const options = {
             method: 'POST',
             credentials: 'include',
-            body: "category=map_element&action=add&map="+map+"&name="+name+"&from_row="+from_row+"&from_col="+from_col+"&to_row="+to_row+"&to_col="+to_col,
+            body: "category=map_element&action=add&map_name="+map_name+"&name="+name+"&from_row="+from_row+"&from_col="+from_col+"&to_row="+to_row+"&to_col="+to_col,
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
             }

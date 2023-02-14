@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from 'react'
-import { EditContext } from '../pages/maps'
+import { EditContext, SelectablesContext } from '../pages/maps'
 import '../style/elements.css'
 
 function MapElement({cell}){
@@ -7,6 +7,7 @@ function MapElement({cell}){
     const edit = useContext(EditContext)
     const Pref = useRef(null)
     const [Cstyle, setCstyle] = useState({})
+    const [selectebls] = useContext(SelectablesContext)
 
     useEffect(()=> {
         var Prect = Pref.current.getBoundingClientRect()
@@ -32,7 +33,7 @@ function MapElement({cell}){
 
     return(
         <div 
-            className="map-element"
+            className={`map-element ${(selectebls === 'cells' ? 'selectable' : '')}`}
             ref={Pref}
             style={{
                 gridRowStart: from_row,

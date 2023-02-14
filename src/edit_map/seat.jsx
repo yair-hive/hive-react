@@ -102,7 +102,7 @@ function Seat(props){
     } 
     var className = "seat"
     if(selecteblsState){
-        if(selecteblsState[0] === 'seat') className = className+" selectable"
+        if(selecteblsState[0] === 'seats') className = className+" selectable"
     }
     return (<div>
         <div className={className} seat_id={props.seat_id}>

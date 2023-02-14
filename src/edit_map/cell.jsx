@@ -13,7 +13,7 @@ function Cell(props){
     var selected = ""
 
     if(selecteblsState){
-        if(selecteblsState[0] === 'cell' && edit == 'ערוך'){
+        if(selecteblsState[0] === 'cells' && edit == 'ערוך'){
             selectable  = "selectable"
         }
     }

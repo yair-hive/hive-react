@@ -118,10 +118,10 @@ function SideMenu(props) {
             return (
                 <HiveSwitch
                     options={[
-                        {value: 'seat', name: 'כיסאות'}, 
-                        {value: 'cell', name: 'תאים'}
+                        {value: 'seats', name: 'כיסאות'}, 
+                        {value: 'cells', name: 'תאים'}
                     ]} 
-                    active={'cell'} 
+                    active={'cells'} 
                     setActive={selecteblsState[1]} 
                     bordKey="KeyX" 
                 />
@@ -130,26 +130,26 @@ function SideMenu(props) {
     }
 
     function actionSwitch(){
-        if(selecteblsState[0] == 'cell'){
+        if(selecteblsState[0] == 'cells'){
             return (
                 <HiveSwitch
                 options={[
-                    {value: 'seat', name: 'כיסאות'}, 
-                    {value: 'element', name: 'אלמנטים'}
+                    {value: 'seats', name: 'כיסאות'}, 
+                    {value: 'elements', name: 'אלמנטים'}
                 ]} 
-                active={'seat'} 
+                active={'seats'} 
                 setActive={setAction} 
                 bordKey="KeyB" 
             />
             )
         }
-        if(selecteblsState[0] == 'seat'){
+        if(selecteblsState[0] == 'seats'){
             return (
                 <HiveSwitch
                 options={[
                     {value: 'numbers', name: 'מספרים'}, 
                     {value: 'tags', name: 'תגיות'},
-                    {value: 'seat', name: 'כיסאות'}
+                    {value: 'seats', name: 'כיסאות'}
                 ]} 
                 active={'numbers'} 
                 setActive={setAction}
