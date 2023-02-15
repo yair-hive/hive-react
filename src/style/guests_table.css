@@ -1,3 +1,7 @@
+::selection{
+    background-color: blueviolet;
+    color: white;
+}
 .table_container{
     height: 100%;
     width: 100%;
@@ -63,6 +67,9 @@ td {
 .td_requests{
     cursor: pointer;
     user-select: none;
+}
+.td_tags{
+    cursor: not-allowed;
 }
 .tag_box{
     white-space: nowrap;

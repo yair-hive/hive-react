@@ -15,7 +15,7 @@ function TableRow(props){
     return(
         <tr>
             <td className={'seat_number'} belong={belong}>{props.seat?.seat_number}</td>
-            <td><TagsCount tags={props.tags}/></td>
+            <td className="td_tags"><TagsCount tags={props.tags}/></td>
             <TdLast last_name={props.guest.last_name} guest_id={props.guest.id}/>
             <TdFirst first_name={props.guest.first_name} guest_id={props.guest.id}/>
             <TdGroup group={props.group.group_name} guest_id={props.guest.id}/>
