@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { BelongsContext, GroupsContext, TagsContext } from "../app";
 import AddGuest from "../components/add_guest";
 import GroupsPop from "../components/groups_pop";
 import ImportGuests from "../components/import_guests";
@@ -9,11 +10,13 @@ import { useGroupsQuery, useTagsQuery } from "../querys";
 
 function GuestsSideMenu(props){
 
-    const {map_name} = useParams()
+    const {map_name, project_name} = useParams()
     const [importPop, setImportPop] = useState(false)
     const [groupsPop, setGroupsPop] = useState(false)
     const [addGuestPop, setAddGuestPop] = useState(false)
-    const {setBelongsStatus, setGroupsStatus, setTagsStatus} = props
+    const [belongsStatus, setBelongsStatus] = useContext(BelongsContext)
+    const [groupsStatus, setGroupsStatus] = useContext(GroupsContext)
+    const [tagsStatus, setTagsStatus] = useContext(TagsContext)
 
     const groups = useGroupsQuery()
     const tags = useTagsQuery()
@@ -35,9 +38,6 @@ function GuestsSideMenu(props){
 
     return(
         <div className="sub_menu">
-        <Link to={`/maps/${map_name}`}>
-            <HiveButton> חזור למפה </HiveButton>
-        </Link>
         <HiveButton onClick={()=> setAddGuestPop(true)}> הוסף בחורים </HiveButton>
         <AddGuest status={addGuestPop} setState = {setAddGuestPop}/>
         <HiveButton onClick={()=> setImportPop(true)}> ייבא בחורים </HiveButton>

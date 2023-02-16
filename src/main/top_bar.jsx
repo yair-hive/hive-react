@@ -6,6 +6,7 @@ import { useState } from 'react';
 import HiveButton from '../hive_elements/hive_button';
 import MapsPop from '../components/maps_pop';
 import AddMapPop from '../components/add_map_pop';
+import AddProjectPop from '../components/add_project_pop';
 
 function TopBar(){
     const [mapsPop, setMapsPop] = useState(false)
@@ -31,12 +32,12 @@ function TopBar(){
             <ul>
                 <li>
                     <HiveButton onClick={()=> setMapsPop(true)}> 
-                        מפות
+                        פרויקטים
                     </HiveButton>
                 </li>
             </ul>
             <MapsPop status={mapsPop} setState = {setMapsPop} setAddMapPopStatus={setAddMapPopStatus}/>
-            <AddMapPop status={addMapPopStatus} setState = {setAddMapPopStatus}/>
+            <AddProjectPop status={addMapPopStatus} setState = {setAddMapPopStatus}/>
         </div>
     )
 }

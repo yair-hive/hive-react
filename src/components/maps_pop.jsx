@@ -5,18 +5,18 @@ import PopUp from '../hive_elements/pop_up';
 import api from '../scripts/api/api';
 
 function MapsPop(props){
-    const  maps_res  = useQuery(['get_maps'], async ()=>{
-        return await api.map.get_all()
+    const projects  = useQuery(['projects'], async ()=>{
+        return await api.project.get()
     })
     function getMapsList(){
-        if(maps_res.data){
-            var maps_list = maps_res.data.data
-            var maps_array = []
-            var key = 0
-            for(let map of maps_list){
-                maps_array.push(<li key={key++} onClick={()=> props.setState(false)}> <Link to={`/maps/${map.map_name}`} onClick={props.onMapClick}> {map.map_name} </Link></li>)
-            }
-            return maps_array
+        if(projects.data){
+            return projects.data.map((project, index)=>{
+                return (<li key={index} onClick={()=> props.setState(false)}> 
+                    <Link to={`/projects/${project.name}`} onClick={props.onMapClick}> 
+                        {project.name} 
+                    </Link>
+                </li>)     
+            })
         }
         return 'טוען ...'
     }

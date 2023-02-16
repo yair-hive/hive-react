@@ -11,6 +11,7 @@ import { guest_new } from './guest_new.js'
 import { groups } from './group.js'
 import { tag_new } from './tag_new.js'
 import { map_elements_new } from './map_elements_new.js'
+import { project } from './project.js'
 
 export default {
     map: map,
@@ -25,5 +26,6 @@ export default {
     guest_new: guest_new,
     groups: groups,
     tag_new: tag_new,
-    elements: map_elements_new
+    elements: map_elements_new,
+    project: project
 }

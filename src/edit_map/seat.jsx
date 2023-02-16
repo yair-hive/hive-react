@@ -3,7 +3,7 @@ import { useState } from "react"
 import { useEffect } from "react"
 import { useRef } from "react"
 import TagsCount from "../components/tags_count"
-import { EditContext, SelectablesContext } from "../pages/maps"
+import { EditContext, SelectablesContext } from "../app"
 import { useSeatBelogsQuery, useGroupsQuery, useGuestsQuery, useTagsQuery, useTagsBelongsQuery, useBelogsQuery } from "../querys"
 import "../style/seat.css"
 import { DropContext, SelectedContext } from "./map"
@@ -31,7 +31,7 @@ function getFontSize(str){
 }
 
 function Seat(props){
-    const edit = useContext(EditContext)
+    const [edit, setEdit] = useContext(EditContext)
     const selecteblsState = useContext(SelectablesContext)
     const [dropDownPos, setDropDownPos] = useContext(DropContext)
     const nameBoxRef = useRef(null)

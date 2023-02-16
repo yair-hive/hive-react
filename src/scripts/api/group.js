@@ -11,7 +11,7 @@ const global_options = {
 export const groups = {
     get_all: async ({queryKey})=>{
         const options = {...global_options}
-        options.body = "category=guest&action=get_all_groups&map_name="+queryKey[1]
+        options.body = "category=guest&action=get_all_groups&project="+queryKey[1]
         const res = await fetch(api_url, options);
         const json_res = await res.json();
         if (json_res.msg != 'ok') throw new Error(json_res.msg);

@@ -1,5 +1,4 @@
 import { useState } from "react"
-import { useQueryClient } from "react-query"
 import { useParams } from "react-router-dom"
 import readXlsxFile from "read-excel-file"
 import HiveButton from "../hive_elements/hive_button"
@@ -8,9 +7,7 @@ import api from "../scripts/api/api"
 
 function ImportGuests(props){
 
-    const queryClient = useQueryClient()
-
-    const {map_name} = useParams()
+    const {project_name} = useParams()
 
     const [file, setFile] = useState()
 
@@ -21,8 +18,7 @@ function ImportGuests(props){
     function onClick(){
         readXlsxFile(file)
         .then((rows)=>{
-            var map_id = queryClient.getQueryData(['get_map', map_name]).id
-            return api.guest.create_multi({map_id: map_id, data: rows})
+            return api.guest_new.create_multi({project: project_name, data: rows})
         })
         .then(()=>{
             props.setState(false)

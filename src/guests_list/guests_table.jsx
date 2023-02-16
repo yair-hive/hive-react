@@ -51,9 +51,6 @@ function GuestsTable(props){
                 var seat_id = false
                 if(belongs_object[guest.id]) seat_id = belongs_object[guest.id].seat
                 rows.push(<TableRow 
-                        belongsStatus = {props.belongsStatus} 
-                        groupsStatus = {props.groupsStatus}
-                        tagsStatus = {props.tagsStatus}
                         guest={guest} 
                         key={i} 
                         group={groups.data[guest.guest_group]} 
@@ -74,21 +71,23 @@ function GuestsTable(props){
             selected={selectedGuest} 
             setSelected={setSelectedGuest}
         />
-        <table className="names_table" dir="rtl">
-            <tbody>
-                <tr>
-                    <th> סטטוס </th>
-                    <th> תגיות </th>
-                    <th> שם משפחה </th>
-                    <th> שם פרטי </th>
-                    <th> שיעור </th>
-                    <th> ניקוד </th>
-                    <th> בקשות </th>
-                    <th> X </th>
-                </tr>
-                {create_rows()}
-            </tbody>
-        </table>
+        <div className="guest_table">
+            <table className="names_table" dir="rtl">
+                <tbody>
+                    <tr>
+                        <th> סטטוס </th>
+                        <th> תגיות </th>
+                        <th> שם משפחה </th>
+                        <th> שם פרטי </th>
+                        <th> שיעור </th>
+                        <th> ניקוד </th>
+                        <th> בקשות </th>
+                        <th> X </th>
+                    </tr>
+                    {create_rows()}
+                </tbody>
+            </table>
+        </div>
         </>
     )
 }

@@ -8,18 +8,19 @@ const global_options = {
     }
 };
 
-export const map_new = {
-    get: async ({queryKey})=>{
+export const project = {
+    create: async ({name})=>{
         const options = {...global_options}
-        options.body = `category=map&action=get&map_name=${queryKey[1]}`
+        console.log(name)
+        options.body = `category=project&action=create&name=${name}`
         const res = await fetch(api_url, options);
         const json_res = await res.json();
         if (json_res.msg != 'ok') throw new Error(json_res.msg);
-        else return json_res.data[0];
+        else alert(json_res.msg);
     },
-    get_all: async ({queryKey})=>{
+    get: async ()=>{
         const options = {...global_options}
-        options.body = `category=map&action=get_all_2&project=${queryKey[1]}`
+        options.body = `category=project&action=get`
         const res = await fetch(api_url, options);
         const json_res = await res.json();
         if (json_res.msg != 'ok') throw new Error(json_res.msg);

@@ -6,17 +6,18 @@ import HiveSwitch from "../hive_elements/hive_switch";
 import PopUp from "../hive_elements/pop_up";
 import { useScheduling } from "../mutations";
 import { MBloaderContext, useSocket } from '../app'
-import { ActionsContext, SelectablesContext, TagsPopUpContext } from "../pages/maps";
-import { EditContext } from "../pages/maps"
+import { ActionsContext, SelectablesContext } from "../app";
+import { EditContext } from "../app"
 import { useBelogsQuery, useGroupsQuery, useGuestBelogsQuery, useGuestsQuery, useMapQuery, useSeatsQuery } from "../querys";
 
 import "../style/side_menu.css"
 import TagsPop from "./tags_pop";
 import { useQueryClient } from "react-query";
 
-function SideMenu(props) {
+function MapSideMenu(props) {
 
-    let {map_name} = useParams()
+    const {map_name, project_name} = useParams()
+    const [edit, setEdit] = useContext(EditContext)
 
     const map  = useMapQuery()
     const seats = useSeatsQuery()
@@ -27,14 +28,13 @@ function SideMenu(props) {
     // const scheduling = useScheduling()
 
     const [input_str, setInputStr] = useState('')
-    const [tagsPopStatus, setTagsPopStatus] = useContext(TagsPopUpContext)
+    const [tagsPopStatus, setTagsPopStatus] = useState(false)
 
     const selecteblsState = useContext(SelectablesContext)
     const [action, setAction] = useContext(ActionsContext)
     const [MBstatus, setMBStatus] = useContext(MBloaderContext)
     const hiveSocket = useSocket()
     const queryClient = useQueryClient()
-    const edit = useContext(EditContext)
 
     function scheduling(){
         const source = new EventSource(`http://hive.com:3020/actions/scheduling/${map_name}`);
@@ -161,14 +161,14 @@ function SideMenu(props) {
 
     function noEditSubMenu(){
         if(edit === 'אל תערוך'){
-            return(
-                <div className="sub_menu">
-                    <Link to={"/guests/"+map_name}><HiveButton>שמות</HiveButton></Link>
-                    <HiveButton onClick={scheduling}> שבץ </HiveButton>
-                    <input type='text' onInput={onInput}></input>
-                    <ul className="results" dir="rtl">{guestsList()}</ul>
-                </div>
-            )
+            // return(
+            //     // <div className="sub_menu">
+            //     //     <Link to={`/projects/${project_name}/guest/${map_name}`}><HiveButton>שמות</HiveButton></Link>
+            //     //     <HiveButton onClick={scheduling}> שבץ </HiveButton>
+            //     //     <input type='text' onInput={onInput}></input>
+            //     //     <ul className="results" dir="rtl">{guestsList()}</ul>
+            //     // </div>
+            // )
         }
     }
     function editSubMenu(){
@@ -186,18 +186,20 @@ function SideMenu(props) {
         }
     }
 
+    if(!map_name) return
+
     return ( 
         <>
-        <HiveSwitch 
-            options={['אל תערוך', 'ערוך']} 
-            active={'אל תערוך'} 
-            setActive={props.setEditStatus} 
-            bordKey="KeyQ" 
-        />
-        {editSubMenu()}
-        {noEditSubMenu()}
+            <HiveSwitch 
+                options={['אל תערוך', 'ערוך']} 
+                active={'אל תערוך'} 
+                setActive={setEdit} 
+                bordKey="KeyQ" 
+            />
+            {editSubMenu()}
+            {noEditSubMenu()}
         </>
     );
 }
 
-export default SideMenu;
+export default MapSideMenu;

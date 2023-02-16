@@ -1,10 +1,10 @@
 import { useContext, useEffect, useRef, useState } from 'react'
-import { EditContext, SelectablesContext } from '../pages/maps'
+import { EditContext, SelectablesContext } from '../app'
 import '../style/elements.css'
 
 function MapElement({cell}){
 
-    const edit = useContext(EditContext)
+    const [edit, setEdit] = useContext(EditContext)
     const Pref = useRef(null)
     const [Cstyle, setCstyle] = useState({})
     const [selectebls] = useContext(SelectablesContext)

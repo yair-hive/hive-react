@@ -105,7 +105,7 @@ export const map = {
             body: JSON.stringify(data_a),
             headers: {}
         }
-        return fetch(api_url, options)
+        return fetch(api_url_1, options)
         // .then(res => res.text())
         // .then(res => console.log(res))
         .then(res => res.json())

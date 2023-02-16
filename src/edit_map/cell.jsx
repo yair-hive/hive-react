@@ -1,10 +1,10 @@
 import { useContext } from "react"
-import { EditContext, SelectablesContext } from "../pages/maps"
+import { EditContext, SelectablesContext } from "../app"
 import "../style/cell.css"
 
 function Cell(props){
 
-    const edit = useContext(EditContext)
+    const [edit, setEdit] = useContext(EditContext)
     const selecteblsState = useContext(SelectablesContext)
 
     var class_rows = `row-${props.row_number}`

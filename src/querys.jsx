@@ -23,12 +23,12 @@ export function useGuestBelogsQuery(){
     return useQuery(['guest_belongs', map_name], api.guest_new.get_belongs)
 }
 export function useGuestsQuery(){
-    const {map_name} = useParams()
-    return useQuery(['guests', map_name], api.guest_new.get_all)
+    const {project_name} = useParams()
+    return useQuery(['guests', project_name], api.guest_new.get_all)
 }
 export function useGroupsQuery(){
-    const {map_name} = useParams()
-    return useQuery(['groups', map_name], api.groups.get_all)
+    const {project_name} = useParams()
+    return useQuery(['groups', project_name], api.groups.get_all)
 }
 export function useTagsQuery(){
     const {map_name} = useParams()
@@ -45,4 +45,8 @@ export function useRequestsQuery(){
 export function useElementsQuery(){
     const {map_name} = useParams()
     return useQuery(['elements', map_name], api.elements.get)
+}
+export function useMapsQuery(){
+    const {project_name} = useParams()
+    return useQuery(['maps', project_name], api.map_new.get_all)
 }

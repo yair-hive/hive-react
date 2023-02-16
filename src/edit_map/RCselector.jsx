@@ -1,9 +1,9 @@
 import { useContext } from 'react';
-import { EditContext } from '../pages/maps';
+import { EditContext } from '../app';
 import '../style/row_col_selector.css'
 
 function RCselector(props) {
-    const edit = useContext(EditContext)
+    const [edit, setEdit] = useContext(EditContext)
 
     if(edit === 'ערוך'){
         var style

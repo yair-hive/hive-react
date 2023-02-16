@@ -1,15 +1,16 @@
-import { useSelection } from '@viselect/react'
+import SelectionArea, { useSelection } from '@viselect/react'
 import { useContext, useEffect, useState} from 'react'
 import React from 'react'
 import { useParams } from 'react-router-dom'
-import { useSocket } from '../app'
-import { ActionsContext, EditContext, MapIdContext, SelectablesContext } from '../pages/maps'
-import api from '../scripts/api/api'
+import { MBloaderContext, useSocket } from '../app'
+import { ActionsContext, EditContext, SelectablesContext } from '../app'
 import AddGuestDropDown from './add_guest_drop_down'
 import NewCell from './new_cell'
 import { useElementsQuery, useMapQuery, useSeatsQuery } from '../querys'
 import "../style/map_cont.css"
+import "../style/side_menu.css"
 import { useMapAdd, useMapDelete } from '../mutations'
+import MBloader from '../hive_elements/MBloader'
 
 export const DropContext = React.createContext(null)
 export const SelectedContext = React.createContext(null)
@@ -30,10 +31,28 @@ function Map(){
     const map_delete = useMapDelete()
 
     const [dropDownPos, setDropDownPos] = useState(null)
-    const edit = useContext(EditContext)
-    const selecteblsState = useContext(SelectablesContext)
-    const map_id = useContext(MapIdContext)
-    const hiveSocket = useSocket()
+    const [edit, setEdit] = useContext(EditContext)
+
+    const [MBloaderStatus, setMBloaderStatus] = useContext(MBloaderContext)
+
+    function onStart({event, selection}){
+        if (!event.ctrlKey && !event.metaKey){
+            selection.clearSelection();
+            document.querySelectorAll('.selected').forEach(e => e.classList.remove('selected'))
+        }
+    }
+    function onMove({ store: { changed: { added, removed } } }){
+        added.forEach(ele => ele.classList.add('selected'))
+        removed.forEach(ele => ele.classList.remove('selected'))
+    }
+
+    var className='selection_bond main_bord'
+    if(MBloaderStatus !== 0 && MBloaderStatus !== 100){
+        var mb = document.getElementsByClassName('selection_bond')[0]
+        mb.scrollTop = 0
+        mb.scrollLeft = 0
+        className += ' in_of'
+    }
 
     if(edit === 'ערוך') {
         if(selection?.enable) selection.enable()
@@ -59,14 +78,10 @@ function Map(){
         }
     }
 
-    async function onKeyDown(event){
+    function onKeyDown(event){
         if(edit === 'ערוך'){
-            if(event.code == 'Enter'){
-                map_add(action)
-            }
-            if(event.code == 'Delete'){
-                map_delete(action)
-            }
+            if(event.code == 'Enter') map_add(action)           
+            if(event.code == 'Delete') map_delete(action)           
         }
     }
 
@@ -148,16 +163,26 @@ function Map(){
         }
     }
 
-    return (<div className="map_container">
-        <SelectedContext.Provider value={[selected_seat, setSelectedSeat]}>
-        <DropContext.Provider value={[dropDownPos, setDropDownPos]}>
-        <AddGuestDropDown pos={dropDownPos} selected_seat={selected_seat} map={map}/>
-            <div id="map" className="map" style={STYLE}> 
-                {new_create_cells()}
-            </div>
-        </DropContext.Provider>
-        </SelectedContext.Provider>
-    </div>)
+    return (<SelectionArea
+        selectables={'.selectable'}
+        onStart={onStart}
+        onMove={onMove}
+        behaviour={{scrolling: {startScrollMargins: {x: 150, y: 0}}}}
+        className={className}
+    >
+        <MBloader />
+        <div className="map_container">
+            <SelectedContext.Provider value={[selected_seat, setSelectedSeat]}>
+            <DropContext.Provider value={[dropDownPos, setDropDownPos]}>
+                <AddGuestDropDown pos={dropDownPos} selected_seat={selected_seat} map={map}/>
+                <div id="map" className="map" style={STYLE}> 
+                    {new_create_cells()}
+                </div>
+
+            </DropContext.Provider>
+            </SelectedContext.Provider>
+        </div>
+    </SelectionArea>)
 }
 
 export default Map

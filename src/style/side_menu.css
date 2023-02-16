@@ -39,3 +39,6 @@ input{
 .results > li > span > .seat_number{
     color: #344052;
 }
+.sub_menu{
+    margin: 10px 0;
+}

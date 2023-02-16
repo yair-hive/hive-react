@@ -92,7 +92,8 @@ td[belong = 'belong']{
 td[belong = 'no belong']{
     background-color: grey;
 }
-.main_bord.guest_table{
+.main_bord > .guest_table{
+    width: 100%;
     display: flex;
     align-items: flex-start;
     justify-content: center;

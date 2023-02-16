@@ -1,16 +1,23 @@
+import { useContext } from "react"
+import { BelongsContext, GroupsContext, TagsContext } from "../app"
 import TagsCount from "../components/tags_count"
 import { TdFirst, TdGroup, TdLast, TdRequests, TdScore, TdX } from "./tds_components"
 
 function TableRow(props){
+
+    const [belongsStatus, setBelongsStatus] = useContext(BelongsContext)
+    const [groupsStatus, setGroupsStatus] = useContext(GroupsContext)
+    const [tagsStatus, setTagsStatus] = useContext(TagsContext)
+
     var belong
     var tags_ids = props.tags?.map(tag => tag.group_id)
     if(!props.guest) return
     if(props.seat) belong = 'belong'
-    if(props.seat && props.belongsStatus == 'לא משובצים') return
-    if(!props.seat && props.belongsStatus == 'משובצים') return
-    if(props.groupsStatus != 'הכל' && props.groupsStatus != props.group.group_name) return
-    if(props.tagsStatus != 'הכל' && !props.tags) return
-    if(props.tagsStatus != 'הכל' && tags_ids?.indexOf(props.tagsStatus) == -1) return
+    if(props.seat && belongsStatus == 'לא משובצים') return
+    if(!props.seat && belongsStatus == 'משובצים') return
+    if(groupsStatus != 'הכל' && groupsStatus != props.group.group_name) return
+    if(tagsStatus != 'הכל' && !props.tags) return
+    if(tagsStatus != 'הכל' && tags_ids?.indexOf(props.tagsStatus) == -1) return
 
     return(
         <tr>

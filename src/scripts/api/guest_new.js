@@ -14,7 +14,7 @@ export const guest_new = {
         var action_params = {
             category: 'guest', 
             action: 'get_all', 
-            map_name: queryKey[1]
+            project: queryKey[1]
         }
         options.body = JSON.stringify(action_params)
         const res = await fetch(api_url, options);
@@ -24,7 +24,7 @@ export const guest_new = {
     },
     get_belongs: async ({queryKey})=>{
         const options = {...global_options}
-        options.body = `category=guest&action=get_belongs&map_name=${queryKey[1]}`
+        options.body = `category=guest&action=get_belongs&project=${queryKey[1]}`
         const res = await fetch(api_url, options);
         const json_res = await res.json();
         if (json_res.msg != 'ok') throw new Error(json_res.msg);
@@ -45,5 +45,40 @@ export const guest_new = {
         const json_res = await res.json();
         if (json_res.msg != 'ok') throw new Error(json_res.msg);
         else return json_res.data
+    },
+    create: (req)=>{
+        const options = {...global_options}
+        var action_params = {category: 'guest', action: 'create'}
+        var req_body = Object.assign(action_params, req)
+        options.body = JSON.stringify(req_body)  
+        return fetch(api_url, options)
+        // .then(res => res.text())
+        .then(res => res.json())
+        .then(res => console.log(res))
+        // .then(res => alert(res))
+        // .then(res => res.json())
+        // .then((res)=>{
+        //     if(res.msg == 'ok') return
+        //     console.log(res)
+        //     return res.msg
+        // })
+        // .then(()=> alert())
+    },
+    create_multi: (req)=>{
+        const options = {...global_options}
+        var action_params = {category: 'guest', action: 'create_multi'}
+        var req_body = Object.assign(action_params, req)
+        options.body = JSON.stringify(req_body)  
+        return fetch(api_url, options)
+        .then(res => res.text())
+        .then(res => console.log(res))
+        // .then(res => alert(res))
+        // .then(res => res.json())
+        // .then((res)=>{
+        //     if(res.msg == 'ok') return
+        //     console.log(res)
+        //     return res.msg
+        // })
+        // .then(()=> alert())
     },
 }
