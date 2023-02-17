@@ -32,7 +32,7 @@ function getFontSize(str){
 
 function Seat(props){
     const [edit, setEdit] = useContext(EditContext)
-    const selecteblsState = useContext(SelectablesContext)
+    const [selectebls] = useContext(SelectablesContext)
     const [dropDownPos, setDropDownPos] = useContext(DropContext)
     const nameBoxRef = useRef(null)
     const belongs = useBelogsQuery()
@@ -55,61 +55,47 @@ function Seat(props){
         guests.data.forEach(guest => guests_object[guest.id] = guest)
     }
 
-    var guest
-    if(guests_object && guest_id){
-        guest = guests_object[guest_id]
-    }
+    var guest = (guests_object && guest_id ? guests_object[guest_id] : null)
 
-    var guest_name
-    if(guest){
-        guest_name = guest.last_name + ' ' + guest.first_name
-    }
+    var guest_name = (guest ? `${guest.last_name} ${guest.first_name}` : '')
 
-    var group_color = undefined
-    if(guest && groups.data){
-        group_color = groups.data[guest.guest_group]?.color
-    }
-    var color, font_size = ''
-    color = getColor(group_color)
-    if(guest_name) font_size = getFontSize(guest_name)
+    var group_color = (guest && groups.data ? groups.data[guest.guest_group]?.color : undefined)
 
-    var tags
-    if(tagsBelongs.data){
-        var seat_tags = tagsBelongs.data[props.seat_id]
-        if(seat_tags) tags = seat_tags
-    }
+    var font_size = (guest_name ? getFontSize(guest_name) : '')
 
-    function nameBoxOnClick(){
-        setDropDownPos(nameBoxRef.current)
-        setSelectedSeat(props.seat_id)
-    }
-    const NAME_BOX_STYLE = {
-        backgroundColor: group_color,
-        fontSize: font_size,
-        color: color
-    }
+    var color = getColor(group_color)
 
-    function name_box(){
-        if(edit === 'ערוך'){
-            return <div className="name_box"> <TagsCount tags={tags}/></div>
-            // return <div className="name_box"> {props.seat.col_score} & {props.seat.row_score} & {props.seat.pass_score}</div>
+    var tags = (tagsBelongs.data ? tagsBelongs.data[props.seat_id] : null)
+
+    function NameBox(){
+
+        function nameBoxOnClick(){
+            if(edit == 'אל תערוך'){
+                setDropDownPos(nameBoxRef.current)
+                setSelectedSeat(props.seat_id)
+            }
         }
+        const NAME_BOX_STYLE = {
+            backgroundColor: group_color,
+            fontSize: font_size,
+            color: color
+        }
+
         return(
             <div className="name_box" style={NAME_BOX_STYLE} ref={nameBoxRef} onClick={nameBoxOnClick}>
-                {guest_name}
+                {(edit === 'ערוך' ? <TagsCount tags={tags}/> : guest_name)}
             </div>  
         )
     } 
-    var className = "seat"
-    if(selecteblsState){
-        if(selecteblsState[0] === 'seats') className = className+" selectable"
-    }
-    return (<div>
-        <div className={className} seat_id={props.seat_id}>
-            <div className="num_box">{props.number}</div> 
-            {name_box()}
+
+    return (
+        <div>
+            <div className={`seat ${(edit === 'ערוך' && selectebls === 'seats' ? "selectable" : "")}`} seat_id={props.seat_id}>
+                <div className="num_box">{props.number}</div> 
+                <NameBox />
+            </div>
         </div>
-    </div>)
+    )
 }
 
 export default Seat

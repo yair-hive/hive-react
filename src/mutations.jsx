@@ -8,14 +8,14 @@ import api from "./scripts/api/api";
 
 export function useMapAdd(){
 
-    const {map_name} = useParams()
+    const {map_name, project_name} = useParams()
     const hiveSocket = useSocket()
     const queryClient = useQueryClient()
 
     const mutations = {   
         seats: useMutation(seats => {
             seats = JSON.stringify(seats)
-            return api.seat_new.create_multiple(map_name, seats)
+            return api.seat_new.create_multiple(map_name, seats, project_name)
         }, {
             onSuccess: ()=>{
                 var msg = JSON.stringify({action: 'invalidate', query_key: ['seats', map_name]})
@@ -56,7 +56,7 @@ export function useMapAdd(){
 
 export function useMapDelete(){
 
-    const {map_name} = useParams()
+    const {map_name, project_name} = useParams()
     const hiveSocket = useSocket()
     const queryClient = useQueryClient()
 
