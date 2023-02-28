@@ -13,7 +13,8 @@ export function useSeatBelongsCreate(){
     const queryClient = useQueryClient()
     
     const mutation = useMutation(async ({guest_id, seat_id}) => {
-        return new_api.seat_belongs.create(seat_id, guest_id)
+        console.log(guest_id)
+        return new_api.seat_belongs.create(project_name, seat_id, guest_id)
     }, {
         onSuccess: (data, variables,)=>{
             var {guest_id, seat_id} = variables

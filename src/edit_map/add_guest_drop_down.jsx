@@ -1,8 +1,9 @@
 import { useContext, useState } from "react"
 import DropDown from "../hive_elements/dropDown"
 import RolligList from "../hive_elements/rolling_list"
-import { useAddGuest } from "../mutations"
+import new_api from "../new_api/new_api"
 import { useGuestsData } from "../querys/guests"
+import { useSeatBelongsCreate } from "../querys/seat_belongs"
 import InputBox from "./input_box"
 import { DropContext, SelectedContext } from "./map"
 
@@ -11,15 +12,20 @@ function AddGuestDropDown(props){
     const guests = useGuestsData()
 
     const [inputStr, setInputStr] = useState('')
-    const add_guest = useAddGuest()
+    const check_guest = new_api.seat_belongs.check
+    const add_guest = useSeatBelongsCreate()
     const [dropDownPos, setDropDownPos] = useContext(DropContext)
     const [selected_seat, setSelectedSeat] = useContext(SelectedContext)
 
-    function onItem(item){
-        add_guest({
-            guest_id: item.value, 
-            seat_id: selected_seat
-        })
+    async function onItem(item){
+        // const {exist} = await check_guest(item.value)
+        // if(exist){
+            console.log(item.value)
+            add_guest({
+                guest_id: item.value, 
+                seat_id: selected_seat
+            })
+        // }
         setDropDownPos(null)
         setSelectedSeat(null)
     }
