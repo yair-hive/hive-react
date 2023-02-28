@@ -1,34 +1,24 @@
 import { useState } from "react";
-import { useQueryClient } from "react-query";
-import { useParams } from "react-router-dom";
-import { useSocket } from "../app";
 import PopUp from "../hive_elements/pop_up";
-import { useTagsQuery } from "../querys";
-import api from "../scripts/api/api";
+import { useTagsData, useTagsUpdate } from "../querys/tags";
 
-function ColorInput(props){
+function ColorInput({tag_id, color}){
 
-    const [color, setColor] = useState(null)
-    const hiveSocket = useSocket()
-    const {map_name} = useParams()
+    const [colorState, setColor] = useState(null)
+    const update_color = useTagsUpdate().color
 
     function onChange(event){
         setColor(event.target.value)
     }
 
     function onBlur(){
-        console.log(color)
-        api.tags.update_color(props.tag_id, color)
-        .then(()=> {
-            var msg = JSON.stringify({action: 'invalidate', quert_key: ['tags', map_name]})
-            hiveSocket.send(msg)
-        })
+        update_color({tag_id, color: colorState})
     }
 
     return(
         <input 
             type={'color'} 
-            value={props.color}
+            value={color}
             onChange={onChange}
             onBlur={onBlur}
         />
@@ -37,7 +27,7 @@ function ColorInput(props){
 
 function TagsPop(props) {
 
-    const tags = useTagsQuery()
+    const tags = useTagsData()
 
     function create_tag_tds(){
         if(tags.data){
@@ -48,7 +38,7 @@ function TagsPop(props) {
                         <td className="td_x"> X </td>
                         <td className="td_color"> <ColorInput color = {tag.color} tag_id={tag.id}/> </td>
                         <td> {tag.score} </td>
-                        <td> {tag.tag_name} </td>
+                        <td> {tag.name} </td>
                     </tr>
                 tr_elements.push(tr)
             }

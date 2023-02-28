@@ -6,11 +6,11 @@ import GroupsPop from "../components/groups_pop";
 import ImportGuests from "../components/import_guests";
 import HiveButton from "../hive_elements/hive_button";
 import HiveSwitch from "../hive_elements/hive_switch";
-import { useGroupsQuery, useTagsQuery } from "../querys";
+import { useGuestGroupsData } from "../querys/guest_groups";
+import { useTagsData } from "../querys/tags";
 
-function GuestsSideMenu(props){
+function GuestsSideMenu(){
 
-    const {map_name, project_name} = useParams()
     const [importPop, setImportPop] = useState(false)
     const [groupsPop, setGroupsPop] = useState(false)
     const [addGuestPop, setAddGuestPop] = useState(false)
@@ -18,8 +18,8 @@ function GuestsSideMenu(props){
     const [groupsStatus, setGroupsStatus] = useContext(GroupsContext)
     const [tagsStatus, setTagsStatus] = useContext(TagsContext)
 
-    const groups = useGroupsQuery()
-    const tags = useTagsQuery()
+    const groups = useGuestGroupsData()
+    const tags = useTagsData()
 
     var groupsOptions, tagsOptions
 

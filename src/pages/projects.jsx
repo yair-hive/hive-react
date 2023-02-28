@@ -7,7 +7,7 @@ import GuestsTable from "../guests_list/guests_table"
 import GuestsSideMenu from "../guests_list/side_menu"
 import HiveButton from "../hive_elements/hive_button"
 import HiveSwitch from "../hive_elements/hive_switch"
-import { useMapsQuery } from "../querys"
+import { useMapsAllData } from "../querys/maps"
 import ProjectSM from "./projects_sub_menu"
 
 function Projects(){
@@ -15,7 +15,7 @@ function Projects(){
     const navigate = useNavigate()
 
     const [map, setMap] = useState(null)
-    const maps = useMapsQuery()
+    const maps = useMapsAllData()
     
     var mapsOptions = maps.data?.map(map => map.map_name)
 

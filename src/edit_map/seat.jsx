@@ -1,12 +1,13 @@
 import { useContext } from "react"
-import { useState } from "react"
-import { useEffect } from "react"
 import { useRef } from "react"
 import TagsCount from "../components/tags_count"
 import { EditContext, SelectablesContext } from "../app"
-import { useSeatBelogsQuery, useGroupsQuery, useGuestsQuery, useTagsQuery, useTagsBelongsQuery, useBelogsQuery } from "../querys"
 import "../style/seat.css"
 import { DropContext, SelectedContext } from "./map"
+import { useSeatBelongsData } from "../querys/seat_belongs"
+import { useGuestsData } from "../querys/guests"
+import { useGuestGroupsData } from "../querys/guest_groups"
+import { useTagBelongsData } from "../querys/tag_belongs"
 
 function getColor(backColor){
     if(backColor){
@@ -30,15 +31,47 @@ function getFontSize(str){
     else return '15px'
 }
 
+function NameBox({seat_id, tags, guest_name, group_color}){
+
+    const [edit, setEdit] = useContext(EditContext)
+    const [dropDownPos, setDropDownPos] = useContext(DropContext)
+    const [selected_seat, setSelectedSeat] = useContext(SelectedContext)
+
+    const nameBoxRef = useRef(null)
+
+    function nameBoxOnClick(){
+        if(edit == 'אל תערוך'){
+            setDropDownPos(nameBoxRef.current)
+            setSelectedSeat(seat_id)
+        }
+    }
+
+    var font_size = (guest_name ? getFontSize(guest_name) : '')
+
+    var color = getColor(group_color)
+
+    const NAME_BOX_STYLE = {
+        backgroundColor: group_color,
+        fontSize: font_size,
+        color: color
+    }
+
+    return(
+        <div className="name_box" style={NAME_BOX_STYLE} ref={nameBoxRef} onClick={nameBoxOnClick}>
+            {(edit === 'ערוך' ? <TagsCount tags={tags}/> : guest_name)}
+        </div>  
+    )
+} 
+
+
 function Seat(props){
     const [edit, setEdit] = useContext(EditContext)
     const [selectebls] = useContext(SelectablesContext)
     const [dropDownPos, setDropDownPos] = useContext(DropContext)
-    const nameBoxRef = useRef(null)
-    const belongs = useBelogsQuery()
-    const guests = useGuestsQuery()
-    const groups = useGroupsQuery()
-    const tagsBelongs = useTagsBelongsQuery()
+    const belongs = useSeatBelongsData()
+    const guests = useGuestsData()
+    const groups = useGuestGroupsData()
+    const tagsBelongs = useTagBelongsData()
     const [selected_seat, setSelectedSeat] = useContext(SelectedContext)
 
     var guest_id
@@ -61,38 +94,13 @@ function Seat(props){
 
     var group_color = (guest && groups.data ? groups.data[guest.guest_group]?.color : undefined)
 
-    var font_size = (guest_name ? getFontSize(guest_name) : '')
-
-    var color = getColor(group_color)
-
     var tags = (tagsBelongs.data ? tagsBelongs.data[props.seat_id] : null)
-
-    function NameBox(){
-
-        function nameBoxOnClick(){
-            if(edit == 'אל תערוך'){
-                setDropDownPos(nameBoxRef.current)
-                setSelectedSeat(props.seat_id)
-            }
-        }
-        const NAME_BOX_STYLE = {
-            backgroundColor: group_color,
-            fontSize: font_size,
-            color: color
-        }
-
-        return(
-            <div className="name_box" style={NAME_BOX_STYLE} ref={nameBoxRef} onClick={nameBoxOnClick}>
-                {(edit === 'ערוך' ? <TagsCount tags={tags}/> : guest_name)}
-            </div>  
-        )
-    } 
 
     return (
         <div>
             <div className={`seat ${(edit === 'ערוך' && selectebls === 'seats' ? "selectable" : "")}`} seat_id={props.seat_id}>
                 <div className="num_box">{props.number}</div> 
-                <NameBox />
+                <NameBox seat_id={props.seat_id} guest_name={guest_name} group_color={group_color} tags={tags}/>
             </div>
         </div>
     )

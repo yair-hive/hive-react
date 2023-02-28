@@ -1,47 +1,27 @@
 import { useContext, useState } from "react"
-import { useParams } from "react-router-dom"
-import { useSocket } from "../app"
 import DropDown from "../hive_elements/dropDown"
 import RolligList from "../hive_elements/rolling_list"
 import { useAddGuest } from "../mutations"
-import { useGuestsQuery } from "../querys"
-import api from "../scripts/api/api"
+import { useGuestsData } from "../querys/guests"
 import InputBox from "./input_box"
-import { DropContext } from "./map"
+import { DropContext, SelectedContext } from "./map"
 
 function AddGuestDropDown(props){
 
-    let {map_name} = useParams()
-
-    const guests = useGuestsQuery()
+    const guests = useGuestsData()
 
     const [inputStr, setInputStr] = useState('')
-    const hiveSocket = useSocket()
     const add_guest = useAddGuest()
     const [dropDownPos, setDropDownPos] = useContext(DropContext)
+    const [selected_seat, setSelectedSeat] = useContext(SelectedContext)
 
     function onItem(item){
-        add_guest.mutate({
+        add_guest({
             guest_id: item.value, 
-            seat_id: props.selected_seat
+            seat_id: selected_seat
         })
         setDropDownPos(null)
-        // api.guest.create_belong(item.value, props.selected_seat, props.map.data.id)
-        // .then((res)=> {
-        //     if(res.msg === 'exists'){
-        //         if(window.confirm('המשתמש כבר משובץ האם אתה רוצה לשבץ מחדש?')){
-        //             api.guest.update_belong(item.value, props.selected_seat, props.map.data.id)
-        //             .then((res)=>{
-        //                 console.log(res)
-        //                 var msg = JSON.stringify({action: 'invalidate', quert_key: ['get_belongs', map_name]})
-        //                 hiveSocket.send(msg)
-        //             })
-        //         }
-        //     }else{
-        //         var msg = JSON.stringify({action: 'invalidate', quert_key: ['get_belongs', map_name]})
-        //         hiveSocket.send(msg)
-        //     }
-        // })
+        setSelectedSeat(null)
     }
 
     function createMatchList(){
@@ -61,8 +41,8 @@ function AddGuestDropDown(props){
 
     return (
         <>
-        <InputBox pos={props.pos} setInputStr={setInputStr}></InputBox>
-        <DropDown pos={props.pos}>
+        <InputBox pos={dropDownPos} setInputStr={setInputStr}></InputBox>
+        <DropDown pos={dropDownPos}>
             <RolligList items={createMatchList()} onItemClick={onItem}/>
         </DropDown>
         </>

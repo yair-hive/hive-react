@@ -7,7 +7,7 @@ function InputBox(props) {
 
     function offsetCalculate(){
         if(props.pos){
-            var parent = props.pos.getBoundingClientRect()  
+            var parent = props.pos.getBoundingClientRect()
 
             inputRef.current.style.width = parent.width+'px'
             inputRef.current.style.top = parent.top+'px'

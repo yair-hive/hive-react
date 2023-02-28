@@ -1,15 +1,12 @@
-import { useParams } from "react-router-dom"
-import { useSocket } from "../app"
 import DropDown from "../hive_elements/dropDown"
 import RollingList from "../hive_elements/rolling_list"
-import { useTagsQuery } from "../querys"
-import api from "../scripts/api/api"
+import { useRequestsBelongsCreate } from "../querys/requests_belongs"
+import { useTagsData } from "../querys/tags"
 
 function RequestsDrop(props){
 
-    const tags = useTagsQuery()
-    const {map_name} = useParams()
-    const hiveSocket = useSocket()
+    const tags = useTagsData()
+    const add_request = useRequestsBelongsCreate()
 
     function createItems(){
         if(tags.data){
@@ -26,14 +23,11 @@ function RequestsDrop(props){
         var data = {
             guest_id: props.selected,
             tag_id: item.value,
-            map_name: map_name
         }
-        api.tag_new.add_request(data)
+        add_request(data)
         .then(()=>{
             props.setPos(null)
             props.setSelected(null)
-            var msg = JSON.stringify({action: 'invalidate', query_key: ['requests', map_name]})
-            hiveSocket.send(msg)
         })
     }
 

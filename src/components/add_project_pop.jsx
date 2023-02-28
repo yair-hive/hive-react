@@ -1,28 +1,23 @@
 import { useState } from "react"
 import HiveButton from "../hive_elements/hive_button"
 import PopUp from "../hive_elements/pop_up"
-import api from "../scripts/api/api"
-import { useNavigate } from "react-router-dom";
+import { useProjectsCreate } from "../querys/projects";
 
-function AddProjectPop(props){
+function AddProjectPop({id}){
 
     const [name, setName] = useState('')
-    const navigate = useNavigate()
+    const create_project = useProjectsCreate()
 
     function onClick(){
-        api.project.create({name: name})
+        create_project(name)
     }
 
     return(
-        <PopUp
-        status={props.status} 
-        setState = {props.setState}
-        title = 'הוסף מפה'
-        >
+        <PopUp id={id} title = 'הוסף פרוייקט'>
             <form id='create_map_form'>
-                <label htmlFor="map_name"> שם המפה </label>
+                <label> שם הפרוייקט </label>
                 <br />
-                <input type='text' name='map_name' onInput={(e)=> setName(e.target.value)}/>  
+                <input type='text' onInput={(e)=> setName(e.target.value)}/>  
                 <br />
                 <HiveButton onClick={onClick}> צור </HiveButton>
             </form>

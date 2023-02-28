@@ -1,16 +1,10 @@
 import { useEffect, useState } from "react"
-import { useQueryClient } from "react-query"
-import { useParams } from "react-router-dom"
-import { useSocket } from "../app"
 import PopUp from "../hive_elements/pop_up"
-import { useGroupsQuery } from "../querys"
-import api from "../scripts/api/api"
+import { useGuestGroupsData, useGuestGroupsDelete, useGuestGroupsUpdate } from "../querys/guest_groups"
 
 function TdColor({color, group_id}){
 
-    const hiveSocket = useSocket()
-    const {map_name} = useParams()
-    const queryClient = useQueryClient()
+    const update_color = useGuestGroupsUpdate().color
 
     const [colorState, setColorState] = useState(color)
 
@@ -21,11 +15,7 @@ function TdColor({color, group_id}){
     }
 
     function onBlur(){
-        api.guest.update_group_color(group_id, colorState)
-        .then(()=>{
-            var msg = JSON.stringify({action: 'invalidate', query_key: ['groups', map_name]})
-            hiveSocket.send(msg)
-        })
+        update_color({group_id, color: colorState})        
     }
 
     return (
@@ -39,9 +29,7 @@ function TdScore({score, group_id}){
 
     const [isInput, setInput] = useState(false)
     const [scoreState, setScore] = useState(score)
-    const hiveSocket = useSocket()
-    const {map_name} = useParams()
-    const queryClient = useQueryClient()
+    const update_score = useGuestGroupsUpdate().score
 
     useEffect(()=> setScore(score), [score])
 
@@ -50,11 +38,7 @@ function TdScore({score, group_id}){
     }
     function onBlur(){
         setInput(false)
-        api.guest.update_group_score(group_id, scoreState)
-        .then(()=>{
-            var msg = JSON.stringify({action: 'invalidate', query_key: ['groups', map_name]})
-            hiveSocket.send(msg)
-        })
+        update_score({group_id: group_id, score: scoreState})
     }
 
     if(isInput) return (
@@ -75,66 +59,22 @@ function TdScore({score, group_id}){
     )
 }
 
-function TdName({name, group_id}){
-
-    const [isInput, setInput] = useState(false)
-    const [nameState, setName] = useState(name)
-    const hiveSocket = useSocket()
-    const {map_name} = useParams()
-
-    useEffect(()=> setName(name), [name])
-
-    function onChange(event){
-        setName(event.target.value)
-    }
-    function onBlur(){
-        setInput(false)
-        api.guest.update_group_name(nameState, group_id, map_name)
-        .then(()=>{
-            var msg = JSON.stringify({action: 'invalidate', query_key: ['groups', map_name]})
-            hiveSocket.send(msg)
-        })
-    }
-
-    if(isInput) return (
-        <td style={{backgroundColor: 'white'}}>
-            <input 
-                value={nameState}
-                style={{width: `${nameState.toString().length}ch`}}
-                onChange={onChange}
-                onBlur={onBlur}
-            />
-        </td>
-    )
-
-    return (
-        <td onClick={()=> setInput(true)}> 
-            {name} 
-        </td>
-    )
+function TdName({name}){
+    return <td>{name}</td>
 }
 
 function TdX({group_id}){
 
-    const hiveSocket = useSocket()
-    const {map_name} = useParams()
+    const delete_group = useGuestGroupsDelete()
 
-    function onClick(){
-        api.guest.delete_group(group_id)
-        .then(()=>{
-            var msg = JSON.stringify({action: 'invalidate', query_key: ['groups', map_name]})
-            hiveSocket.send(msg)
-        })
-    }
+    function onClick(){delete_group(group_id)}
 
-    return(
-        <td className="td_x" onClick={onClick}> X </td>
-    )
+    return <td className="td_x" onClick={onClick}> X </td>
 }
 
 function GroupsPop(props){
 
-    const groups = useGroupsQuery()
+    const groups = useGuestGroupsData()
 
     function create_rows(){
         if(groups.data){

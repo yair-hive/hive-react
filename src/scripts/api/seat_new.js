@@ -8,6 +8,15 @@ const global_options = {
     }
 };
 
+function convertToFormType(object){
+    var as_array = Object.entries(object)
+    var strings_array = []
+    for(let [key, value] of as_array){
+        strings_array.push(`${key}=${value}`)
+    }
+    return strings_array.join('&')
+}
+
 export const seat_new = {
     get_all_1: async ({queryKey})=>{
         const options = {method: 'GET'}
@@ -18,8 +27,15 @@ export const seat_new = {
         else return json_res.data;
     },
     get_all: async ({queryKey})=>{
+        const {map_name, project_name} = queryKey[1]
         const options = {...global_options}
-        options.body = `category=seat&action=get_all&map_name=${queryKey[1]}`         
+        const body = {
+            category: 'seat',
+            action: 'get_all',
+            map_name: map_name,
+            project_name: project_name
+        }
+        options.body = convertToFormType(body)         
         const res = await fetch(api_url, options);
         const json_res = await res.json();
         if (json_res.msg != 'ok') throw new Error(json_res.msg);

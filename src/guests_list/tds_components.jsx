@@ -1,17 +1,13 @@
 import { useEffect, useRef, useState } from "react"
-import { useParams } from "react-router-dom"
-import { useSocket } from "../app"
-import { useDeleteGuest } from "../mutations"
-import { useRequestsQuery } from "../querys"
-import api from "../scripts/api/api"
+import { useGuestsDelete, useGuestsUpdate } from "../querys/guests"
 import RequestsCount from "../components/requestsCount"
+import { useRequestsBelongsData } from "../querys/requests_belongs"
 
 export function TdLast(props){
 
     const [isLastInput, setLastInput] = useState(false)
     const [last, setLast] = useState(props.last_name)
-    const hiveSocket = useSocket()
-    const {map_name} = useParams()
+    const update_last = useGuestsUpdate().last
 
     function onTdClick(){
         setLastInput(true)
@@ -23,11 +19,7 @@ export function TdLast(props){
 
     function onInputBlur(){
         setLastInput(false)
-        api.guest.update_last_name(last, props.guest_id)
-        .then(()=>{
-            var msg = JSON.stringify({action: 'invalidate', quert_key: ['get_guests', map_name]})
-            hiveSocket.send(msg)
-        })
+        update_last({last: last, guest_id: props.guest_id})
     }
 
     function onInputChange(event){
@@ -59,8 +51,7 @@ export function TdFirst(props){
 
     const [isFirstInput, setFirstInput] = useState(false)
     const [first, setFirst] = useState(props.first_name)
-    const hiveSocket = useSocket()
-    const {map_name} = useParams()
+    const update_first = useGuestsUpdate().first
 
     useEffect(()=> setFirst(props.first_name), [props.first_name])
 
@@ -70,11 +61,7 @@ export function TdFirst(props){
 
     function onInputBlur(){
         setFirstInput(false)
-        api.guest.update_first_name(first, props.guest_id)
-        .then(()=>{
-            var msg = JSON.stringify({action: 'invalidate', quert_key: ['get_guests', map_name]})
-            hiveSocket.send(msg)
-        })
+        update_first({first: first, guest_id: props.guest_id})
     }
 
     function onInputChange(event){
@@ -106,8 +93,7 @@ export function TdGroup(props){
 
     const [isGroupInput, setGroupInput] = useState(false)
     const [group, setGroup] = useState(props.group)
-    const hiveSocket = useSocket()
-    const {map_name} = useParams()
+    const update_group = useGuestsUpdate().group
 
     useEffect(()=> setGroup(props.group), [props.group])
 
@@ -117,11 +103,7 @@ export function TdGroup(props){
 
     function onInputBlur(){
         setGroupInput(false)
-        api.guest.update_group_name(group, props.guest_id, map_name)
-        .then(()=>{
-            var msg = JSON.stringify({action: 'invalidate', query_key: ['get_guests', map_name]})
-            hiveSocket.send(msg)
-        })
+        update_group({group: group, guest_id: props.guest_id})
     }
 
     function onInputChange(event){
@@ -153,8 +135,7 @@ export function TdScore(props){
 
     const [isScoreInput, setScoreInput] = useState(false)
     const [score, setScore] = useState(props.guest_score + props.group_score)
-    const hiveSocket = useSocket()
-    const {map_name} = useParams()
+    const update_score = useGuestsUpdate().score
 
     useEffect(()=> setScore(props.guest_score + props.group_score), [props.guest_score, props.group_score])
 
@@ -163,11 +144,7 @@ export function TdScore(props){
     }
 
     function onInputBlur(){
-        api.guest.update_guest_score(props.guest_id, (score -props.group_score))
-        .then(()=> {
-            var msg = JSON.stringify({action: 'invalidate', quert_key: ['get_guests', map_name]})
-            hiveSocket.send(msg)
-        })
+        update_score({guest_id: props.guest_id, score: (score -props.group_score)})
         setScoreInput(false)
     }
 
@@ -198,17 +175,17 @@ export function TdScore(props){
 }
 export function TdX(props){
 
-    const delete_guest = useDeleteGuest()
+    const delete_guest = useGuestsDelete()
  
     function on_td_x(){
-        delete_guest.mutate({guest_id: props.guest_id})
+        delete_guest({guest_id: props.guest_id})
     }
 
     return (<td className="td_x" onClick={on_td_x}> x </td>)
 }
 export function TdRequests(props){
 
-    const requests = useRequestsQuery()
+    const requests = useRequestsBelongsData()
     const tdRef = useRef(null)
 
     function onClick(event){

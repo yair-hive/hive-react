@@ -1,28 +1,22 @@
 import { useState } from "react"
-import { useParams } from "react-router-dom"
 import readXlsxFile from "read-excel-file"
 import HiveButton from "../hive_elements/hive_button"
 import PopUp from "../hive_elements/pop_up"
-import api from "../scripts/api/api"
+import { useGuestsCreate } from "../querys/guests"
 
 function ImportGuests(props){
 
-    const {project_name} = useParams()
-
     const [file, setFile] = useState()
+    const create_guests = useGuestsCreate()
 
     function onChange(event){
         setFile(event.target.files[0])
     }
 
-    function onClick(){
-        readXlsxFile(file)
-        .then((rows)=>{
-            return api.guest_new.create_multi({project: project_name, data: rows})
-        })
-        .then(()=>{
-            props.setState(false)
-        })
+    async function onClick(){
+        var rows = await readXlsxFile(file)
+        await create_guests(rows)
+        props.setState(false)
     }
 
     return(<PopUp

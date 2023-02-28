@@ -1,39 +1,46 @@
 import SelectionArea, { useSelection } from '@viselect/react'
 import { useContext, useEffect, useState} from 'react'
 import React from 'react'
-import { useParams } from 'react-router-dom'
-import { MBloaderContext, useSocket } from '../app'
-import { ActionsContext, EditContext, SelectablesContext } from '../app'
+import { MBloaderContext } from '../app'
+import { ActionsContext, EditContext } from '../app'
 import AddGuestDropDown from './add_guest_drop_down'
 import NewCell from './new_cell'
-import { useElementsQuery, useMapQuery, useSeatsQuery } from '../querys'
 import "../style/map_cont.css"
 import "../style/side_menu.css"
-import { useMapAdd, useMapDelete } from '../mutations'
 import MBloader from '../hive_elements/MBloader'
+import { useSeatsCreate, useSeatsData, useSeatsDelete, useSeatsUpdate } from '../querys/seats'
+import { useTagBelongsCreate } from '../querys/tag_belongs'
+import { useMapElementsCreate, useMapElementsData, useMapElementsDelete } from '../querys/map_elements'
+import { map_add_presers } from './map_add_presers'
+import { useMapsData } from '../querys/maps'
+import { useSeatBelongsDelete } from '../querys/seat_belongs'
+import { map_delete_presers } from './map_delete_presers'
 
 export const DropContext = React.createContext(null)
 export const SelectedContext = React.createContext(null)
 
 function Map(){
 
-    const {map_name} = useParams()
-
-    const map = useMapQuery()
-    const seats = useSeatsQuery()
-    const elements = useElementsQuery()
+    const map = useMapsData()
+    const seats = useSeatsData()
+    const elements = useMapElementsData()
 
     const [selected_seat, setSelectedSeat] = useState(null)
     const [action, setAction] = useContext(ActionsContext)
     const selection = useSelection()
 
-    const map_add = useMapAdd()
-    const map_delete = useMapDelete()
-
     const [dropDownPos, setDropDownPos] = useState(null)
     const [edit, setEdit] = useContext(EditContext)
 
     const [MBloaderStatus, setMBloaderStatus] = useContext(MBloaderContext)
+
+    const seats_create = useSeatsCreate()       
+    const tags_create = useTagBelongsCreate()        
+    const numbers_update = useSeatsUpdate().numbers
+    const elements_create = useMapElementsCreate()
+
+    const seats_delete  = useSeatsDelete()
+    const elements_delete = useMapElementsDelete()
 
     function onStart({event, selection}){
         if (!event.ctrlKey && !event.metaKey){
@@ -78,9 +85,25 @@ function Map(){
         }
     }
 
+    function map_add(){
+        const mutations = {   
+            seats: seats_create,       
+            tags: tags_create,        
+            numbers: numbers_update,       
+            elements: elements_create,
+        }
+        return mutations[action](map_add_presers[action]())
+    }
+    function map_delete(){
+        const mutations = {   
+            seats: seats_delete,       
+            elements: elements_delete,
+        }
+        return mutations[action](map_delete_presers[action]())
+    }
     function onKeyDown(event){
         if(edit === 'ערוך'){
-            if(event.code == 'Enter') map_add(action)           
+            if(event.code == 'Enter') map_add()           
             if(event.code == 'Delete') map_delete(action)           
         }
     }
@@ -174,7 +197,7 @@ function Map(){
         <div className="map_container">
             <SelectedContext.Provider value={[selected_seat, setSelectedSeat]}>
             <DropContext.Provider value={[dropDownPos, setDropDownPos]}>
-                <AddGuestDropDown pos={dropDownPos} selected_seat={selected_seat} map={map}/>
+                <AddGuestDropDown/>
                 <div id="map" className="map" style={STYLE}> 
                     {new_create_cells()}
                 </div>

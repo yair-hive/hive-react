@@ -1,4 +1,4 @@
-export const map_delete = {
+export const map_delete_presers = {
     seats: function(){
         var selected = document.querySelectorAll('.selected')
         var seats_ids = []

@@ -9,7 +9,7 @@ const global_options = {
 };
 
 export const project = {
-    create: async ({name})=>{
+    create: async (name)=>{
         const options = {...global_options}
         console.log(name)
         options.body = `category=project&action=create&name=${name}`

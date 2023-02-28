@@ -1,4 +1,4 @@
-import { useTagsQuery } from "../querys";
+import { useTagsData } from "../querys/tags";
 
 function getColor(backColor){
     var color = 'black'
@@ -16,7 +16,7 @@ function getColor(backColor){
 }
 
 function TagsCount(props){
-    const tags = useTagsQuery()
+    const tags = useTagsData()
     if(props.tags){
         if(tags.data){
             var i = 0

@@ -1,4 +1,4 @@
-export const map_add = {
+export const map_add_presers = {
     seats: function(){
         var cells_list = []
         var selected = document.querySelectorAll('.selected')

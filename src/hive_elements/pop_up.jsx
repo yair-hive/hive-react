@@ -1,19 +1,26 @@
 import '../style/pop_up.css'
 import ReactDOM from 'react-dom';
 import { useEffect } from 'react';
+import { useHive } from '../app';
 
 function PopUp(props){
+
+    const Hive = useHive()
+
     function closePopUp(){
-        props.setState(false)
+        if(props.id) Hive.closePopUp(props.id)
+        else props.setState(false)
     }
+
+    function onkeydown(event){
+        if(event.code == 'Escape') closePopUp()
+    }
+
     useEffect(()=>{
-        function onkeydown(event){
-            if(event.code == 'Escape') closePopUp()
-        }
         document.addEventListener('keydown', onkeydown)
         return ()=> document.removeEventListener('keydown', onkeydown)
     },[])
-    if(props.status) return (
+    if(props.status || Hive.pop_ups[props.id]) return (
         ReactDOM.createPortal(<>
         <div className="blur" onClick={closePopUp}></div>                
         <div className='pop_up'>

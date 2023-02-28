@@ -46,39 +46,17 @@ export const guest_new = {
         if (json_res.msg != 'ok') throw new Error(json_res.msg);
         else return json_res.data
     },
-    create: (req)=>{
+    create_multi: async ({project_name, guests})=>{
         const options = {...global_options}
-        var action_params = {category: 'guest', action: 'create'}
-        var req_body = Object.assign(action_params, req)
-        options.body = JSON.stringify(req_body)  
-        return fetch(api_url, options)
-        // .then(res => res.text())
-        .then(res => res.json())
-        .then(res => console.log(res))
-        // .then(res => alert(res))
-        // .then(res => res.json())
-        // .then((res)=>{
-        //     if(res.msg == 'ok') return
-        //     console.log(res)
-        //     return res.msg
-        // })
-        // .then(()=> alert())
-    },
-    create_multi: (req)=>{
-        const options = {...global_options}
-        var action_params = {category: 'guest', action: 'create_multi'}
-        var req_body = Object.assign(action_params, req)
-        options.body = JSON.stringify(req_body)  
-        return fetch(api_url, options)
-        .then(res => res.text())
-        .then(res => console.log(res))
-        // .then(res => alert(res))
-        // .then(res => res.json())
-        // .then((res)=>{
-        //     if(res.msg == 'ok') return
-        //     console.log(res)
-        //     return res.msg
-        // })
-        // .then(()=> alert())
+        var action_params = {
+            category: 'guest', 
+            action: 'create_multi',
+            project: project_name,
+            guests: guests
+        }
+        options.body = JSON.stringify(action_params)  
+        const res = await fetch(api_url, options);
+        const res_text = await res.text();
+        return console.log(res_text);
     },
 }

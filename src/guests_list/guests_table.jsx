@@ -1,26 +1,19 @@
-import { useQuery } from "react-query"
 import "../style/guests_table.css"
-import api from '../scripts/api/api'
-import { useParams } from "react-router-dom"
 import TableRow from "./table_row"
-import { 
-    useBelogsQuery,
-    useGroupsQuery, 
-    useGuestBelogsQuery, 
-    useGuestsQuery, 
-    useSeatsQuery,
-    useTagsBelongsQuery 
-} from "../querys"
 import { useEffect, useState } from "react"
 import RequestsDrop from "./requestsDrop"
+import { useSeatsData } from "../querys/seats"
+import { useGuestsData } from "../querys/guests"
+import { useGuestGroupsData } from "../querys/guest_groups"
+import { useTagBelongsData } from "../querys/tag_belongs"
 
-function GuestsTable(props){
+function GuestsTable(){
 
-    const seats_res = useSeatsQuery()
-    const belongs_res = useBelogsQuery()
-    const guests = useGuestsQuery()
-    const groups = useGroupsQuery()
-    const tags_belongs = useTagsBelongsQuery()
+    const seats_res = useSeatsData()
+    const belongs_res = useSeatsData()
+    const guests = useGuestsData()
+    const groups = useGuestGroupsData()
+    const tags_belongs = useTagBelongsData()
     const [dropPos, setDropPos] = useState(null)
     const [selectedGuest, setSelectedGuest] = useState(undefined)
 

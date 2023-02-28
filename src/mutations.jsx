@@ -2,8 +2,9 @@ import { useContext } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";
 import { MBloaderContext, useSocket } from "./app";
-import { map_add } from "./edit_map/map_add";
-import { map_delete } from "./edit_map/map_delete";
+import { map_add_presers } from "./edit_map/map_add_presers";
+import { map_delete_presers } from "./edit_map/map_delete_presers";
+import new_api from "./new_api/new_api";
 import api from "./scripts/api/api";
 
 export function useMapAdd(){
@@ -18,14 +19,14 @@ export function useMapAdd(){
             return api.seat_new.create_multiple(map_name, seats, project_name)
         }, {
             onSuccess: ()=>{
-                var msg = JSON.stringify({action: 'invalidate', query_key: ['seats', map_name]})
+                var msg = JSON.stringify({action: 'invalidate', query_key: ['seats', {map_name: map_name, project_name: project_name}]})
                 hiveSocket.send(msg)
     
             }
         }),       
         tags: useMutation(({seats, tag_name}) => {
             seats = JSON.stringify(seats)
-            return api.tag_new.add_multiple(seats, tag_name, map_name)
+            return api.tag_new.add_multiple(seats, tag_name, map_name, project_name)
         }, {
             onSuccess: ()=>{
                 queryClient.invalidateQueries(['tags', map_name])
@@ -50,7 +51,7 @@ export function useMapAdd(){
         })
     }
     return  function(action){
-        return mutations[action].mutate(map_add[action]())
+        return mutations[action].mutate(map_add_presers[action]())
     }
 }
 
@@ -82,10 +83,25 @@ export function useMapDelete(){
         numbers: 'TODO',
     }
     return  function(action){
-        return mutations[action].mutate(map_delete[action]())
+        return mutations[action].mutate(map_delete_presers[action]())
     }
 }
 
+
+export function useCreateGuests(){
+    const {map_name, project_name} = useParams()
+    const hiveSocket = useSocket()
+    const queryClient = useQueryClient()
+    const mutation = useMutation(guests =>{
+        return new_api.guests.create(guests, project_name)
+    }, {
+        onSuccess: ()=>{
+            var msg = JSON.stringify({action: 'invalidate', query_key: ['guests', project_name]})
+            hiveSocket.send(msg)
+        }
+    })
+    return mutation.mutate
+}
 export function useAddGuest(){
     const {map_name} = useParams()
     const hiveSocket = useSocket()
@@ -108,12 +124,11 @@ export function useAddGuest(){
                 })
                 return old
             })
-            // queryClient.invalidateQueries(['belongs', map_name])
             var msg = JSON.stringify({action: 'invalidate', quert_key: ['belongs', map_name]})
             hiveSocket.send(msg)
         }
     })
-    return mutation
+    return mutation.mutate
 }
 export function useScheduling(){
 
@@ -138,15 +153,15 @@ export function useScheduling(){
     return mutation
 }
 export function useDeleteGuest(){
-    const {map_name} = useParams()
+    const {project_name} = useParams()
     const hiveSocket = useSocket()
     const queryClient = useQueryClient()
     
     const mutation = useMutation(({guest_id}) => {
-        return api.guest.delete(guest_id)
+        return new_api.guests.delete(guest_id)
     }, {
         onMutate: (variables)=>{
-            queryClient.setQueryData(['guests', map_name], old => {
+            queryClient.setQueryData(['guests', project_name], old => {
                 old.forEach((guest, index)=>{
                     if(guest.id === variables.guest_id){
                         old.splice(index, 1)
@@ -156,8 +171,159 @@ export function useDeleteGuest(){
             })
         },
         onSuccess: ()=>{
-            queryClient.invalidateQueries(['guests', map_name])
+            var msg = JSON.stringify({action: 'invalidate', query_key: ['guests', project_name]})
+            hiveSocket.send(msg)
         }
     })
     return mutation   
+}
+export function useUpdateTagColor(){
+    const {map_name, project_name} = useParams()
+    const hiveSocket = useSocket()
+    const queryClient = useQueryClient()
+    const mutation = useMutation(({tag_id, color}) =>{
+        return api.tags.update_color(tag_id, color)
+    }, {
+        onSuccess: ()=>{
+            var msg = JSON.stringify({action: 'invalidate', query_key: ['tags', project_name]})
+            hiveSocket.send(msg)
+        }
+    })
+    return mutation.mutate
+}
+export function useCreateMap(){
+    const {project_name} = useParams()
+    const hiveSocket = useSocket()
+    const mutation = useMutation(({name, rows, cols}) =>{
+        return new_api.maps.create(name, rows, cols, project_name)
+    }, {
+        onSuccess: ()=>{
+            var msg = JSON.stringify({action: 'invalidate', query_key: ['maps', project_name]})
+            hiveSocket.send(msg)
+        }
+    })
+    return mutation.mutate
+}
+export function useCreateProject(){
+    const hiveSocket = useSocket()
+    const mutation = useMutation((name) =>{
+        return new_api.projects.create(name)
+    }, {
+        onSuccess: ()=>{
+            var msg = JSON.stringify({action: 'invalidate', query_key: ['projects']})
+            hiveSocket.send(msg)
+        }
+    })
+    return mutation.mutate
+}
+export function useDeleteRequest(){
+    const {project_name} = useParams()
+    const hiveSocket = useSocket()
+    const mutation = useMutation(({request_id}) =>{
+        return new_api.requests_belongs.delete(request_id)
+    }, {
+        onSuccess: ()=>{
+            var msg = JSON.stringify({action: 'invalidate', query_key: ["requests", project_name]})
+            hiveSocket.send(msg)
+        }
+    })
+    return mutation.mutate
+}
+export function useAddRequest(){
+    const {project_name} = useParams()
+    const hiveSocket = useSocket()
+    const mutation = useMutation(({guest_id, tag_id}) =>{
+        return new_api.requests_belongs.create(guest_id, tag_id)
+    }, {
+        onSuccess: ()=>{
+            var msg = JSON.stringify({action: 'invalidate', query_key: ["requests", project_name]})
+            hiveSocket.send(msg)
+        }
+    })
+    return mutation.mutateAsync
+}
+export function useUpdatesGroupColor(){
+    const {project_name} = useParams()
+    const hiveSocket = useSocket()
+    const mutation = useMutation(({group_id, color}) =>{
+        return api.guest.update_group_color(group_id, color)
+    }, {
+        onSuccess: ()=>{
+            var msg = JSON.stringify({action: 'invalidate', query_key: ['groups', project_name]})
+            hiveSocket.send(msg)
+        }
+    })
+    return mutation.mutate
+}
+export function useUpdatesGroupScore(){
+    const {project_name} = useParams()
+    const hiveSocket = useSocket()
+    const mutation = useMutation(({group_id, score}) =>{
+        return api.guest.update_group_score(group_id, score)
+    }, {
+        onSuccess: ()=>{
+            var msg = JSON.stringify({action: 'invalidate', query_key: ['groups', project_name]})
+            hiveSocket.send(msg)
+        }
+    })
+    return mutation.mutate
+}
+export function useDeleteGroup(){
+    const {project_name} = useParams()
+    const hiveSocket = useSocket()
+    const mutation = useMutation((group_id) =>{
+        return new_api.guest_groups.delete(group_id)
+    }, {
+        onSuccess: ()=>{
+            var msg = JSON.stringify({action: 'invalidate', query_key: ['groups', project_name]})
+            hiveSocket.send(msg)
+        }
+    })
+    return mutation.mutate
+}
+export function useGuestsUpdate(){
+    const {project_name} = useParams()
+    const hiveSocket = useSocket()
+
+    const mutations = {   
+        last: useMutation(({guest_id, last}) => {
+            return api.guest.update_last_name(last, guest_id)
+        }, {
+            onSuccess: ()=>{
+                var msg = JSON.stringify({action: 'invalidate', query_key: ['guests', project_name]})
+                hiveSocket.send(msg)
+    
+            }
+        }),
+        first: useMutation(({guest_id, first}) => {
+            return api.guest.update_first_name(first, guest_id)
+        }, {
+            onSuccess: ()=>{
+                var msg = JSON.stringify({action: 'invalidate', query_key: ['guests', project_name]})
+                hiveSocket.send(msg)
+    
+            }
+        }),
+        group: useMutation(({guest_id, group}) => {
+            return api.guest.update_group_name(group, guest_id, project_name)
+        }, {
+            onSuccess: ()=>{
+                var msg = JSON.stringify({action: 'invalidate', query_key: ['guests', project_name]})
+                hiveSocket.send(msg)
+    
+            }
+        }), 
+        score: useMutation(({guest_id, score}) => {
+            return api.guest.update_guest_score(guest_id, score)
+        }, {
+            onSuccess: ()=>{
+                var msg = JSON.stringify({action: 'invalidate', query_key: ['guests', project_name]})
+                hiveSocket.send(msg)
+    
+            }
+        }),       
+    }
+    return function(action){
+        return mutations[action].mutate
+    }
 }

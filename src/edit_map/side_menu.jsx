@@ -1,31 +1,30 @@
 import { useContext } from "react";
 import { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import HiveButton from "../hive_elements/hive_button";
 import HiveSwitch from "../hive_elements/hive_switch";
-import PopUp from "../hive_elements/pop_up";
-import { useScheduling } from "../mutations";
 import { MBloaderContext, useSocket } from '../app'
 import { ActionsContext, SelectablesContext } from "../app";
 import { EditContext } from "../app"
-import { useBelogsQuery, useGroupsQuery, useGuestBelogsQuery, useGuestsQuery, useMapQuery, useSeatsQuery } from "../querys";
-
 import "../style/side_menu.css"
 import TagsPop from "./tags_pop";
 import { useQueryClient } from "react-query";
+import { useMapsData } from "../querys/maps";
+import { useSeatsData } from "../querys/seats";
+import { useSeatBelongsData } from "../querys/seat_belongs";
+import { useGuestsData } from "../querys/guests";
+import { useGuestGroupsData } from "../querys/guest_groups";
 
-function MapSideMenu(props) {
+function MapSideMenu() {
 
-    const {map_name, project_name} = useParams()
+    const {map_name} = useParams()
     const [edit, setEdit] = useContext(EditContext)
 
-    const map  = useMapQuery()
-    const seats = useSeatsQuery()
-    const belongs = useBelogsQuery()
-    const guests = useGuestsQuery()
-    const groups = useGroupsQuery()
-
-    // const scheduling = useScheduling()
+    const map  = useMapsData()
+    const seats = useSeatsData()
+    const belongs = useSeatBelongsData()
+    const guests = useGuestsData()
+    const groups = useGuestGroupsData()
 
     const [input_str, setInputStr] = useState('')
     const [tagsPopStatus, setTagsPopStatus] = useState(false)

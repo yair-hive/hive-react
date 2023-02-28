@@ -11,6 +11,12 @@ import { HiveSocket } from '.';
 import Projects from './pages/projects';
 // import { useSocket } from './index.js';
 
+const HiveContext = React.createContext({})
+
+export function useHive(){
+  return useContext(HiveContext)
+}
+
 export function useSocket(){
   return useContext(HiveSocket)
 }
@@ -23,7 +29,6 @@ export const BelongsContext = React.createContext(null)
 export const GroupsContext = React.createContext(null)
 export const TagsContext = React.createContext(null)
 
-
 function App() {
   const hiveSocket = useSocket()
   const queryClient = useQueryClient()
@@ -34,6 +39,22 @@ function App() {
   const belongsState = useState('הכל')
   const groupsState = useState('הכל')
   const tagsState = useState('הכל')
+  const [popUps, setPopUps] = useState({})
+
+  function openPopUp(id){
+    setPopUps((prev) =>{
+      var the_new = {...prev}
+      the_new[id] = true
+      return the_new
+    })
+  }
+  function closePopUp(id){
+    setPopUps((prev) =>{
+      var the_new = {...prev}
+      the_new[id] = false
+      return the_new
+    })
+  }
 
   useEffect(()=>{
     hiveSocket.onmessage = function(msg){
@@ -57,7 +78,16 @@ function App() {
     document.addEventListener('keydown', onEnter)
     return ()=> document.removeEventListener('keydown', onEnter)
   }, [])
+
+  var hive = {
+    pop_ups: popUps,
+    openPopUp: openPopUp,
+    closePopUp: closePopUp
+  }
+
+
   return (
+    <HiveContext.Provider value={hive}>
     <BelongsContext.Provider value={belongsState}>
     <GroupsContext.Provider value={groupsState}>
     <TagsContext.Provider value={tagsState}>
@@ -81,6 +111,7 @@ function App() {
     </TagsContext.Provider>
     </GroupsContext.Provider>
     </BelongsContext.Provider>
+    </HiveContext.Provider>
   );
 }
 

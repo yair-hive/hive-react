@@ -5,30 +5,18 @@ import { useParams } from "react-router-dom"
 import { useSocket } from "../app"
 import HiveButton from "../hive_elements/hive_button"
 import PopUp from "../hive_elements/pop_up"
-import api from "../scripts/api/api"
+import { useGuestsCreate } from "../querys/guests"
 
 function AddGuest(props){
 
-    const queryClient = useQueryClient()
-    const hiveSocket = useSocket()
-    const {map_name} = useParams()
     const [first, setFirst] = useState('')
     const [last, setLast] = useState('')
     const [group, setGroup] = useState('')
-    const map_id = queryClient.getQueryData(['get_map', map_name])?.id
+    const create_guests = useGuestsCreate()
 
     function onClick(){
-        api.guest.create({
-            map_id: map_id,
-            first_name: first,
-            last_name: last,
-            guest_group: group
-        })
-        .then(()=>{
-            var msg = JSON.stringify({action: 'invalidate', quert_key: ['get_map', map_name]})
-            hiveSocket.send(msg)
-            props.setState(false)
-        })
+        create_guests([[first, last, group]])
+        props.setState(false)
     }
 
 

@@ -1,21 +1,14 @@
-import { useParams } from "react-router-dom"
-import { useSocket } from "../app"
-import { useTagsQuery } from "../querys"
-import api from "../scripts/api/api"
+import { useRequestsBelongsDelete } from "../querys/requests_belongs"
+import { useTagsData } from "../querys/tags"
 import '../style/requests_count.css'
 
 function RequestBox({request_id, tag_id}){
 
-    const tags = useTagsQuery()
-    const {map_name} = useParams()
-    const hiveSocket = useSocket()
+    const tags = useTagsData()
+    const delete_request = useRequestsBelongsDelete()
 
     function onClickDelete(){
-        api.tag_new.delete_request({request_id: request_id})
-        .then(()=>{
-            var msg = JSON.stringify({action: 'invalidate', query_key: ["requests", map_name]})
-            hiveSocket.send(msg)
-        })
+        delete_request({request_id})
     }
 
     if(tags.data){

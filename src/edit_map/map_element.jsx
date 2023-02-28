@@ -44,7 +44,7 @@ function MapElement({cell}){
                 color: 'white'
             }} 
         >
-            <div style={Cstyle}>{cell.ob_name}</div>
+            <div style={Cstyle}>{cell.name}</div>
         </div>
     )
 }
