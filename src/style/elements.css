@@ -1,4 +1,4 @@
-.map-element{
+.group-element, .map-element{
     display: flex;
     align-items: center;
     justify-content: center;
@@ -16,4 +16,11 @@
 }
 .map-element > div {
     rotate: 90;
+}
+.group-element{
+    background-color: rgb(101, 101, 50);
+    border-color: yellow;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 0.25rem;
 }

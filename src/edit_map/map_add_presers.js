@@ -22,7 +22,7 @@ export const map_add_presers = {
         }
         cols.sort(function(a, b) { return a - b; }); 
         rows.sort(function(a, b) { return a - b; }); 
-        var name = prompt('הוסף אלמנט')
+        var name = prompt('הכנס שם')
         var from_row = rows[0]
         var from_col = cols[0]
         var to_row = rows[rows.length -1]
@@ -34,7 +34,33 @@ export const map_add_presers = {
             to_row: to_row, 
             to_col: to_col
         }
-        return {data: data}
+        return {data}
+    },
+    groups: function(){
+        var selected = document.querySelectorAll('.selected')
+        var rows = []
+        var cols = []
+        for(let cell of selected){
+            var row = Number(cell.getAttribute('cell-row')) 
+            var col = Number(cell.getAttribute('cell-col'))
+            if(rows.indexOf(row) === -1) rows.push(row)
+            if(cols.indexOf(col) === -1) cols.push(col)
+        }
+        cols.sort(function(a, b) { return a - b; }); 
+        rows.sort(function(a, b) { return a - b; }); 
+        var name = prompt('הכנס שם')
+        var from_row = rows[0]
+        var from_col = cols[0]
+        var to_row = rows[rows.length -1]
+        var to_col = cols[cols.length -1]
+        var data = {
+            name: name, 
+            from_row: from_row, 
+            from_col: from_col, 
+            to_row: to_row, 
+            to_col: to_col
+        }
+        return {data}
     },
     numbers: function(){
         var col_name = prompt('Please enter number')

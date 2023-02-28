@@ -8,6 +8,7 @@ import guest_groups from './guest_groups'
 import seat_belongs from './seat_belongs'
 import tag_belongs from './tag_belongs'
 import requests_belongs from './requests_belongs'
+import seats_groups from './seats_groups'
 
 const new_api = {
     maps,
@@ -20,6 +21,7 @@ const new_api = {
     seat_belongs,
     tag_belongs,
     requests_belongs,
+    seats_groups,
 }
 
 export default new_api

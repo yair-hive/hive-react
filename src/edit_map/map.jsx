@@ -15,6 +15,7 @@ import { map_add_presers } from './map_add_presers'
 import { useMapsData } from '../querys/maps'
 import { useSeatBelongsDelete } from '../querys/seat_belongs'
 import { map_delete_presers } from './map_delete_presers'
+import { useSeatsGroupsCreate, useSeatsGroupsData } from '../querys/seats_groups'
 
 export const DropContext = React.createContext(null)
 export const SelectedContext = React.createContext(null)
@@ -24,6 +25,7 @@ function Map(){
     const map = useMapsData()
     const seats = useSeatsData()
     const elements = useMapElementsData()
+    const seats_groups = useSeatsGroupsData()
 
     const [selected_seat, setSelectedSeat] = useState(null)
     const [action, setAction] = useContext(ActionsContext)
@@ -38,6 +40,7 @@ function Map(){
     const tags_create = useTagBelongsCreate()        
     const numbers_update = useSeatsUpdate().numbers
     const elements_create = useMapElementsCreate()
+    const groups_create = useSeatsGroupsCreate()
 
     const seats_delete  = useSeatsDelete()
     const elements_delete = useMapElementsDelete()
@@ -91,6 +94,7 @@ function Map(){
             tags: tags_create,        
             numbers: numbers_update,       
             elements: elements_create,
+            groups: groups_create,
         }
         return mutations[action](map_add_presers[action]())
     }
@@ -150,7 +154,8 @@ function Map(){
             var i = 0 
             var seats_array = Object.entries(seats.data)
             for(let [key, seat] of seats_array){
-                list[RCindex[seat.row_num][seat.col_num]] = seat
+                var cell = list[RCindex[seat.row_num][seat.col_num]]
+                list[RCindex[seat.row_num][seat.col_num]] = {...seat, ...cell}
                 i++
             }
         }
@@ -161,7 +166,20 @@ function Map(){
                         list[RCindex[row][col]] = null
                     }
                 }
-                list[RCindex[element.from_row][element.from_col]] = element
+                list[RCindex[element.from_row][element.from_col]] = {...element, type: 'element'}
+            }
+        }
+        if(map.data && seats_groups.data){
+            for(let group of seats_groups.data){
+                for(let row = group.from_row; row <= group.to_row; row++){
+                    for(let col = group.from_col; col <= group.to_col; col++){
+                        var cell = list[RCindex[row][col]]
+                        list[RCindex[row][col]] = {...cell, in_group: true}
+                    }
+                }
+            }
+            for(let group of seats_groups.data){
+                list.push({...group, type: 'group'})
             }
         }
         var i = 0

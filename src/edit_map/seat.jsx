@@ -1,7 +1,7 @@
 import { useContext } from "react"
 import { useRef } from "react"
 import TagsCount from "../components/tags_count"
-import { EditContext, SelectablesContext } from "../app"
+import { ActionsContext, EditContext, SelectablesContext } from "../app"
 import "../style/seat.css"
 import { DropContext, SelectedContext } from "./map"
 import { useSeatBelongsData } from "../querys/seat_belongs"
@@ -67,6 +67,7 @@ function NameBox({seat_id, tags, guest_name, group_color}){
 function Seat(props){
     const [edit, setEdit] = useContext(EditContext)
     const [selectebls] = useContext(SelectablesContext)
+    const [action, setAction] = useContext(ActionsContext)
     const belongs = useSeatBelongsData()
     const guests = useGuestsData()
     const groups = useGuestGroupsData()
@@ -93,10 +94,15 @@ function Seat(props){
     var group_color = (guest && groups.data ? groups.data[guest.guest_group]?.color : undefined)
 
     var tags = (tagsBelongs.data ? tagsBelongs.data[props.seat_id] : null)
-
+    if(props.seat.in_group && action === 'groups' && edit === 'ערוך') return
     return (
         <div>
-            <div className={`seat ${(edit === 'ערוך' && selectebls === 'seats' ? "selectable" : "")}`} seat_id={props.seat_id}>
+            <div 
+                className={`seat ${(edit === 'ערוך' && selectebls === 'seats' ? "selectable" : "")}`} 
+                seat_id={props.seat_id}
+                cell-row = {props.seat.row_num} 
+                cell-col = {props.seat.col_num}
+            >
                 <div className="num_box">{props.number}</div> 
                 <NameBox seat_id={props.seat_id} guest_name={guest_name} group_color={group_color} tags={tags}/>
             </div>

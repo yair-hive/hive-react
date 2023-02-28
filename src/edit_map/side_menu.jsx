@@ -148,7 +148,8 @@ function MapSideMenu() {
                 options={[
                     {value: 'numbers', name: 'מספרים'}, 
                     {value: 'tags', name: 'תגיות'},
-                    {value: 'seats', name: 'כיסאות'}
+                    {value: 'seats', name: 'כיסאות'},
+                    {value: 'groups', name: 'טורים'}
                 ]} 
                 active={'numbers'} 
                 setActive={setAction}
