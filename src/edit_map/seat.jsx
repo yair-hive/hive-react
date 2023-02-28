@@ -67,12 +67,10 @@ function NameBox({seat_id, tags, guest_name, group_color}){
 function Seat(props){
     const [edit, setEdit] = useContext(EditContext)
     const [selectebls] = useContext(SelectablesContext)
-    const [dropDownPos, setDropDownPos] = useContext(DropContext)
     const belongs = useSeatBelongsData()
     const guests = useGuestsData()
     const groups = useGuestGroupsData()
     const tagsBelongs = useTagBelongsData()
-    const [selected_seat, setSelectedSeat] = useContext(SelectedContext)
 
     var guest_id
     if(belongs.data){
