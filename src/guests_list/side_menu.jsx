@@ -25,7 +25,7 @@ function GuestsSideMenu(){
 
     if(groups.data){
         var groups_array = Object.entries(groups.data)
-        groupsOptions = groups_array.map(([key, group]) => {return group.group_name})
+        groupsOptions = groups_array.map(([key, group]) => {return group.name})
         groupsOptions.push('הכל')
     }
     if(tags.data){

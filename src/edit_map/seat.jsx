@@ -94,7 +94,9 @@ function Seat(props){
     var group_color = (guest && groups.data ? groups.data[guest.guest_group]?.color : undefined)
 
     var tags = (tagsBelongs.data ? tagsBelongs.data[props.seat_id] : null)
+
     if(props.seat.in_group && action === 'groups' && edit === 'ערוך') return
+    
     return (
         <div>
             <div 

@@ -13,7 +13,6 @@ import { useTagBelongsCreate } from '../querys/tag_belongs'
 import { useMapElementsCreate, useMapElementsData, useMapElementsDelete } from '../querys/map_elements'
 import { map_add_presers } from './map_add_presers'
 import { useMapsData } from '../querys/maps'
-import { useSeatBelongsDelete } from '../querys/seat_belongs'
 import { map_delete_presers } from './map_delete_presers'
 import { useSeatsGroupsCreate, useSeatsGroupsData } from '../querys/seats_groups'
 
@@ -108,7 +107,7 @@ function Map(){
     function onKeyDown(event){
         if(edit === 'ערוך'){
             if(event.code == 'Enter') map_add()           
-            if(event.code == 'Delete') map_delete(action)           
+            if(event.code == 'Delete') map_delete()           
         }
     }
 

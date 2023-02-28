@@ -14,7 +14,7 @@ export function useGuestGroupsDelete(){
         return new_api.guest_groups.delete(group_id)
     }, {
         onSuccess: ()=>{
-            var msg = JSON.stringify({action: 'invalidate', query_key: ['groups', project_name]})
+            var msg = JSON.stringify({action: 'invalidate', query_key: ['groups', {project_name}]})
             hiveSocket.send(msg)
         }
     })
@@ -28,7 +28,7 @@ export function useGuestGroupsUpdate(){
         return new_api.guest_groups.update.name(group_id, name)
     }, {
         onSuccess: ()=>{
-            var msg = JSON.stringify({action: 'invalidate', query_key: ['groups', project_name]})
+            var msg = JSON.stringify({action: 'invalidate', query_key: ['groups', {project_name}]})
             hiveSocket.send(msg)
 
         }
@@ -37,7 +37,7 @@ export function useGuestGroupsUpdate(){
         return new_api.guest_groups.update.color(group_id, color)
     }, {
         onSuccess: ()=>{
-            var msg = JSON.stringify({action: 'invalidate', query_key: ['groups', project_name]})
+            var msg = JSON.stringify({action: 'invalidate', query_key: ['groups', {project_name}]})
             hiveSocket.send(msg)
 
         }
@@ -46,7 +46,7 @@ export function useGuestGroupsUpdate(){
         return new_api.guest_groups.update.score(group_id, score)
     }, {
         onSuccess: ()=>{
-            var msg = JSON.stringify({action: 'invalidate', query_key: ['groups', project_name]})
+            var msg = JSON.stringify({action: 'invalidate', query_key: ['groups', {project_name}]})
             hiveSocket.send(msg)
 
         }

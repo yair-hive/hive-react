@@ -85,7 +85,7 @@ function GroupsPop(props){
                     <TdX group_id={group.id}/>
                     <TdColor color={group.color} group_id={group.id}/>
                     <TdScore score={group.score} group_id={group.id}/>
-                    <TdName name={group.group_name} group_id={group.id}/>
+                    <TdName name={group.name} group_id={group.id}/>
                 </tr>)
                 rows.push(tr)
             }

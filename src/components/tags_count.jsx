@@ -1,7 +1,8 @@
 import { useTagsData } from "../querys/tags";
 
 function getColor(backColor){
-    var color = 'black'
+    if(backColor){
+        var color = 'black'
         var c = backColor.substring(1);      // strip #
         var rgb = parseInt(c, 16);   // convert rrggbb to decimal
         var r = (rgb >> 16) & 0xff;  // extract red
@@ -13,6 +14,7 @@ function getColor(backColor){
             color = 'white'
         }
         return color
+    }
 }
 
 function TagsCount(props){
@@ -21,7 +23,7 @@ function TagsCount(props){
         if(tags.data){
             var i = 0
             return (<div className="tags_cont"> {props.tags.map(tag_id =>{
-                var tag = tags.data[tag_id.group_id]
+                var tag = tags.data[tag_id.tag]
                 var color = getColor(tag.color)
                 var style = {
                     backgroundColor: tag.color,
@@ -29,7 +31,7 @@ function TagsCount(props){
                 }
                 i++
                 return(<div key={i} style = {style} className="tag_box">
-                    {tag.tag_name}
+                    {tag.name}
                 </div>)
             })} </div>)
         }

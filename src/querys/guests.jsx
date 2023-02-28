@@ -29,7 +29,7 @@ export function useGuestsDelete(){
         return new_api.guests.delete(guest_id)
     }, {
         onMutate: (variables)=>{
-            queryClient.setQueryData(['guests', project_name], old => {
+            queryClient.setQueryData(['guests', {project_name}], old => {
                 old.forEach((guest, index)=>{
                     if(guest.id === variables.guest_id){
                         old.splice(index, 1)
@@ -39,11 +39,11 @@ export function useGuestsDelete(){
             })
         },
         onSuccess: ()=>{
-            var msg = JSON.stringify({action: 'invalidate', query_key: ['guests', project_name]})
+            var msg = JSON.stringify({action: 'invalidate', query_key: ['guests', {project_name}]})
             hiveSocket.send(msg)
         }
     })
-    return mutation  
+    return mutation.mutate  
 }
 export function useGuestsUpdate(){
     const {project_name} = useParams()
