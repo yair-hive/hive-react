@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import HiveButton from "../hive_elements/hive_button";
@@ -9,7 +9,7 @@ import { EditContext } from "../app"
 import "../style/side_menu.css"
 import TagsPop from "./tags_pop";
 import { useQueryClient } from "react-query";
-import { useMapsData } from "../querys/maps";
+import { useMapsData, useMapsUpdate } from "../querys/maps";
 import { useSeatsData } from "../querys/seats";
 import { useSeatBelongsData } from "../querys/seat_belongs";
 import { useGuestsData } from "../querys/guests";
@@ -28,12 +28,19 @@ function MapSideMenu() {
 
     const [input_str, setInputStr] = useState('')
     const [tagsPopStatus, setTagsPopStatus] = useState(false)
+    const [colsTo, setColsTo] = useState(undefined)
 
     const selecteblsState = useContext(SelectablesContext)
     const [action, setAction] = useContext(ActionsContext)
     const [MBstatus, setMBStatus] = useContext(MBloaderContext)
     const hiveSocket = useSocket()
     const queryClient = useQueryClient()
+
+    const update_cols_to = useMapsUpdate().cols_to
+
+    useEffect(()=>{
+        if(colsTo) update_cols_to({to: colsTo})
+    }, [colsTo])
 
     function scheduling(){
         const source = new EventSource(`http://hive.com:3020/actions/scheduling/${map_name}`);
@@ -175,6 +182,15 @@ function MapSideMenu() {
         if(edit === 'ערוך'){
             return(
                 <div className="sub_menu">
+                <HiveSwitch
+                    active={map.data?.cols_to}
+                    options={[
+                        {name: 'ימין', value: 'right'},
+                        {name: 'מרכז', value: 'center'},
+                        {name: 'שמאל', value: 'left'},
+                    ]}
+                    setActive={setColsTo}
+                />
                     {selecteblsSwitch()}
                     {actionSwitch()}
                     <HiveButton> הוסף </HiveButton>

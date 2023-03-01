@@ -4,7 +4,7 @@ import React from 'react'
 import { MBloaderContext } from '../app'
 import { ActionsContext, EditContext } from '../app'
 import AddGuestDropDown from './add_guest_drop_down'
-import NewCell from './new_cell'
+import Cell from './cell'
 import "../style/map_cont.css"
 import "../style/side_menu.css"
 import MBloader from '../hive_elements/MBloader'
@@ -120,7 +120,7 @@ function Map(){
         }
     }, [action])
 
-    function new_create_cells(){
+    function render_cells(){
         var cells_elements = []
         var list = [] 
         var RCindex = []      
@@ -132,18 +132,18 @@ function Map(){
                     for(let col = 0; col <= map.data.columns_number; col++){
                         if(col != 0){
                             RCindex[row][col] = i
-                            list[i] = {row: row, col: col}
+                            list[i] = {row: row, col: col, type: 'plase_holder'}
                             i++
                         }else{
                             RCindex[row][col] = i
-                            list[i] = {RC: true, row: row, col: col}
+                            list[i] = {row: row, col: col, type: 'RC'}
                             i++
                         }
                     }
                 }else{
                     for(let col = 0; col <= map.data.columns_number; col++){
                         RCindex[row][col] = i
-                        list[i] = {RC: true, row: row, col: col}
+                        list[i] = {row: row, col: col, type: 'RC'}
                         i++
                     }
                 }
@@ -154,7 +154,7 @@ function Map(){
             var seats_array = Object.entries(seats.data)
             for(let [key, seat] of seats_array){
                 var cell = list[RCindex[seat.row_num][seat.col_num]]
-                list[RCindex[seat.row_num][seat.col_num]] = {...seat, ...cell}
+                list[RCindex[seat.row_num][seat.col_num]] = {...seat, ...cell, type: 'seat'}
                 i++
             }
         }
@@ -173,7 +173,7 @@ function Map(){
                 for(let row = group.from_row; row <= group.to_row; row++){
                     for(let col = group.from_col; col <= group.to_col; col++){
                         var cell = list[RCindex[row][col]]
-                        list[RCindex[row][col]] = {...cell, in_group: true}
+                        list[RCindex[row][col]] = {...cell, in_group: true, type: 'plase_holder'}
                     }
                 }
             }
@@ -183,7 +183,7 @@ function Map(){
         }
         var i = 0
         for(let cell of list){
-            cells_elements.push(<NewCell cell={cell} key={i}/>)
+            cells_elements.push(<Cell cell={cell} key={i}/>)
             i++
         }
         return cells_elements
@@ -216,7 +216,7 @@ function Map(){
             <DropContext.Provider value={[dropDownPos, setDropDownPos]}>
                 <AddGuestDropDown/>
                 <div id="map" className="map" style={STYLE}> 
-                    {new_create_cells()}
+                    {render_cells()}
                 </div>
 
             </DropContext.Provider>

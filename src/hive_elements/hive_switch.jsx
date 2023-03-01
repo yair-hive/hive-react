@@ -3,19 +3,19 @@ import HiveButton from "./hive_button"
 import '../style/hive_switch.css'
 import { useState } from "react"
 
-function HiveSwitch(props){
+function HiveSwitch({active, options, setActive, bordKey}){
 
-    const [intActive, setIntActive] = useState(props.active)
+    const [intActive, setIntActive] = useState(active)
 
     useEffect(()=>{
-        setIntActive(props.active)
-        props.setActive(props.active)
-    },[props.active])
+        setIntActive(active)
+        setActive(active)
+    },[active])
 
     function onKeyDown(event){
         if(event.ctrlKey || event.metaKey){
-            if(event.code == props.bordKey){
-                hiveSwitchMove(props.options, intActive)
+            if(event.code == bordKey){
+                hiveSwitchMove(options, intActive)
             }
         }
     }
@@ -30,16 +30,16 @@ function HiveSwitch(props){
         if(activeIndex == length) i = 0
         else i = activeIndex+1
         setIntActive(itemsList[i])
-        props.setActive(itemsList[i])
+        setActive(itemsList[i])
     }
     function onClick(name){
         setIntActive(name)
-        props.setActive(name)
+        setActive(name)
     }
     function create_elements(){
         var i = 0
         var class_name
-        return props.options?.map(element => {
+        return options?.map(element => {
             var name, value
             if(typeof element == 'string'){
                 name = element
@@ -53,7 +53,7 @@ function HiveSwitch(props){
             if(value === intActive) isActive = true
             class_name = 'hive-switch-m'
             if(i === 0) class_name = 'hive-switch-l'
-            if(i === (props.options.length -1)) class_name = 'hive-switch-r'
+            if(i === (options.length -1)) class_name = 'hive-switch-r'
             i++
             return <HiveButton onClick = {onClick} name={value} key={i} className={class_name} active={isActive}> {name} </HiveButton>
         })

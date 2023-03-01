@@ -1,6 +1,7 @@
 import hiveFetch from "./hiveFetch";
 
 const maps = {}
+maps.update = {}
 
 maps['create'] = function(map_name, rows, cols, project_name){
     const body = {
@@ -25,6 +26,15 @@ maps['get'] = function({queryKey}){
         category: 'maps',
         action: 'get',
         map_name, project_name
+    }
+    return hiveFetch(body)
+};
+maps['update']['cols_to'] = function(map_name, project_name, to){
+    const body = {
+        category: 'maps',
+        action: 'update',
+        fild: 'cols_to',
+        map_name, project_name, to
     }
     return hiveFetch(body)
 };

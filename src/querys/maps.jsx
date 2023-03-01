@@ -24,3 +24,20 @@ export function useMapsCreate(){
     })
     return mutation.mutate
 }
+export function useMapsUpdate(){
+    const {project_name, map_name} = useParams()
+    const hiveSocket = useSocket()
+
+    var cols_to = useMutation(({to}) => {
+        return new_api.maps.update.cols_to(map_name, project_name, to)
+    }, {
+        onSuccess: ()=>{
+            var msg = JSON.stringify({action: 'invalidate', query_key: ['map', {map_name, project_name}]})
+            hiveSocket.send(msg)
+
+        }
+    })
+    return {
+        cols_to: cols_to.mutate
+    }
+}
