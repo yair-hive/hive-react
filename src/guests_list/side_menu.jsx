@@ -31,7 +31,7 @@ function GuestsSideMenu(){
     if(tags.data){
         var tags_array = Object.entries(tags.data)
         tagsOptions = tags_array.map(([key, tag]) => {
-            return {name:tag.tag_name, value:tag.id}
+            return {name:tag.name, value:tag.id}
         })
         tagsOptions.push('הכל')
     }

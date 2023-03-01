@@ -5,7 +5,11 @@ import new_api from "../new_api/new_api";
 
 export function useSeatsData(){
     const {map_name, project_name} = useParams()
-    return useQuery(['seats', {map_name, project_name}], new_api.seats.get_all)
+    return useQuery(['seats', {map_name, project_name}], new_api.seats.get)
+}
+export function useSeatsDataAll(){
+    const {project_name} = useParams()
+    return useQuery(['seats_all', {project_name}], new_api.seats.get_all)
 }
 export function useSeatsCreate(){
     const {map_name, project_name} = useParams()

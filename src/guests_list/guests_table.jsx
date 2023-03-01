@@ -2,15 +2,16 @@ import "../style/guests_table.css"
 import TableRow from "./table_row"
 import { useEffect, useState } from "react"
 import RequestsDrop from "./requestsDrop"
-import { useSeatsData } from "../querys/seats"
+import { useSeatsDataAll } from "../querys/seats"
 import { useGuestsData } from "../querys/guests"
 import { useGuestGroupsData } from "../querys/guest_groups"
 import { useTagBelongsData } from "../querys/tag_belongs"
+import { useSeatBelongsData } from "../querys/seat_belongs"
 
 function GuestsTable(){
 
-    const seats_res = useSeatsData()
-    const belongs_res = useSeatsData()
+    const seats_res = useSeatsDataAll()
+    const belongs_res = useSeatBelongsData()
     const guests = useGuestsData()
     const groups = useGuestGroupsData()
     const tags_belongs = useTagBelongsData()

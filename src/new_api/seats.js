@@ -11,12 +11,21 @@ seats['create'] = function(map_name, project_name, data){
     }
     return hiveFetch(body)
 };
-seats['get_all'] = function({queryKey}){
+seats['get'] = function({queryKey}){
     const {map_name, project_name} = queryKey[1]
     const body = {
         category: 'seats',
-        action: 'get_all',
+        action: 'get',
         map_name, project_name
+    }
+    return hiveFetch(body)
+};
+seats['get_all'] = function({queryKey}){
+    const {project_name} = queryKey[1]
+    const body = {
+        category: 'seats',
+        action: 'get_all',
+        project_name
     }
     return hiveFetch(body)
 };

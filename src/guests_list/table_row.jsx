@@ -10,14 +10,14 @@ function TableRow(props){
     const [tagsStatus, setTagsStatus] = useContext(TagsContext)
 
     var belong
-    var tags_ids = props.tags?.map(tag => tag.group_id)
+    var tags_ids = props.tags?.map(tag => tag.tag)
     if(!props.guest) return
     if(props.seat) belong = 'belong'
     if(props.seat && belongsStatus == 'לא משובצים') return
     if(!props.seat && belongsStatus == 'משובצים') return
     if(groupsStatus != 'הכל' && groupsStatus != props.group?.name) return
     if(tagsStatus != 'הכל' && !props.tags) return
-    if(tagsStatus != 'הכל' && tags_ids?.indexOf(props.tagsStatus) == -1) return
+    if(tagsStatus != 'הכל' && tags_ids?.indexOf(tagsStatus) == -1) return
 
     return(
         <tr>
