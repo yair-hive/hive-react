@@ -1,21 +1,22 @@
 import { useContext, useState } from "react"
 import { useQueryClient } from "react-query"
 import { Link, useParams } from "react-router-dom"
-import { MBloaderContext, useSocket } from "../app"
+import { MBloaderContext, useHive, useSocket } from "../app"
 import AddMapPop from "../components/add_map_pop"
 import HiveButton from "../hive_elements/hive_button"
 
 function ProjectSM(){
 
-    const [addMapPopStatus, setAddMapPopStatus] = useState(false)
     const {map_name, project_name} = useParams()
 
     const [MBstatus, setMBStatus] = useContext(MBloaderContext)
+
     const hiveSocket = useSocket()
     const queryClient = useQueryClient()
+    const hive = useHive()
 
     function scheduling(){
-        const source = new EventSource(`http://hive.com:3020/actions/scheduling/${map_name}`);
+        const source = new EventSource(`http://hive.com:3020/actions/scheduling/${project_name}`);
 
         source.onmessage = (event) => {
             const data = JSON.parse(event.data);
@@ -38,8 +39,8 @@ function ProjectSM(){
         <div className="sub_menu">
             <Link to={`/projects/${project_name}/guest/${map_name}`}><HiveButton>שמות</HiveButton></Link>
             <HiveButton onClick={scheduling}> שבץ </HiveButton>
-            <HiveButton onClick={()=> setAddMapPopStatus(true)}> הוסף מפה </HiveButton>
-            <AddMapPop status={addMapPopStatus} setState={setAddMapPopStatus}/>
+            <HiveButton onClick={()=> hive.openPopUp('add_map')}> הוסף מפה </HiveButton>
+            <AddMapPop id={'add_map'}/>
         </div>
     )
 }

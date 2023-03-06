@@ -170,10 +170,14 @@ function Map(){
         }
         if(map.data && seats_groups.data){
             for(let group of seats_groups.data){
+                group.from_row = Number(group.from_row)
+                group.from_col = Number(group.from_col)
+                group.to_row = Number(group.to_row)
+                group.to_col = Number(group.to_col)
                 for(let row = group.from_row; row <= group.to_row; row++){
                     for(let col = group.from_col; col <= group.to_col; col++){
                         var cell = list[RCindex[row][col]]
-                        list[RCindex[row][col]] = {...cell, in_group: true, type: 'plase_holder'}
+                        list[RCindex[row][col]] = {...cell, in_group: true, type: 'seat'}
                     }
                 }
             }

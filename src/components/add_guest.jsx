@@ -1,31 +1,25 @@
-import { useEffect } from "react"
 import { useState } from "react"
-import { useQueryClient } from "react-query"
-import { useParams } from "react-router-dom"
-import { useSocket } from "../app"
+import { useHive } from "../app"
 import HiveButton from "../hive_elements/hive_button"
 import PopUp from "../hive_elements/pop_up"
 import { useGuestsCreate } from "../querys/guests"
 
-function AddGuest(props){
+function AddGuest({id}){
 
     const [first, setFirst] = useState('')
     const [last, setLast] = useState('')
     const [group, setGroup] = useState('')
     const create_guests = useGuestsCreate()
+    const hive = useHive()
 
     function onClick(){
         create_guests([[first, last, group]])
-        props.setState(false)
+        hive.closePopUp(id)
     }
 
 
     return(
-        <PopUp
-        status={props.status} 
-        setState = {props.setState}
-        title = 'הוסף'
-    >
+        <PopUp title = 'הוסף' id={id}>
         <form id='add_guest_form'>
             <label htmlFor='first_name'> שם פרטי </label>
             <br /> 

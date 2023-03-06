@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { BelongsContext, GroupsContext, TagsContext } from "../app";
+import { BelongsContext, GroupsContext, TagsContext, useHive } from "../app";
 import AddGuest from "../components/add_guest";
 import GroupsPop from "../components/groups_pop";
 import ImportGuests from "../components/import_guests";
@@ -10,6 +10,8 @@ import { useGuestGroupsData } from "../querys/guest_groups";
 import { useTagsData } from "../querys/tags";
 
 function GuestsSideMenu(){
+
+    const hive = useHive()
 
     const [importPop, setImportPop] = useState(false)
     const [groupsPop, setGroupsPop] = useState(false)
@@ -38,8 +40,8 @@ function GuestsSideMenu(){
 
     return(
         <div className="sub_menu">
-        <HiveButton onClick={()=> setAddGuestPop(true)}> הוסף בחורים </HiveButton>
-        <AddGuest status={addGuestPop} setState = {setAddGuestPop}/>
+        <HiveButton onClick={()=>hive.openPopUp('add_guest')}> הוסף בחורים </HiveButton>
+        <AddGuest id='add_guest'/>
         <HiveButton onClick={()=> setImportPop(true)}> ייבא בחורים </HiveButton>
         <ImportGuests status={importPop} setState = {setImportPop}/>
         <HiveButton onClick={()=> setGroupsPop(true)}> קבוצות </HiveButton>

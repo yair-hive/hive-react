@@ -9,7 +9,6 @@ import { useEffect } from 'react';
 import { useQueryClient } from 'react-query';
 import { HiveSocket } from '.';
 import Projects from './pages/projects';
-// import { useSocket } from './index.js';
 
 const HiveContext = React.createContext({})
 

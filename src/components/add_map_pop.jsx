@@ -3,7 +3,7 @@ import HiveButton from "../hive_elements/hive_button"
 import PopUp from "../hive_elements/pop_up"
 import { useMapsCreate } from "../querys/maps";
 
-function AddMapPop(props){
+function AddMapPop({id}){
 
     const [name, setName] = useState('')
     const [rows, setRows] = useState(0)
@@ -15,11 +15,7 @@ function AddMapPop(props){
     }
 
     return(
-        <PopUp
-        status={props.status} 
-        setState = {props.setState}
-        title = 'הוסף מפה'
-        >
+        <PopUp title = 'הוסף מפה' id={id}>
             <form id='create_map_form'>
                 <label htmlFor="map_name"> שם המפה </label>
                 <br />

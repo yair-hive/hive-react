@@ -18,7 +18,7 @@ export function useMapsCreate(){
         return new_api.maps.create(name, rows, cols, project_name)
     }, {
         onSuccess: ()=>{
-            var msg = JSON.stringify({action: 'invalidate', query_key: ['maps', project_name]})
+            var msg = JSON.stringify({action: 'invalidate', query_key: ['maps', {project_name}]})
             hiveSocket.send(msg)
         }
     })

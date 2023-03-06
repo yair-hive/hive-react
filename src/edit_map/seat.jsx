@@ -96,7 +96,7 @@ function Seat(props){
     var tags = (tagsBelongs.data ? tagsBelongs.data[props.seat_id] : null)
 
     if(props.seat.in_group && action === 'groups' && edit === 'ערוך') return
-    
+
     return (
         <div>
             <div 

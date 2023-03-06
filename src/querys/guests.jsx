@@ -11,6 +11,7 @@ export function useGuestsCreate(){
     const {project_name} = useParams()
     const hiveSocket = useSocket()
     const mutation = useMutation(guests =>{
+        guests = JSON.stringify(guests)
         return new_api.guests.create(guests, project_name)
     }, {
         onSuccess: ()=>{
