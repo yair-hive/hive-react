@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Link, Route, Router, Routes, useNavigate } from "react-router-dom"
+import { Link, Route, Router, Routes, useNavigate, useParams } from "react-router-dom"
 import AddMapPop from "../components/add_map_pop"
 import Map from "../edit_map/map"
 import MapSideMenu from "../edit_map/side_menu"
@@ -13,6 +13,7 @@ import ProjectSM from "./projects_sub_menu"
 function Projects(){
 
     const navigate = useNavigate()
+    const {map_name} = useParams()
 
     const [map, setMap] = useState(null)
     const maps = useMapsAllData()
@@ -33,6 +34,7 @@ function Projects(){
         <div className="side_menu">
             <HiveSwitch 
                 options={mapsOptions} 
+                active={map_name}
                 setActive={setMap} 
                 bordKey="KeyQ" 
             />

@@ -20,6 +20,39 @@ export const DropContext = React.createContext(null)
 export const SelectedContext = React.createContext(null)
 export const SelectedRCcontext = React.createContext(null)
 
+function MapSelection({children}){
+
+    const [MBloaderStatus, setMBloaderStatus] = useContext(MBloaderContext)
+
+    var className='selection_bond main_bord'
+    if(MBloaderStatus !== 0 && MBloaderStatus !== 100){
+        var mb = document.getElementsByClassName('selection_bond')[0]
+        mb.scrollTop = 0
+        mb.scrollLeft = 0
+        className += ' in_of'
+    }
+
+    function onStart({event, selection}){
+        if (!event.ctrlKey && !event.metaKey){
+            selection.clearSelection();
+            document.querySelectorAll('.selected').forEach(e => e.classList.remove('selected'))
+        }
+    }
+    function onMove({ store: { changed: { added, removed } } }){
+        added.forEach(ele => ele.classList.add('selected'))
+        removed.forEach(ele => ele.classList.remove('selected'))
+    }
+    return(
+        <SelectionArea
+        selectables={'.selectable'}
+        onStart={onStart}
+        onMove={onMove}
+        behaviour={{scrolling: {startScrollMargins: {x: 150, y: 0}}}}
+        className={className}
+        >{children}</SelectionArea>
+    )
+}
+
 function Map(){
 
     const map = useMapsData()
@@ -37,8 +70,6 @@ function Map(){
     const [dropDownPos, setDropDownPos] = useState(null)
     const [edit, setEdit] = useContext(EditContext)
 
-    const [MBloaderStatus, setMBloaderStatus] = useContext(MBloaderContext)
-
     const seats_create = useSeatsCreate()       
     const tags_create = useTagBelongsCreate()        
     const numbers_update = useSeatsUpdate().numbers
@@ -48,27 +79,9 @@ function Map(){
     const seats_delete  = useSeatsDelete()
     const elements_delete = useMapElementsDelete()
 
-    function onStart({event, selection}){
-        if (!event.ctrlKey && !event.metaKey){
-            selection.clearSelection();
-            document.querySelectorAll('.selected').forEach(e => e.classList.remove('selected'))
-        }
-    }
-    function onMove({ store: { changed: { added, removed } } }){
-        added.forEach(ele => ele.classList.add('selected'))
-        removed.forEach(ele => ele.classList.remove('selected'))
-    }
-
-    var className='selection_bond main_bord'
-    if(MBloaderStatus !== 0 && MBloaderStatus !== 100){
-        var mb = document.getElementsByClassName('selection_bond')[0]
-        mb.scrollTop = 0
-        mb.scrollLeft = 0
-        className += ' in_of'
-    }
-
     if(edit === 'ערוך') {
         if(selection?.enable) selection.enable()
+        console.log(selection)
     }
     if(edit === 'אל תערוך') {
         if(selection?.disable) selection.disable()
@@ -185,6 +198,22 @@ function Map(){
                     }
                 }
             }
+            // for(let group of seats_groups.data){
+            //     list.push({...group, type: 'group'})
+            // }
+        }
+        var i = 0
+        for(let cell of list){
+            cells_elements.push(<Cell cell={cell} key={i}/>)
+            i++
+        }
+        return cells_elements
+    }
+
+    function render_areas(){
+        var list = []
+        var cells_elements = []
+        if(map.data && seats_groups.data){
             for(let group of seats_groups.data){
                 list.push({...group, type: 'group'})
             }
@@ -196,7 +225,6 @@ function Map(){
         }
         return cells_elements
     }
-
     var STYLE
     if(edit === 'אל תערוך'){
         STYLE = {
@@ -211,19 +239,17 @@ function Map(){
         }
     }
 
-    return (<SelectionArea
-        selectables={'.selectable'}
-        onStart={onStart}
-        onMove={onMove}
-        behaviour={{scrolling: {startScrollMargins: {x: 150, y: 0}}}}
-        className={className}
-    >
+    return (
+        <MapSelection>
         <MBloader />
         <div className="map_container">
             <SelectedRCcontext.Provider value={[selectedRC, setSelectedRC]}>
             <SelectedContext.Provider value={[selected_seat, setSelectedSeat]}>
             <DropContext.Provider value={[dropDownPos, setDropDownPos]}>
                 <AddGuestDropDown/>
+                <div className='map_overlay' style={STYLE}>
+                    {render_areas()}
+                </div>
                 <div id="map" className="map" style={STYLE}> 
                     {render_cells()}
                 </div>
@@ -232,7 +258,8 @@ function Map(){
             </SelectedContext.Provider>
             </SelectedRCcontext.Provider>
         </div>
-    </SelectionArea>)
+        </MapSelection>
+    )
 }
 
 export default Map

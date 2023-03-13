@@ -10,7 +10,7 @@ import "../style/side_menu.css"
 import TagsPop from "./tags_pop";
 import { useQueryClient } from "react-query";
 import { useMapsData, useMapsUpdate } from "../querys/maps";
-import { useSeatsData } from "../querys/seats";
+import { useSeatsData, useSeatsDataAll } from "../querys/seats";
 import { useSeatBelongsData } from "../querys/seat_belongs";
 import { useGuestsData } from "../querys/guests";
 import { useGuestGroupsData } from "../querys/guest_groups";
@@ -21,7 +21,7 @@ function MapSideMenu() {
     const [edit, setEdit] = useContext(EditContext)
 
     const map  = useMapsData()
-    const seats = useSeatsData()
+    const seats = useSeatsDataAll()
     const belongs = useSeatBelongsData()
     const guests = useGuestsData()
     const groups = useGuestGroupsData()
@@ -84,13 +84,15 @@ function MapSideMenu() {
             for(let guest of guests.data){
                 var seat = belongs_object[guest.id]
                 if(seat) {
-                    seat = seat.seat
-                    var seat_number = seats.data[seat]?.seat_number
-                    guest.group_id = guest.guest_group
-                    guest.group_name = groups.data[guest.group_id].group_name
-                    guest.name = guest.last_name + ' ' + guest.first_name
-                    guest.seat_number = seat_number
-                    guests_with_belong.push(guest)
+                    // if(seats.data[seat]){
+                        seat = seat.seat
+                        var seat_number = seats.data[seat]?.seat_number
+                        guest.group_id = guest.guest_group
+                        guest.group_name = groups.data[guest.group_id].group_name
+                        guest.name = guest.last_name + ' ' + guest.first_name
+                        guest.seat_number = seat_number
+                        guests_with_belong.push(guest)
+                    // }
                 }
             }
             var matchList = createMatchList(guests_with_belong)
@@ -168,14 +170,12 @@ function MapSideMenu() {
 
     function noEditSubMenu(){
         if(edit === 'אל תערוך'){
-            // return(
-            //     // <div className="sub_menu">
-            //     //     <Link to={`/projects/${project_name}/guest/${map_name}`}><HiveButton>שמות</HiveButton></Link>
-            //     //     <HiveButton onClick={scheduling}> שבץ </HiveButton>
-            //     //     <input type='text' onInput={onInput}></input>
-            //     //     <ul className="results" dir="rtl">{guestsList()}</ul>
-            //     // </div>
-            // )
+            return(
+                <div className="sub_menu">
+                    <input type='text' onInput={onInput}></input>
+                    <ul className="results" dir="rtl">{guestsList()}</ul>
+                </div>
+            )
         }
     }
     function editSubMenu(){

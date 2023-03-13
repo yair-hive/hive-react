@@ -1,4 +1,4 @@
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import DropDown from "../hive_elements/dropDown"
 import RolligList from "../hive_elements/rolling_list"
 import new_api from "../new_api/new_api"
@@ -17,10 +17,11 @@ function AddGuestDropDown(props){
     const [dropDownPos, setDropDownPos] = useContext(DropContext)
     const [selected_seat, setSelectedSeat] = useContext(SelectedContext)
 
+    useEffect(()=> setInputStr(''),[dropDownPos])
+
     async function onItem(item){
         // const {exist} = await check_guest(item.value)
         // if(exist){
-            console.log(item.value)
             add_guest({
                 guest_id: item.value, 
                 seat_id: selected_seat

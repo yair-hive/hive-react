@@ -18,7 +18,7 @@
     rotate: 90;
 }
 .group-element{
-    background-color: rgb(101, 101, 50);
+    background-color: rgba(101, 101, 50, 0.5);
     border-color: yellow;
     border-style: solid;
     border-width: 2px;

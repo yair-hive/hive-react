@@ -15,7 +15,9 @@ export function useGuestsCreate(){
         return new_api.guests.create(guests, project_name)
     }, {
         onSuccess: ()=>{
-            var msg = JSON.stringify({action: 'invalidate', query_key: ['guests', project_name]})
+            var msg = JSON.stringify({action: 'invalidate', query_key: ['guests', {project_name}]})
+            hiveSocket.send(msg)
+            var msg = JSON.stringify({action: 'invalidate', query_key: ['groups', {project_name}]})
             hiveSocket.send(msg)
         }
     })

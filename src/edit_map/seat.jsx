@@ -97,8 +97,6 @@ function Seat({seat}){
 
     var tags = (tagsBelongs.data ? tagsBelongs.data[seat.id] : null)
 
-    if(seat.in_group && action === 'groups' && edit === 'ערוך') return
-
     if(edit === 'ערוך' && selectebls === 'seats'){
         var selectable_class = " selectable"
         var selected_class = (selectedRC.dir === 'row' && selectedRC.number === Number(seat.row_num) || selectedRC.dir === 'col' && selectedRC.number === Number(seat.col_num) ? " selected" : "")
@@ -106,6 +104,8 @@ function Seat({seat}){
         var selectable_class = ""
         var selected_class = ""
     }
+
+    if(seat.in_group && action === 'groups' && edit === 'ערוך') var selectable_class = ""
 
     var class_name = `seat${selectable_class}${selected_class}`
 
