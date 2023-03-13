@@ -18,6 +18,7 @@ import { useSeatsGroupsCreate, useSeatsGroupsData } from '../querys/seats_groups
 
 export const DropContext = React.createContext(null)
 export const SelectedContext = React.createContext(null)
+export const SelectedRCcontext = React.createContext(null)
 
 function Map(){
 
@@ -27,9 +28,12 @@ function Map(){
     const seats_groups = useSeatsGroupsData()
 
     const [selected_seat, setSelectedSeat] = useState(null)
+    const [selectedRC, setSelectedRC] = useState({})
     const [action, setAction] = useContext(ActionsContext)
     const selection = useSelection()
 
+    useEffect(()=> console.log(selectedRC),[selectedRC])
+    
     const [dropDownPos, setDropDownPos] = useState(null)
     const [edit, setEdit] = useContext(EditContext)
 
@@ -136,14 +140,14 @@ function Map(){
                             i++
                         }else{
                             RCindex[row][col] = i
-                            list[i] = {row: row, col: col, type: 'RC'}
+                            list[i] = {row: row, col: col, dir: 'row', type: 'RC'}
                             i++
                         }
                     }
                 }else{
                     for(let col = 0; col <= map.data.columns_number; col++){
                         RCindex[row][col] = i
-                        list[i] = {row: row, col: col, type: 'RC'}
+                        list[i] = {row: row, col: col, dir: 'col', type: 'RC'}
                         i++
                     }
                 }
@@ -216,6 +220,7 @@ function Map(){
     >
         <MBloader />
         <div className="map_container">
+            <SelectedRCcontext.Provider value={[selectedRC, setSelectedRC]}>
             <SelectedContext.Provider value={[selected_seat, setSelectedSeat]}>
             <DropContext.Provider value={[dropDownPos, setDropDownPos]}>
                 <AddGuestDropDown/>
@@ -225,6 +230,7 @@ function Map(){
 
             </DropContext.Provider>
             </SelectedContext.Provider>
+            </SelectedRCcontext.Provider>
         </div>
     </SelectionArea>)
 }

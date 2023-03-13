@@ -1,25 +1,29 @@
 import { useContext } from "react"
 import { EditContext, SelectablesContext } from "../app"
 import "../style/cell.css"
+import { SelectedRCcontext } from "./map"
 
-function PlaseHolder(props){
+function PlaseHolder({cell}){
 
     const [edit, setEdit] = useContext(EditContext)
     const selecteblsState = useContext(SelectablesContext)
-
-    var selectable = ""
+    const [selectedRC, setSelectedRC] = useContext(SelectedRCcontext)
 
     if(selecteblsState){
         if(selecteblsState[0] === 'cells' && edit == 'ערוך'){
-            selectable  = "selectable"
+        var selected_class = (selectedRC.dir === 'row' && selectedRC.number === Number(cell.row) || selectedRC.dir === 'col' && selectedRC.number === Number(cell.col) ? " selected" : "")
+        var selectable_class  = " selectable"
+        }else{
+            var selectable_class = ""
+            var selected_class = ""
         }
     }
 
     return (
         <div 
-            className = {`cell ${selectable}`} 
-            cell-row = {props.row_number} 
-            cell-col = {props.col_number}
+            className = {`cell${selectable_class}${selected_class}`} 
+            cell-row = {cell.row} 
+            cell-col = {cell.col}
         /> 
     )
 }

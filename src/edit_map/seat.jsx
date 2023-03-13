@@ -3,7 +3,7 @@ import { useRef } from "react"
 import TagsCount from "../components/tags_count"
 import { ActionsContext, EditContext, SelectablesContext } from "../app"
 import "../style/seat.css"
-import { DropContext, SelectedContext } from "./map"
+import { DropContext, SelectedContext, SelectedRCcontext } from "./map"
 import { useSeatBelongsData } from "../querys/seat_belongs"
 import { useGuestsData } from "../querys/guests"
 import { useGuestGroupsData } from "../querys/guest_groups"
@@ -57,17 +57,19 @@ function NameBox({seat_id, tags, guest_name, group_color}){
     }
 
     return(
-        <div className="name_box" style={NAME_BOX_STYLE} ref={nameBoxRef} onClick={nameBoxOnClick}>
+        <div className="name_box" style={(edit !== 'ערוך' ? NAME_BOX_STYLE : null)} ref={nameBoxRef} onClick={nameBoxOnClick}>
             {(edit === 'ערוך' ? <TagsCount tags={tags}/> : guest_name)}
         </div>  
     )
 } 
 
 
-function Seat(props){
+function Seat({seat}){
     const [edit, setEdit] = useContext(EditContext)
     const [selectebls] = useContext(SelectablesContext)
     const [action, setAction] = useContext(ActionsContext)
+    const [selectedRC, setSelectedRC] = useContext(SelectedRCcontext)
+
     const belongs = useSeatBelongsData()
     const guests = useGuestsData()
     const groups = useGuestGroupsData()
@@ -77,7 +79,7 @@ function Seat(props){
     if(belongs.data){
         var belongs_object = {}
         belongs.data.forEach(belong => belongs_object[belong.seat] = belong)
-        var seat_belong = belongs_object[props.seat_id]
+        var seat_belong = belongs_object[seat.id]
         guest_id = seat_belong?.guest
     }
 
@@ -93,20 +95,30 @@ function Seat(props){
 
     var group_color = (guest && groups.data ? groups.data[guest.guest_group]?.color : undefined)
 
-    var tags = (tagsBelongs.data ? tagsBelongs.data[props.seat_id] : null)
+    var tags = (tagsBelongs.data ? tagsBelongs.data[seat.id] : null)
 
-    if(props.seat.in_group && action === 'groups' && edit === 'ערוך') return
+    if(seat.in_group && action === 'groups' && edit === 'ערוך') return
+
+    if(edit === 'ערוך' && selectebls === 'seats'){
+        var selectable_class = " selectable"
+        var selected_class = (selectedRC.dir === 'row' && selectedRC.number === Number(seat.row_num) || selectedRC.dir === 'col' && selectedRC.number === Number(seat.col_num) ? " selected" : "")
+    }else{
+        var selectable_class = ""
+        var selected_class = ""
+    }
+
+    var class_name = `seat${selectable_class}${selected_class}`
 
     return (
         <div>
             <div 
-                className={`seat ${(edit === 'ערוך' && selectebls === 'seats' ? "selectable" : "")}`} 
-                seat_id={props.seat_id}
-                cell-row = {props.seat.row_num} 
-                cell-col = {props.seat.col_num}
+                className={class_name} 
+                seat_id={seat.id}
+                cell-row = {seat.row_num} 
+                cell-col = {seat.col_num}
             >
-                <div className="num_box">{props.number}</div> 
-                <NameBox seat_id={props.seat_id} guest_name={guest_name} group_color={group_color} tags={tags}/>
+                <div className="num_box">{seat.seat_number}</div> 
+                <NameBox seat_id={seat.id} guest_name={guest_name} group_color={group_color} tags={tags}/>
             </div>
         </div>
     )
