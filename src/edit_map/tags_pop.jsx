@@ -1,6 +1,6 @@
 import { useState } from "react";
 import PopUp from "../hive_elements/pop_up";
-import { useTagsData, useTagsUpdate } from "../querys/tags";
+import { useTagsData, useTagsDelete, useTagsUpdate } from "../querys/tags";
 
 function ColorInput({tag_id, color}){
 
@@ -25,6 +25,21 @@ function ColorInput({tag_id, color}){
     )
 }
 
+function TdX({tag_id}){
+
+    console.log(tag_id)
+
+    const delete_tag = useTagsDelete()
+
+    function onClick(){
+        delete_tag({tag_id})
+    }
+
+    return(
+        <td className="td_x" onClick={onClick}> X </td>
+    )
+}
+
 function TagsPop(props) {
 
     const tags = useTagsData()
@@ -35,7 +50,7 @@ function TagsPop(props) {
             var new_tags = Object.entries(tags.data)
             for(let [tag_key, tag] of new_tags){
                 var tr = <tr key={tag_key}>
-                        <td className="td_x"> X </td>
+                        <TdX tag_id={tag.id}/>
                         <td className="td_color"> <ColorInput color = {tag.color} tag_id={tag.id}/> </td>
                         <td> {tag.score} </td>
                         <td> {tag.name} </td>

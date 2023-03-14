@@ -19,7 +19,7 @@ export function useTagsDelete(){
             hiveSocket.send(msg)
         }
     })
-    return mutation
+    return mutation.mutate
 }
 export function useTagsUpdate(){
     const {project_name} = useParams()
