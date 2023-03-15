@@ -10,8 +10,8 @@ import { useSeatBelongsData } from "../querys/seat_belongs"
 
 function GuestsTable(){
 
-    const seats_res = useSeatsDataAll()
-    const belongs_res = useSeatBelongsData()
+    const seats = useSeatsDataAll()
+    const belongs = useSeatBelongsData()
     const guests = useGuestsData()
     const groups = useGuestGroupsData()
     const tags_belongs = useTagBelongsData()
@@ -37,9 +37,11 @@ function GuestsTable(){
     function create_rows(){
         var rows = []
         var i = 0
-        if(guests.data && belongs_res.data && groups.data && seats_res.data && tags_belongs.data){
+        if(guests.data && belongs.data && groups.data && seats.data && tags_belongs.data){
             var belongs_object = {}
-            belongs_res.data.forEach(belong => belongs_object[belong.guest] = belong)
+            var seats_object = {}
+            belongs.data.forEach(belong => belongs_object[belong.guest] = belong)
+            seats.data.forEach(seat => seats_object[seat.id] = seat)
             for(let guest of guests.data){
                 i++
                 var seat_id = false
@@ -48,7 +50,7 @@ function GuestsTable(){
                         guest={guest} 
                         key={i} 
                         group={groups.data[guest.guest_group]} 
-                        seat={seats_res.data[seat_id]}
+                        seat={seats_object[seat_id]}
                         tags = {tags_belongs.data[seat_id]}
                         setDropPos={setDropPos}
                         setSelectedGuest={setSelectedGuest}

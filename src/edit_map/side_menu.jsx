@@ -79,20 +79,20 @@ function MapSideMenu() {
 
         if(map.data && seats.data && belongs.data && guests.data && groups.data){
             var belongs_object = {}
+            var seats_object = {}
             belongs.data.forEach(belong => belongs_object[belong.guest] = belong)
+            seats.data.forEach(seat => seats_object[seat.id] = seat)
             var guests_with_belong = []
             for(let guest of guests.data){
                 var seat = belongs_object[guest.id]
                 if(seat) {
-                    // if(seats.data[seat]){
-                        seat = seat.seat
-                        var seat_number = seats.data[seat]?.seat_number
-                        guest.group_id = guest.guest_group
-                        guest.group_name = groups.data[guest.group_id].group_name
-                        guest.name = guest.last_name + ' ' + guest.first_name
-                        guest.seat_number = seat_number
-                        guests_with_belong.push(guest)
-                    // }
+                    seat = seat.seat
+                    var seat_number = seats_object[seat]?.seat_number
+                    guest.group_id = guest.guest_group
+                    guest.group_name = groups.data[guest.group_id].group_name
+                    guest.name = guest.last_name + ' ' + guest.first_name
+                    guest.seat_number = seat_number
+                    guests_with_belong.push(guest)
                 }
             }
             var matchList = createMatchList(guests_with_belong)
