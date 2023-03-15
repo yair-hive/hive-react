@@ -37,7 +37,51 @@ export function useMapsUpdate(){
 
         }
     })
+    var add_row = useMutation(({row}) => {
+        return new_api.maps.update.add_row(map_name, project_name, row)
+    }, {
+        onSuccess: ()=>{
+            var msg = JSON.stringify({action: 'invalidate', query_key: ['map', {map_name, project_name}]})
+            hiveSocket.send(msg)
+            var msg = JSON.stringify({action: 'invalidate', query_key: ['seats', {map_name, project_name}]})
+            hiveSocket.send(msg)
+        }
+    })
+    var add_col = useMutation(({col}) => {
+        return new_api.maps.update.add_col(map_name, project_name, col)
+    }, {
+        onSuccess: ()=>{
+            var msg = JSON.stringify({action: 'invalidate', query_key: ['map', {map_name, project_name}]})
+            hiveSocket.send(msg)
+            var msg = JSON.stringify({action: 'invalidate', query_key: ['seats', {map_name, project_name}]})
+            hiveSocket.send(msg)
+        }
+    })
+    var delete_row = useMutation(({row}) => {
+        return new_api.maps.update.delete_row(map_name, project_name, row)
+    }, {
+        onSuccess: ()=>{
+            var msg = JSON.stringify({action: 'invalidate', query_key: ['map', {map_name, project_name}]})
+            hiveSocket.send(msg)
+            var msg = JSON.stringify({action: 'invalidate', query_key: ['seats', {map_name, project_name}]})
+            hiveSocket.send(msg)
+        }
+    })
+    var delete_col = useMutation(({col}) => {
+        return new_api.maps.update.delete_col(map_name, project_name, col)
+    }, {
+        onSuccess: ()=>{
+            var msg = JSON.stringify({action: 'invalidate', query_key: ['map', {map_name, project_name}]})
+            hiveSocket.send(msg)
+            var msg = JSON.stringify({action: 'invalidate', query_key: ['seats', {map_name, project_name}]})
+            hiveSocket.send(msg)
+        }
+    })
     return {
-        cols_to: cols_to.mutate
+        cols_to: cols_to.mutate,
+        add_row: add_row.mutate,
+        add_col: add_col.mutate,
+        delete_row: delete_row.mutate,
+        delete_col: delete_col.mutate
     }
 }

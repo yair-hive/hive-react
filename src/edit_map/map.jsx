@@ -12,7 +12,7 @@ import { useSeatsCreate, useSeatsData, useSeatsDelete, useSeatsUpdate } from '..
 import { useTagBelongsCreate } from '../querys/tag_belongs'
 import { useMapElementsCreate, useMapElementsData, useMapElementsDelete } from '../querys/map_elements'
 import { map_add_presers } from './map_add_presers'
-import { useMapsData } from '../querys/maps'
+import { useMapsData, useMapsUpdate } from '../querys/maps'
 import { map_delete_presers } from './map_delete_presers'
 import { useSeatsGroupsCreate, useSeatsGroupsData } from '../querys/seats_groups'
 
@@ -64,8 +64,6 @@ function Map(){
     const [selectedRC, setSelectedRC] = useState({})
     const [action, setAction] = useContext(ActionsContext)
     const selection = useSelection()
-
-    useEffect(()=> console.log(selectedRC),[selectedRC])
     
     const [dropDownPos, setDropDownPos] = useState(null)
     const [edit, setEdit] = useContext(EditContext)
@@ -75,13 +73,13 @@ function Map(){
     const numbers_update = useSeatsUpdate().numbers
     const elements_create = useMapElementsCreate()
     const groups_create = useSeatsGroupsCreate()
+    const map_update = useMapsUpdate()
 
     const seats_delete  = useSeatsDelete()
     const elements_delete = useMapElementsDelete()
 
     if(edit === 'ערוך') {
         if(selection?.enable) selection.enable()
-        console.log(selection)
     }
     if(edit === 'אל תערוך') {
         if(selection?.disable) selection.disable()
@@ -90,6 +88,7 @@ function Map(){
     function onMousedown(event){
         var classList = event.target.classList
         if(!event.ctrlKey && !event.metaKey && !classList.contains('hive_button')){
+            setSelectedRC({})
             if(!classList.contains('name_box') && !classList.contains('drop_down') && !classList.contains('rolling_list_item')){
                 setDropDownPos(false)
             }                               
@@ -105,6 +104,15 @@ function Map(){
     }
 
     function map_add(){
+        if(selectedRC.dir){
+            if(selectedRC.dir === 'row'){
+                map_update.add_row({row: selectedRC.number})
+            }
+            if(selectedRC.dir === 'col'){
+                map_update.add_col({col: selectedRC.number})
+            }
+            return
+        }
         const mutations = {   
             seats: seats_create,       
             tags: tags_create,        
@@ -115,6 +123,15 @@ function Map(){
         return mutations[action](map_add_presers[action]())
     }
     function map_delete(){
+        if(selectedRC.dir){
+            if(selectedRC.dir === 'row'){
+                map_update.delete_row({row: selectedRC.number})
+            }
+            if(selectedRC.dir === 'col'){
+                map_update.delete_col({col: selectedRC.number})
+            }
+            return
+        }
         const mutations = {   
             seats: seats_delete,       
             elements: elements_delete,
@@ -135,7 +152,7 @@ function Map(){
             document.removeEventListener('mousedown', onMousedown)
             document.removeEventListener('keydown', onKeyDown)
         }
-    }, [action])
+    }, [action, selectedRC])
 
     function render_cells(){
         var cells_elements = []
@@ -170,9 +187,13 @@ function Map(){
             var i = 0 
             var seats_array = Object.entries(seats.data)
             for(let [key, seat] of seats_array){
-                var cell = list[RCindex[seat.row_num][seat.col_num]]
-                list[RCindex[seat.row_num][seat.col_num]] = {...seat, ...cell, type: 'seat'}
-                i++
+                if(seat){
+                    try {
+                        var cell = list[RCindex[seat.row_num][seat.col_num]]
+                        list[RCindex[seat.row_num][seat.col_num]] = {...seat, ...cell, type: 'seat'}
+                    } catch (error) {}
+                    i++
+                }
             }
         }
         if(map.data && elements.data){
@@ -194,13 +215,10 @@ function Map(){
                 for(let row = group.from_row; row <= group.to_row; row++){
                     for(let col = group.from_col; col <= group.to_col; col++){
                         var cell = list[RCindex[row][col]]
-                        list[RCindex[row][col]] = {...cell, in_group: true, type: 'seat'}
+                        list[RCindex[row][col]] = {...cell, in_group: true}
                     }
                 }
             }
-            // for(let group of seats_groups.data){
-            //     list.push({...group, type: 'group'})
-            // }
         }
         var i = 0
         for(let cell of list){
@@ -247,9 +265,9 @@ function Map(){
             <SelectedContext.Provider value={[selected_seat, setSelectedSeat]}>
             <DropContext.Provider value={[dropDownPos, setDropDownPos]}>
                 <AddGuestDropDown/>
-                <div className='map_overlay' style={STYLE}>
+                {/* <div className='map_overlay' style={STYLE}>
                     {render_areas()}
-                </div>
+                </div> */}
                 <div id="map" className="map" style={STYLE}> 
                     {render_cells()}
                 </div>

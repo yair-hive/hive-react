@@ -38,5 +38,41 @@ maps['update']['cols_to'] = function(map_name, project_name, to){
     }
     return hiveFetch(body)
 };
+maps['update']['add_row'] = function(map_name, project_name, row){
+    const body = {
+        category: 'maps',
+        action: 'update',
+        fild: 'add_row',
+        map_name, project_name, row
+    }
+    return hiveFetch(body)
+};
+maps['update']['add_col'] = function(map_name, project_name, col){
+    const body = {
+        category: 'maps',
+        action: 'update',
+        fild: 'add_col',
+        map_name, project_name, col
+    }
+    return hiveFetch(body)
+};
+maps['update']['delete_row'] = function(map_name, project_name, row){
+    const body = {
+        category: 'maps',
+        action: 'update',
+        fild: 'delete_row',
+        map_name, project_name, row
+    }
+    return hiveFetch(body)
+};
+maps['update']['delete_col'] = function(map_name, project_name, col){
+    const body = {
+        category: 'maps',
+        action: 'update',
+        fild: 'delete_col',
+        map_name, project_name, col
+    }
+    return hiveFetch(body)
+};
 
 export default maps
