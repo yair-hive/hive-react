@@ -265,9 +265,9 @@ function Map(){
             <SelectedContext.Provider value={[selected_seat, setSelectedSeat]}>
             <DropContext.Provider value={[dropDownPos, setDropDownPos]}>
                 <AddGuestDropDown/>
-                {/* <div className='map_overlay' style={STYLE}>
+                <div className='map_overlay' style={STYLE}>
                     {render_areas()}
-                </div> */}
+                </div>
                 <div id="map" className="map" style={STYLE}> 
                     {render_cells()}
                 </div>

@@ -24,6 +24,7 @@ h1{
 .map_overlay{
     position: absolute;
     user-select: none;
+    pointer-events: none;
     display: grid;
     grid-template-rows: repeat(var(--map-rows), 55px);
     grid-template-columns: repeat(var(--map-cols), 125px);
