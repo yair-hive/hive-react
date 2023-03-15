@@ -11,10 +11,10 @@ export function useRequestsBelongsCreate(){
     const {project_name} = useParams()
     const hiveSocket = useSocket()
     const mutation = useMutation(({guest_id, tag_id}) =>{
-        return new_api.requests_belongs.create(guest_id, tag_id)
+        return new_api.requests_belongs.create(guest_id, tag_id, project_name)
     }, {
         onSuccess: ()=>{
-            var msg = JSON.stringify({action: 'invalidate', query_key: ["requests", project_name]})
+            var msg = JSON.stringify({action: 'invalidate', query_key: ["requests", {project_name}]})
             hiveSocket.send(msg)
         }
     })
@@ -27,7 +27,7 @@ export function useRequestsBelongsDelete(){
         return new_api.requests_belongs.delete(request_id)
     }, {
         onSuccess: ()=>{
-            var msg = JSON.stringify({action: 'invalidate', query_key: ["requests", project_name]})
+            var msg = JSON.stringify({action: 'invalidate', query_key: ["requests", {project_name}]})
             hiveSocket.send(msg)
         }
     })

@@ -15,7 +15,7 @@ function RequestBox({request_id, tag_id}){
         return (
             <div className="request-box" dir="rtl">
                 <span className="delete" onClick={onClickDelete}> x </span>
-                <span className="text"> {tags.data[tag_id].tag_name} </span>
+                <span className="text"> {tags.data[tag_id].name} </span>
             </div>
         )
     }

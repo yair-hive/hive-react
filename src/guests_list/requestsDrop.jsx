@@ -13,7 +13,7 @@ function RequestsDrop(props){
             var tags_array = Object.entries(tags.data)
             var items = []
             for(let [key, tag] of tags_array){
-                items.push({name: tag.tag_name, value:tag.id})
+                items.push({name: tag.name, value:tag.id})
             }
             return items
         }
