@@ -7,6 +7,10 @@ export function useSeatsData(){
     const {map_name, project_name} = useParams()
     return useQuery(['seats', {map_name, project_name}], new_api.seats.get)
 }
+export function useSeatsDataScore(){
+    const {map_name, project_name} = useParams()
+    return useQuery(['seats', {map_name, project_name}], new_api.seats.get_score)
+}
 export function useSeatsDataAll(){
     const {project_name} = useParams()
     return useQuery(['seats_all', {project_name}], new_api.seats.get_all)

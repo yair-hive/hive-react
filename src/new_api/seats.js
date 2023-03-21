@@ -20,6 +20,12 @@ seats['get'] = function({queryKey}){
     }
     return hiveFetch(body)
 };
+seats['get_score'] = async function({queryKey}){
+    const {map_name, project_name} = queryKey[1]
+    const url = `http://localhost/actions/score/${project_name}/${map_name}`
+    var res = await fetch(url)
+    return await res.json()
+};
 seats['get_all'] = function({queryKey}){
     const {project_name} = queryKey[1]
     const body = {

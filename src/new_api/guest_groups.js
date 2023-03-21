@@ -12,11 +12,11 @@ guest_groups['get_all'] = function({queryKey}){
     }
     return hiveFetch(body)
 };
-guest_groups['delete'] = function(group_id){
+guest_groups['delete'] = function(group_id, project_name){
     const body = {
         category: 'guest_groups',
         action: 'delete',
-        group_id,
+        group_id, project_name,
     }
     return hiveFetch(body)
 }; 

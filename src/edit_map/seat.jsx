@@ -8,6 +8,7 @@ import { useSeatBelongsData } from "../querys/seat_belongs"
 import { useGuestsData } from "../querys/guests"
 import { useGuestGroupsData } from "../querys/guest_groups"
 import { useTagBelongsData } from "../querys/tag_belongs"
+import { useSeatsDataScore } from "../querys/seats"
 
 function getColor(backColor){
     if(backColor){
@@ -74,6 +75,16 @@ function Seat({seat}){
     const guests = useGuestsData()
     const groups = useGuestGroupsData()
     const tagsBelongs = useTagBelongsData()
+    const score = useSeatsDataScore()
+
+    var score_object = undefined
+
+    if(score.data){
+        score_object = {}
+        score.data.forEach(seat => {
+            score_object[seat.id] = seat.score
+        })
+    }
 
     var guest_id
     if(belongs.data){

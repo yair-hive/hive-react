@@ -11,7 +11,7 @@ export function useGuestGroupsDelete(){
     const {project_name} = useParams()
     const hiveSocket = useSocket()
     const mutation = useMutation((group_id) =>{
-        return new_api.guest_groups.delete(group_id)
+        return new_api.guest_groups.delete(group_id, project_name)
     }, {
         onSuccess: ()=>{
             var msg = JSON.stringify({action: 'invalidate', query_key: ['groups', {project_name}]})

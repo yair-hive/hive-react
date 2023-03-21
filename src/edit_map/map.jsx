@@ -243,6 +243,35 @@ function Map(){
         }
         return cells_elements
     }
+
+    function selected_rc(){
+
+        if(selectedRC.dir === 'row'){
+            var from_col = 2
+            var to_col = Number(map.data?.columns_number)+2
+            var from_row = Number(selectedRC.number) +1
+            var to_row = Number(selectedRC.number)+1
+        }
+
+        if(selectedRC.dir === 'col'){
+            var from_col = Number(selectedRC.number)+1
+            var to_col = Number(selectedRC.number)+1
+            var from_row = 2
+            var to_row = Number(map.data?.rows_number)+2
+        }
+
+        if(!selectedRC.dir) return
+
+        return (
+            <div className = "selected_rc" style={{
+                gridRowStart: from_row,
+                gridColumnStart: from_col,
+                gridRowEnd: to_row,
+                gridColumnEnd: to_col,
+            }} />
+        )
+    }
+
     var STYLE
     if(edit === 'אל תערוך'){
         STYLE = {
@@ -267,6 +296,7 @@ function Map(){
                 <AddGuestDropDown/>
                 <div className='map_overlay' style={STYLE}>
                     {render_areas()}
+                    {selected_rc()}
                 </div>
                 <div id="map" className="map" style={STYLE}> 
                     {render_cells()}
