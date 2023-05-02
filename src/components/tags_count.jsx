@@ -17,12 +17,12 @@ function getColor(backColor){
     }
 }
 
-function TagsCount(props){
+function TagsCount({value}){
     const tags = useTagsData()
-    if(props.tags){
+    if(value){
         if(tags.data){
             var i = 0
-            return (<div className="tags_cont"> {props.tags.map(tag_id =>{
+            return (<div className="tags_cont"> {value.map(tag_id =>{
                 var tag = tags.data[tag_id.tag]
                 var color = getColor(tag.color)
                 var style = {

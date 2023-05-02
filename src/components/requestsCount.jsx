@@ -21,12 +21,12 @@ function RequestBox({request_id, tag_id}){
     }
 }
 
-function RequestsCount({requests}){
+function RequestsCount({value}){
 
     function renderRequestsList(){
         const requests_list = []
-        if(requests){
-            requests.forEach(({id, request}, index) => requests_list.push(<RequestBox request_id={id} tag_id={request} key={index}/>))
+        if(value){
+            value.forEach(({id, request}, index) => requests_list.push(<RequestBox request_id={id} tag_id={request} key={index}/>))
         }
         return requests_list
     }

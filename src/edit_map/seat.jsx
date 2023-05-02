@@ -59,7 +59,7 @@ function NameBox({seat_id, tags, guest_name, group_color}){
 
     return(
         <div className="name_box" style={(edit !== 'ערוך' ? NAME_BOX_STYLE : null)} ref={nameBoxRef} onClick={nameBoxOnClick}>
-            {(edit === 'ערוך' ? <TagsCount tags={tags}/> : guest_name)}
+            {(edit === 'ערוך' ? <TagsCount value={tags}/> : guest_name)}
         </div>  
     )
 } 

@@ -105,8 +105,6 @@ function TdX({tag_id}){
 }
 
 function TableInstens({data}){
-
-    console.log(data)
     
     const columns = React.useMemo(
         () => [

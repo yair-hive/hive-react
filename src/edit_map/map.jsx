@@ -53,7 +53,7 @@ function MapSelection({children}){
     )
 }
 
-function Map(){
+function MapBody(){
 
     const map = useMapsData()
     const seats = useSeatsData()
@@ -287,7 +287,7 @@ function Map(){
     }
 
     return (
-        <MapSelection>
+        <>
         <MBloader />
         <div className="map_container">
             <SelectedRCcontext.Provider value={[selectedRC, setSelectedRC]}>
@@ -306,6 +306,14 @@ function Map(){
             </SelectedContext.Provider>
             </SelectedRCcontext.Provider>
         </div>
+        </>
+    )
+}
+
+function Map(){
+    return (
+        <MapSelection>
+            <MapBody/>
         </MapSelection>
     )
 }

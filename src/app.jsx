@@ -29,6 +29,7 @@ export const GroupsContext = React.createContext(null)
 export const TagsContext = React.createContext(null)
 
 function App() {
+
   const hiveSocket = useSocket()
   const queryClient = useQueryClient()
   const MBloaderState = useState(0)

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Link, Route, Router, Routes, useNavigate, useParams } from "react-router-dom"
 import AddMapPop from "../components/add_map_pop"
 import Map from "../edit_map/map"
@@ -10,10 +10,13 @@ import HiveSwitch from "../hive_elements/hive_switch"
 import { useMapsAllData } from "../querys/maps"
 import ProjectSM from "./projects_sub_menu"
 
+export const TableRefContext = React.createContext([])
+
 function Projects(){
 
     const navigate = useNavigate()
     const {map_name} = useParams()
+    const [TableRefState, setTableRefState] = useState(null)
 
     const [map, setMap] = useState(null)
     const maps = useMapsAllData()
@@ -25,6 +28,7 @@ function Projects(){
 
     return(
         <>
+        <TableRefContext.Provider value={[TableRefState, setTableRefState]}>
         <div className="main_bord">
             <Routes>
                 <Route path="map/:map_name" element={<Map />}/>
@@ -39,10 +43,12 @@ function Projects(){
                 bordKey="KeyQ" 
             />
             <Routes>
-                <Route path="map/:map_name" element={<><MapSideMenu /><ProjectSM /></>}/>
                 <Route path="guest/:map_name" element={<GuestsSideMenu />}/>
+                <Route path="map/:map_name" element={<><MapSideMenu /><ProjectSM /></>}/>
+                <Route path="*" element={<><MapSideMenu /><ProjectSM /></>}/>
             </Routes>
         </div>
+        </TableRefContext.Provider>
         </>
     )
 }

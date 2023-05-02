@@ -1,4 +1,5 @@
 import { useContext, useState } from "react";
+import { useDownloadExcel } from "react-export-table-to-excel";
 import { Link, useParams } from "react-router-dom";
 import { BelongsContext, GroupsContext, TagsContext, useHive } from "../app";
 import AddGuest from "../components/add_guest";
@@ -6,13 +7,22 @@ import GroupsPop from "../components/groups_pop";
 import ImportGuests from "../components/import_guests";
 import HiveButton from "../hive_elements/hive_button";
 import HiveSwitch from "../hive_elements/hive_switch";
+import { TableRefContext } from "../pages/projects";
 import { useGuestGroupsData } from "../querys/guest_groups";
 import { useTagsData } from "../querys/tags";
 
 function GuestsSideMenu(){
 
     const hive = useHive()
+    const {map_name} = useParams()
 
+    const [TableRefState, setTableRefState] = useContext(TableRefContext)
+
+    const {onDownload} = useDownloadExcel({
+        currentTableRef: TableRefState,
+        filename: map_name,
+        sheet: '1'
+    })
     const [importPop, setImportPop] = useState(false)
     const [groupsPop, setGroupsPop] = useState(false)
     const [addGuestPop, setAddGuestPop] = useState(false)
@@ -66,7 +76,7 @@ function GuestsSideMenu(){
             bordKey="KeyB" 
         />
 
-        <HiveButton> ייצא </HiveButton>
+        <HiveButton onClick={onDownload}> ייצא </HiveButton>
         </div>
     )
 }
