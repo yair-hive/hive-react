@@ -3,7 +3,7 @@ import TableRow from "./table_row"
 import React, { useContext, useEffect, useRef, useState } from "react"
 import RequestsDrop from "./requestsDrop"
 import { useSeatsDataAll } from "../querys/seats"
-import { useGuestsData } from "../querys/guests"
+import { useGuestsData, useGuestsUpdate } from "../querys/guests"
 import { useGuestGroupsData } from "../querys/guest_groups"
 import { useTagBelongsData } from "../querys/tag_belongs"
 import { useSeatBelongsData } from "../querys/seat_belongs"
@@ -31,6 +31,9 @@ function Table({ columns, data }) {
       {
         columns,
         data,
+        getRowId: function(row, relativeIndex, parent){
+          return data[relativeIndex].guest_id
+        }
       },
       useFilters,
       useSortBy,
@@ -105,12 +108,196 @@ function filterGroups(rows, columnsIds, filterValue){
     return row_value == filterValue || filterValue == 'הכל'
   })
 }
+function SeatNumberCell({value}){
+  var backgroundColor = value ? "green" : "gray";
+  return (
+    <div style={{
+      height: "100%",
+      width: "100%",
+      backgroundColor
+    }}>
+      {value}
+    </div>
+  )
+}
+
+function LastNameCell(props){
+
+  const initialValue = props.value
+  const guest_id = props.cell.row.id
+
+  const [isLastInput, setLastInput] = useState(false)
+  const [last, setLast] = useState(initialValue)
+  const update_last = useGuestsUpdate().last
+
+  function onTdClick(){
+      setLastInput(true)
+  }
+
+  useEffect(()=>{
+      setLast(initialValue)
+  }, [initialValue])
+
+  function onInputBlur(){
+      setLastInput(false)
+      update_last({last: last, guest_id})
+  }
+
+  function onInputChange(event){
+      setLast(event.target.value)
+  }
+
+  if(isLastInput){ 
+      return (
+          <input 
+              type='text' 
+              autoFocus 
+              value={last} 
+              onBlur={onInputBlur}
+              onChange={onInputChange}
+              style={{
+                  width: `${last.length}ch`
+              }}
+          />
+      )
+  }
+
+  return <div onClick={onTdClick}>{last}</div>
+}
+function FirstNameCell(props){
+
+  const initialValue = props.value
+  const guest_id = props.cell.row.id
+
+  const [isFirstInput, setFirstInput] = useState(false)
+  const [first, setFirst] = useState(initialValue)
+  const update_first = useGuestsUpdate().first
+
+  useEffect(()=> setFirst(initialValue), [initialValue])
+
+  function onTdClick(){
+      setFirstInput(true)
+  }
+
+  function onInputBlur(){
+      setFirstInput(false)
+      update_first({first, guest_id})
+  }
+
+  function onInputChange(event){
+      setFirst(event.target.value)
+  }
+
+  if(isFirstInput){ 
+      return (
+          <input 
+              type='text' 
+              autoFocus 
+              value={first} 
+              onBlur={onInputBlur}
+              onChange={onInputChange}
+              style={{
+                  width: `${first.length}ch`
+              }}
+          />
+      )
+  }
+
+  return <div onClick={onTdClick}>{first}</div>
+}
+function GroupNameCell(props){
+
+  const initialValue = props.value
+  const guest_id = props.cell.row.id
+
+  const [isGroupInput, setGroupInput] = useState(false)
+  const [group, setGroup] = useState(initialValue)
+  const update_group = useGuestsUpdate().group
+
+  useEffect(()=> setGroup(initialValue), [initialValue])
+
+  function onTdClick(){
+      setGroupInput(true)
+  }
+
+  function onInputBlur(){
+      setGroupInput(false)
+      update_group({group, guest_id})
+  }
+
+  function onInputChange(event){
+      setGroup(event.target.value)
+  }
+
+  if(isGroupInput){ 
+      return (
+          <input 
+              type='text' 
+              autoFocus 
+              value={group} 
+              onBlur={onInputBlur}
+              onChange={onInputChange}
+              style={{
+                  width: `${group.length}ch`
+              }}
+          />
+      )
+  }
+
+  return <div onClick={onTdClick}>{group}</div>
+}
+// function ScoreCell(props){
+
+//   const initialValue = props.value
+//   const guest_id = props.cell.row.id
+
+//   const [isScoreInput, setScoreInput] = useState(false)
+//   const [score, setScore] = useState(props.guest_score + props.group_score)
+//   const update_score = useGuestsUpdate().score
+
+//   useEffect(()=> setScore(props.guest_score + props.group_score), [props.guest_score, props.group_score])
+
+//   function onTdClick(){
+//       setScoreInput(true)
+//   }
+
+//   function onInputBlur(){
+//       update_score({guest_id: props.guest_id, score: (score -props.group_score)})
+//       setScoreInput(false)
+//   }
+
+//   function onInputChange(event){
+//       setScore(Number(event.target.value))
+//   }
+
+//   if(isScoreInput){ 
+//       return (
+//       <td style={{
+//           backgroundColor: 'white'
+//       }}>
+//           <input 
+//               type='text' 
+//               autoFocus 
+//               value={score} 
+//               onBlur={onInputBlur}
+//               onChange={onInputChange}
+//               style={{
+//                   width: `${score.toString().length}ch`
+//               }}
+//           />
+//       </td>
+//       )
+//   }
+
+//   return <td onClick={onTdClick}>{score}</td>
+// }
 function TableInstens({data}){
     const columns = React.useMemo(
         () => [
             {
                 Header: "מספר כיסא",
                 accessor: "seat_number",
+                Cell: SeatNumberCell
             },   
             {
                 Header: "תגיות",
@@ -121,15 +308,18 @@ function TableInstens({data}){
             {
                 Header: "שם משפחה",
                 accessor: "last_name",
+                Cell: LastNameCell
             }, 
             {
                 Header: "שם פרטי",
                 accessor: "first_name",
+                Cell: FirstNameCell
             },
             {
                 Header: "שיעור",
                 accessor: "group_name",
-                filter: filterGroups
+                filter: filterGroups,
+                Cell: GroupNameCell
             },  
             {
                 Header: "ניקוד",
@@ -175,6 +365,7 @@ function GuestsTable(){
                 var tags = (tags_belongs.data[seat_id] ? tags_belongs.data[seat_id] : [])
                 var group_score = group ? group.score : 0
                 rows.push({
+                    guest_id: guest.id,
                     last_name: guest.last_name,
                     first_name: guest.first_name, 
                     group_name: group?.name,
