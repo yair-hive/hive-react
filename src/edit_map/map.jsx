@@ -43,15 +43,16 @@ function MapSelection({children}){
         added.forEach(ele => ele.classList.add('selected'))
         removed.forEach(ele => ele.classList.remove('selected'))
     }
-    return <div>{children}</div>
     return(
         <SelectionArea
-        selectables={'.selectable'}
-        onStart={onStart}
-        onMove={onMove}
-        behaviour={{scrolling: {startScrollMargins: {x: 150, y: 0}}}}
-        className={className}
-        >{children}</SelectionArea>
+            selectables={'.selectable'}
+            onStart={onStart}
+            onMove={onMove}
+            behaviour={{scrolling: {startScrollMargins: {x: 150, y: 0}}}}
+            className={className}
+        >
+            {children}
+        </SelectionArea>
     )
 }
 
