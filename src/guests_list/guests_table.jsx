@@ -26,7 +26,7 @@ function Table({ columns, data }) {
       headerGroups,
       rows,
       prepareRow,
-      setFilter,
+      setAllFilters,
     } = useTable(
       {
         columns,
@@ -40,11 +40,9 @@ function Table({ columns, data }) {
     )
   
     useEffect(()=> {
-      setFilter('tags', tagsStatus)
-    }, [tagsStatus])
-    useEffect(()=> {
-      setFilter('group_name', groupsStatus)
-    }, [groupsStatus])
+      setAllFilters([{id: 'tags', value: tagsStatus}, {id: 'group_name', value: groupsStatus}])
+    }, [tagsStatus, groupsStatus])
+
     // We don't want to render all 2000 rows for this example, so cap
     // it at 20 for this use case
     const firstPageRows = rows.slice(0, 100)
@@ -91,7 +89,7 @@ function Table({ columns, data }) {
         </table>
       </>
     )
-  }
+}
 
 function filterTags(rows, columnsIds, filterValue){
   var id = columnsIds[0]
@@ -108,19 +106,18 @@ function filterGroups(rows, columnsIds, filterValue){
     return row_value == filterValue || filterValue == 'הכל'
   })
 }
+
 function SeatNumberCell({value}){
   var backgroundColor = value ? "green" : "gray";
   return (
-    <div style={{
-      height: "100%",
-      width: "100%",
-      backgroundColor
-    }}>
+    <div 
+      style={{backgroundColor}}
+      className="table_cell"
+    >
       {value}
     </div>
   )
 }
-
 function LastNameCell(props){
 
   const initialValue = props.value
@@ -149,7 +146,7 @@ function LastNameCell(props){
 
   if(isLastInput){ 
       return (
-          <input 
+          <input
               type='text' 
               autoFocus 
               value={last} 
@@ -162,7 +159,7 @@ function LastNameCell(props){
       )
   }
 
-  return <div onClick={onTdClick}>{last}</div>
+  return <div className="text_cell" onClick={onTdClick}>{last}</div>
 }
 function FirstNameCell(props){
 
@@ -203,7 +200,7 @@ function FirstNameCell(props){
       )
   }
 
-  return <div onClick={onTdClick}>{first}</div>
+  return <div className="text_cell" onClick={onTdClick}>{first}</div>
 }
 function GroupNameCell(props){
 
@@ -244,7 +241,14 @@ function GroupNameCell(props){
       )
   }
 
-  return <div onClick={onTdClick}>{group}</div>
+  return (
+    <div 
+      onClick={onTdClick} 
+      className="text_cell"
+    >
+      {group}
+    </div>
+    )
 }
 // function ScoreCell(props){
 
@@ -304,6 +308,7 @@ function TableInstens({data}){
                 accessor: "tags",
                 Cell: TagsCount,
                 filter: filterTags,
+                disableSortBy: true
             },  
             {
                 Header: "שם משפחה",
@@ -328,7 +333,8 @@ function TableInstens({data}){
             {
                 Header: "בקשות",
                 accessor: "requests",
-                Cell: RequestsCount
+                Cell: RequestsCount,
+                disableSortBy: true
             }, 
         ],
         []
