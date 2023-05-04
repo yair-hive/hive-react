@@ -1,4 +1,5 @@
-import SelectionArea, { useSelection } from '@viselect/react'
+import SelectionArea from '@viselect/react'
+// import SelectionArea, { useSelection } from '@viselect/react'
 import { useContext, useEffect, useState} from 'react'
 import React from 'react'
 import { MBloaderContext } from '../app'
@@ -42,6 +43,7 @@ function MapSelection({children}){
         added.forEach(ele => ele.classList.add('selected'))
         removed.forEach(ele => ele.classList.remove('selected'))
     }
+    return <div>{children}</div>
     return(
         <SelectionArea
         selectables={'.selectable'}
@@ -63,7 +65,7 @@ function MapBody(){
     const [selected_seat, setSelectedSeat] = useState(null)
     const [selectedRC, setSelectedRC] = useState({})
     const [action, setAction] = useContext(ActionsContext)
-    const selection = useSelection()
+    // const selection = useSelection()
     
     const [dropDownPos, setDropDownPos] = useState(null)
     const [edit, setEdit] = useContext(EditContext)
@@ -78,12 +80,12 @@ function MapBody(){
     const seats_delete  = useSeatsDelete()
     const elements_delete = useMapElementsDelete()
 
-    if(edit === 'ערוך') {
-        if(selection?.enable) selection.enable()
-    }
-    if(edit === 'אל תערוך') {
-        if(selection?.disable) selection.disable()
-    }
+    // if(edit === 'ערוך') {
+    //     if(selection?.enable) selection.enable()
+    // }
+    // if(edit === 'אל תערוך') {
+    //     if(selection?.disable) selection.disable()
+    // }
 
     function onMousedown(event){
         var classList = event.target.classList
