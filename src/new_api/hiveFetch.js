@@ -1,4 +1,4 @@
-const api_url = "http://hive.com:3025/api/"
+const api_url = "http://localhost:3025/api/"
 const options = {
     method: 'POST',
     credentials: 'include',            

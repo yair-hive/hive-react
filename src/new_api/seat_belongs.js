@@ -35,5 +35,13 @@ seat_belongs['delete_all'] = function(project_name){
     }
     return hiveFetch(body)
 };
+seat_belongs['set_fixed'] = function(id, value){
+    const body = {
+        category: 'seat_belongs',
+        action: 'set_fixed',
+        id, value
+    }
+    return hiveFetch(body)
+};
 
 export default seat_belongs

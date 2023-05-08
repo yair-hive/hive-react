@@ -27,7 +27,7 @@ function MB(){
     const [status, setStatus] = useContext(MBloaderContext)
 
     useEffect(() => {
-        const source = new EventSource(`http://localhost:3020/actions/scheduling/${map_name}`);
+        const source = new EventSource(`http://localhost:3025/actions/scheduling/${map_name}`);
 
         source.onmessage = (event) => {
             const data = JSON.parse(event.data);

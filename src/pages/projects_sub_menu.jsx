@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom"
 import { MBloaderContext, useHive, useSocket } from "../app"
 import AddMapPop from "../components/add_map_pop"
 import HiveButton from "../hive_elements/hive_button"
+import { FixedContext } from "./projects"
 
 function ProjectSM(){
 
@@ -13,10 +14,11 @@ function ProjectSM(){
 
     const hiveSocket = useSocket()
     const queryClient = useQueryClient()
+    const [fixedState, setfixedState] = useContext(FixedContext)
     const hive = useHive()
 
     function scheduling(){
-        const source = new EventSource(`http://hive.com:3020/actions/scheduling/${project_name}`);
+        const source = new EventSource(`http://localhost:3025/actions/scheduling/${project_name}`);
 
         source.onmessage = (event) => {
             const data = JSON.parse(event.data);
@@ -40,6 +42,7 @@ function ProjectSM(){
             <Link to={`/projects/${project_name}/guest/${map_name}`}><HiveButton>שמות</HiveButton></Link>
             <HiveButton onClick={scheduling}> שבץ </HiveButton>
             <HiveButton onClick={()=> hive.openPopUp('add_map')}> הוסף מפה </HiveButton>
+            <HiveButton onClick={()=> setfixedState(!fixedState)}> ניהול מקומות קבועים </HiveButton>
             <AddMapPop id={'add_map'}/>
         </div>
     )

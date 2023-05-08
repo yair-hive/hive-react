@@ -1,4 +1,4 @@
-const api_url = "http://hive.com/api/index.php"
+const api_url = "http://localhost/api/index.php"
 
 const global_options = {
     method: 'POST',

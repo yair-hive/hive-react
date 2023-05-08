@@ -45,3 +45,17 @@ export function useSeatBelongsDelete(){
     })
     return mutation.mutate
 }
+export function useSeatBelongsSetFixed(){
+    const {project_name} = useParams()
+    const hiveSocket = useSocket()
+    
+    const mutation = useMutation(async ({id, value}) => {
+        return new_api.seat_belongs.set_fixed(id, value)
+    }, {
+        onSuccess: ()=>{
+            var msg = JSON.stringify({action: 'invalidate', quert_key: ['belongs', {project_name}]})
+            hiveSocket.send(msg)
+        }
+    })
+    return mutation.mutate
+}

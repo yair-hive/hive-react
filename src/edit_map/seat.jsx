@@ -1,14 +1,15 @@
-import { useContext } from "react"
+import { useContext, useEffect, useState } from "react"
 import { useRef } from "react"
 import TagsCount from "../components/tags_count"
 import { ActionsContext, EditContext, SelectablesContext } from "../app"
 import "../style/seat.css"
 import { DropContext, SelectedContext, SelectedRCcontext } from "./map"
-import { useSeatBelongsData } from "../querys/seat_belongs"
+import { useSeatBelongsData, useSeatBelongsSetFixed } from "../querys/seat_belongs"
 import { useGuestsData } from "../querys/guests"
 import { useGuestGroupsData } from "../querys/guest_groups"
 import { useTagBelongsData } from "../querys/tag_belongs"
 import { useSeatsDataScore } from "../querys/seats"
+import { FixedContext } from "../pages/projects"
 
 function getColor(backColor){
     if(backColor){
@@ -64,6 +65,35 @@ function NameBox({seat_id, tags, guest_name, group_color}){
     )
 } 
 
+function SeatNumber({number, belong_id, fixed}){
+
+    const [fixedState, setfixedState] = useContext(FixedContext)
+    const setFixed = useSeatBelongsSetFixed()
+    const [fixedValue, setFixedValue] = useState(fixed)
+
+    useEffect(()=>{
+        setFixedValue(fixed)
+    }, [fixed])
+
+    function onChange(e){
+        setFixed({id: belong_id, value: !fixedValue})
+        setFixedValue(!fixedValue)
+    }
+
+    if(fixedState){
+        return (
+            <div className="num_box" style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+            }}>
+                <input type="checkbox" onChange={onChange} checked={fixedValue}/>
+                {number}
+            </div>
+        )
+    }
+    else return <div className="num_box">{number}</div> 
+}
 
 function Seat({seat}){
     const [edit, setEdit] = useContext(EditContext)
@@ -87,11 +117,18 @@ function Seat({seat}){
     }
 
     var guest_id
+    var belong_id
+    var fixed
     if(belongs.data){
         var belongs_object = {}
         belongs.data.forEach(belong => belongs_object[belong.seat] = belong)
         var seat_belong = belongs_object[seat.id]
         guest_id = seat_belong?.guest
+        belong_id = seat_belong?.id
+        if(seat_belong){
+            if(seat_belong.fixed == 0) fixed = false
+            if(seat_belong.fixed == 1) fixed = true
+        }
     }
 
     var guests_object
@@ -128,7 +165,7 @@ function Seat({seat}){
                 cell-row = {seat.row_num} 
                 cell-col = {seat.col_num}
             >
-                <div className="num_box">{seat.seat_number}</div> 
+                <SeatNumber number={seat.seat_number} belong_id={belong_id} fixed={fixed}/>
                 <NameBox seat_id={seat.id} guest_name={guest_name} group_color={group_color} tags={tags}/>
             </div>
         </div>

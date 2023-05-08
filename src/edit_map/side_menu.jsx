@@ -43,7 +43,7 @@ function MapSideMenu() {
     }, [colsTo])
 
     function scheduling(){
-        const source = new EventSource(`http://hive.com:3020/actions/scheduling/${map_name}`);
+        const source = new EventSource(`http://localhost:3025/actions/scheduling/${map_name}`);
 
         source.onmessage = (event) => {
             const data = JSON.parse(event.data);

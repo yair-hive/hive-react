@@ -1,6 +1,6 @@
 const parsedUrl = new URL(window.location.href)
-const api_url = "http://hive.com/php/api.php"
-const api_url_1 = "http://hive.com/api/index.php"
+const api_url = "http://localhost/php/api.php"
+const api_url_1 = "http://localhost/api/index.php"
 
 export const map_elements = {
     add: (name, from_row, from_col, to_row, to_col, map)=>{

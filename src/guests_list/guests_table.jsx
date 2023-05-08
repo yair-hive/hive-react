@@ -10,15 +10,19 @@ import { useSeatBelongsData } from "../querys/seat_belongs"
 import { TableRefContext } from "../pages/projects"
 import { useSortBy, useTable } from "react-table";
 import TagsCount from "../components/tags_count"
-import { GroupsContext, TagsContext } from "../app"
+import { BelongsContext, GroupsContext, TagsContext } from "../app"
 import { useFilters } from "react-table/dist/react-table.development"
 import RequestsCount from "../components/requestsCount"
 import { useRequestsBelongsData } from "../querys/requests_belongs"
+
+const DropPosContext = React.createContext([])
+const SelectedGuestContext = React.createContext([])
 
 function Table({ columns, data }) {
 
   const [tagsStatus, setTagsStatus] = useContext(TagsContext)
   const [groupsStatus, setGroupsStatus] = useContext(GroupsContext)
+  const [belongsStatus, setBelongsStatus] = useContext(BelongsContext)
 
     const {
       getTableProps,
@@ -40,8 +44,8 @@ function Table({ columns, data }) {
     )
   
     useEffect(()=> {
-      setAllFilters([{id: 'tags', value: tagsStatus}, {id: 'group_name', value: groupsStatus}])
-    }, [tagsStatus, groupsStatus])
+      setAllFilters([{id: 'seat_number', value: belongsStatus}, {id: 'tags', value: tagsStatus}, {id: 'group_name', value: groupsStatus}])
+    }, [tagsStatus, groupsStatus, belongsStatus])
 
     // We don't want to render all 2000 rows for this example, so cap
     // it at 20 for this use case
@@ -91,19 +95,32 @@ function Table({ columns, data }) {
     )
 }
 
+function filterBelongs(rows, columnsIds, filterValue){
+  var id = columnsIds[0]
+  return rows.filter((row)=>{
+    var row_value = row.values[id]
+    if(filterValue == 'משובצים') return row_value
+    if(filterValue == 'לא משובצים') return !row_value
+    return filterValue == 'הכל'
+  })
+}
+
 function filterTags(rows, columnsIds, filterValue){
   var id = columnsIds[0]
   return rows.filter((row)=>{
     var row_value = row.values[id]
     row_value = row_value.map(tag => tag.tag)
-    return row_value.indexOf(filterValue) != -1 || filterValue == 'הכל'
+    for(let value of filterValue){
+      if (row_value.indexOf(value) != -1) return true
+    }
+    return filterValue.indexOf('הכל') != -1
   })
 }
 function filterGroups(rows, columnsIds, filterValue){
   var id = columnsIds[0]
   return rows.filter((row)=>{
     var row_value = row.values[id]
-    return row_value == filterValue || filterValue == 'הכל'
+    return  filterValue.indexOf(row_value) != -1 || filterValue.indexOf('הכל') != -1
   })
 }
 
@@ -250,6 +267,30 @@ function GroupNameCell(props){
     </div>
     )
 }
+function RequestsCell(props){
+
+  const value = props.value
+  const guest_id = props.cell.row.id
+
+  const [dropPos, setDropPos] = useContext(DropPosContext)
+  const [selectedGuest, setSelectedGuest] = useContext(SelectedGuestContext)
+
+  const tdRef = useRef(null)
+
+  function onClick(event){
+      var classList = event.target.classList
+      if(!classList.contains('delete')){
+          setDropPos(tdRef.current)
+          setSelectedGuest(guest_id)
+      }
+  }
+
+  return (
+      <div ref={tdRef} onClick={onClick} className='table_cell'>
+          <RequestsCount value={value}/>
+      </div>
+  )
+}
 // function ScoreCell(props){
 
 //   const initialValue = props.value
@@ -301,7 +342,8 @@ function TableInstens({data}){
             {
                 Header: "מספר כיסא",
                 accessor: "seat_number",
-                Cell: SeatNumberCell
+                Cell: SeatNumberCell,
+                filter: filterBelongs,
             },   
             {
                 Header: "תגיות",
@@ -333,7 +375,7 @@ function TableInstens({data}){
             {
                 Header: "בקשות",
                 accessor: "requests",
-                Cell: RequestsCount,
+                Cell: RequestsCell,
                 disableSortBy: true
             }, 
         ],
@@ -342,6 +384,7 @@ function TableInstens({data}){
 
       return <Table columns={columns} data={data}/>
 }
+
 function GuestsTable(){
 
     const seats = useSeatsDataAll()
@@ -350,6 +393,9 @@ function GuestsTable(){
     const groups = useGuestGroupsData()
     const requests = useRequestsBelongsData()
     const tags_belongs = useTagBelongsData()
+
+    const [dropPos, setDropPos] = useState(null)
+    const [selectedGuest, setSelectedGuest] = useState(null)
 
     function create_rows(){
         var rows = []
@@ -386,9 +432,19 @@ function GuestsTable(){
     }
 
     return (
-        <div className="guest_table">
-            <TableInstens data={create_rows()}/>
+      <SelectedGuestContext.Provider value={[selectedGuest, setSelectedGuest]}>
+      <DropPosContext.Provider value={[dropPos, setDropPos]}>
+      <div className="guest_table">
+          <RequestsDrop 
+            pos={dropPos} 
+            setPos={setDropPos} 
+            selected={selectedGuest} 
+            setSelected={setSelectedGuest}
+          />
+          <TableInstens data={create_rows()}/>
         </div>
+      </DropPosContext.Provider>
+      </SelectedGuestContext.Provider>
     )
 }
 

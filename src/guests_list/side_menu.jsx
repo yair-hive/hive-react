@@ -63,6 +63,7 @@ function GuestsSideMenu(){
             bordKey="KeyQ" 
         />
         <HiveSwitch 
+            multipleSelect={true}
             options = {groupsOptions}
             active={'הכל'} 
             setActive={setGroupsStatus} 
@@ -70,6 +71,7 @@ function GuestsSideMenu(){
         />
 
         <HiveSwitch 
+            multipleSelect={true}
             options = {tagsOptions}
             active={'הכל'} 
             setActive={setTagsStatus} 

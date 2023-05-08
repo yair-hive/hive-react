@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
 import { useGuestsDelete, useGuestsUpdate } from "../querys/guests"
 import RequestsCount from "../components/requestsCount"
 import { useRequestsBelongsData } from "../querys/requests_belongs"
@@ -185,31 +185,25 @@ export function TdX(props){
 }
 export function TdRequests(props){
 
-    const requests = useRequestsBelongsData()
+    const value = props.value
+    const guest_id = props.cell.row.id
+
+    const [dropPos, setDropPos] = useContext(null)
+    const [selectedGuest, setSelectedGuest] = useContext(undefined)
+
     const tdRef = useRef(null)
 
     function onClick(event){
         var classList = event.target.classList
         if(!classList.contains('delete')){
-            props.setDropPos(tdRef.current)
-            props.setSelectedGuest(props.guest_id)
+            setDropPos(tdRef.current)
+            setSelectedGuest(props.guest_id)
         }
     }
 
-    var requests_object
-
-    if(requests.data){
-        requests_object = {}
-        requests.data.forEach(request => requests_object[request.guest] = [])
-        requests.data.forEach(request => requests_object[request.guest].push(request))
-    }
-
-    var this_requests
-    if(requests_object) this_requests = requests_object[props.guest_id]
-
     return (
-        <td ref={tdRef} onClick={onClick} className='td_requests'>
-            <RequestsCount requests={this_requests}/>
-        </td>
+        <div ref={tdRef} onClick={onClick} className='td_requests'>
+            <RequestsCount value={value}/>
+        </div>
     )
 }

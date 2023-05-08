@@ -1,4 +1,4 @@
-const api_url = "http://hive.com/api/index.php"
+const api_url = "http://localhost/api/index.php"
 
 const global_options = {
     method: 'POST',
@@ -21,7 +21,7 @@ export const seat_new = {
     get_all_1: async ({queryKey})=>{
         const options = {method: 'GET'}
         // options.body = `category=seat&action=get_all&map_name=${queryKey[1]}`       
-        const res = await fetch("http://localhost:3020/actions/seats_score/"+queryKey[1], options);
+        const res = await fetch("http://localhost:3025/actions/seats_score/"+queryKey[1], options);
         const json_res = await res.json();
         if (json_res.msg != 'ok') throw new Error(json_res.msg);
         else return json_res.data;

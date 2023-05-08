@@ -11,12 +11,14 @@ import { useMapsAllData } from "../querys/maps"
 import ProjectSM from "./projects_sub_menu"
 
 export const TableRefContext = React.createContext([])
+export const FixedContext = React.createContext([])
 
 function Projects(){
 
     const navigate = useNavigate()
     const {map_name} = useParams()
     const [TableRefState, setTableRefState] = useState(null)
+    const [fixedState, setfixedState] = useState(false)
 
     const [map, setMap] = useState(null)
     const maps = useMapsAllData()
@@ -28,6 +30,7 @@ function Projects(){
 
     return(
         <>
+        <FixedContext.Provider value={[fixedState, setfixedState]}>
         <TableRefContext.Provider value={[TableRefState, setTableRefState]}>
         <div className="main_bord">
             <Routes>
@@ -49,6 +52,7 @@ function Projects(){
             </Routes>
         </div>
         </TableRefContext.Provider>
+        </FixedContext.Provider>
         </>
     )
 }

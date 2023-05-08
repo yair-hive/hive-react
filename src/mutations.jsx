@@ -139,8 +139,8 @@ export function useScheduling(){
     const queryClient = useQueryClient()
     
     const mutation = useMutation(() => {
-        // return fetch(`http://localhost:3020/actions/seats_score/${map_name}`, {method: 'GET'})
-        // return fetch(`http://localhost:3020/actions/scheduling/${map_name}`, {method: 'GET'})
+        // return fetch(`http://localhost:3025/actions/seats_score/${map_name}`, {method: 'GET'})
+        // return fetch(`http://localhost:3025/actions/scheduling/${map_name}`, {method: 'GET'})
     }, {
         onMutate: ()=>{
             setMBloaderStatus(true)
