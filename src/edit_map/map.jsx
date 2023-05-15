@@ -16,6 +16,7 @@ import { map_add_presers } from './map_add_presers'
 import { useMapsData, useMapsUpdate } from '../querys/maps'
 import { map_delete_presers } from './map_delete_presers'
 import { useSeatsGroupsCreate, useSeatsGroupsData } from '../querys/seats_groups'
+import { useParams } from 'react-router-dom'
 
 export const DropContext = React.createContext(null)
 export const SelectedContext = React.createContext(null)
@@ -314,6 +315,11 @@ function MapBody(){
 }
 
 function Map(){
+
+    const {map_name} = useParams()
+
+    if(!map_name) return <div className='main_bord'/>
+
     return (
         <MapSelection>
             <MapBody/>

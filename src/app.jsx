@@ -28,6 +28,8 @@ export const ActionsContext = React.createContext(null)
 export const BelongsContext = React.createContext(null)
 export const GroupsContext = React.createContext(null)
 export const TagsContext = React.createContext(null)
+export const TableRefContext = React.createContext([])
+export const FixedContext = React.createContext([])
 
 function App() {
 
@@ -41,6 +43,8 @@ function App() {
   const groupsState = useState('הכל')
   const tagsState = useState('הכל')
   const [popUps, setPopUps] = useState({})
+  const [TableRefState, setTableRefState] = useState(null)
+  const [fixedState, setfixedState] = useState(false)
 
   function openPopUp(id){
     setPopUps((prev) =>{
@@ -95,16 +99,21 @@ function App() {
     <EditContext.Provider value={editState}>
     <SelectablesContext.Provider value={selecteblsState}>
     <MBloaderContext.Provider value={MBloaderState}>
-      <div className="content">
+    <FixedContext.Provider value={[fixedState, setfixedState]}>
+    <TableRefContext.Provider value={[TableRefState, setTableRefState]}>
+    <div className="content">
         <TopBar />
         <Routes>
           <Route path='/' element ={<Home />}/>
-          <Route path='/maps/:map_name/*' element ={<Maps />}/>
+          <Route path='/maps/:project_name/:map_name/*' element ={<Maps />}/>
+          <Route path='/maps/:project_name/*' element ={<Maps />}/>
           <Route path='/guests/:project_name/*' element={<Guests/>} />
           <Route path='/projects/:project_name/*' element={<Projects />}/>
           <Route path='login' element={<Login/>} />
         </Routes>
       </div>
+    </TableRefContext.Provider>
+    </FixedContext.Provider>
     </MBloaderContext.Provider>
     </SelectablesContext.Provider>
     </EditContext.Provider>

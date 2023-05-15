@@ -7,7 +7,7 @@ import { useGuestsData, useGuestsDelete, useGuestsUpdate } from "../querys/guest
 import { useGuestGroupsData } from "../querys/guest_groups"
 import { useTagBelongsData } from "../querys/tag_belongs"
 import { useSeatBelongsData } from "../querys/seat_belongs"
-import { TableRefContext } from "../pages/projects"
+import { TableRefContext } from "../app"
 import { useSortBy, useTable } from "react-table";
 import TagsCount from "../components/tags_count"
 import { BelongsContext, GroupsContext, TagsContext } from "../app"

@@ -7,7 +7,7 @@ import GroupsPop from "../components/groups_pop";
 import ImportGuests from "../components/import_guests";
 import HiveButton from "../hive_elements/hive_button";
 import HiveSwitch from "../hive_elements/hive_switch";
-import { TableRefContext } from "../pages/projects";
+import { TableRefContext } from "../app";
 import { useGuestGroupsData } from "../querys/guest_groups";
 import { useTagsData } from "../querys/tags";
 

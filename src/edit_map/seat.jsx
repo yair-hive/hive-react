@@ -9,7 +9,7 @@ import { useGuestsData } from "../querys/guests"
 import { useGuestGroupsData } from "../querys/guest_groups"
 import { useTagBelongsData } from "../querys/tag_belongs"
 import { useSeatsDataScore } from "../querys/seats"
-import { FixedContext } from "../pages/projects"
+import { FixedContext } from "../app"
 import RollingList from "../hive_elements/rolling_list"
 
 function DropTest({inputStr}){

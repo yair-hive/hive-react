@@ -39,7 +39,7 @@ function ProjectSM(){
 
     return(
         <div className="sub_menu">
-            <Link to={`/projects/${project_name}/guest/${map_name}`}><HiveButton>שמות</HiveButton></Link>
+            <Link to={`/guests/${project_name}`}><HiveButton>שמות</HiveButton></Link>
             <HiveButton onClick={scheduling}> שבץ </HiveButton>
             <HiveButton onClick={()=> hive.openPopUp('add_map')}> הוסף מפה </HiveButton>
             <HiveButton onClick={()=> setfixedState(!fixedState)}> ניהול מקומות קבועים </HiveButton>

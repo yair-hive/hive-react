@@ -1,6 +1,6 @@
 import { useContext, useEffect } from "react";
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import HiveButton from "../hive_elements/hive_button";
 import HiveSwitch from "../hive_elements/hive_switch";
 import { MBloaderContext, useSocket } from '../app'
@@ -9,16 +9,51 @@ import { EditContext } from "../app"
 import "../style/side_menu.css"
 import TagsPop from "./tags_pop";
 import { useQueryClient } from "react-query";
-import { useMapsData, useMapsUpdate } from "../querys/maps";
+import { useMapsAllData, useMapsData, useMapsUpdate } from "../querys/maps";
 import { useSeatsData, useSeatsDataAll } from "../querys/seats";
 import { useSeatBelongsData } from "../querys/seat_belongs";
 import { useGuestsData } from "../querys/guests";
 import { useGuestGroupsData } from "../querys/guest_groups";
+import ProjectSM from "../pages/projects_sub_menu";
+
+
+function ProjectSideMenu(){
+
+    const navigate = useNavigate()
+    const {map_name, project_name} = useParams()
+
+    const [mapState, setMap] = useState(null)
+    const maps = useMapsAllData()
+
+    var mapsOptions = maps.data?.map(map => map.map_name)
+
+    useEffect(()=> {if(mapState) navigate(`/maps/${project_name}/${mapState}`)}, [mapState])
+
+    return (
+        <div className="side_menu">
+            <HiveSwitch 
+                options={mapsOptions} 
+                active={map_name}
+                setActive={setMap} 
+                bordKey="KeyQ" 
+            />
+            <ProjectSM />
+        </div>
+    )
+}
 
 function MapSideMenu() {
 
-    const {map_name} = useParams()
+    const navigate = useNavigate()
+    const {map_name, project_name} = useParams()
     const [edit, setEdit] = useContext(EditContext)
+
+    const [mapState, setMap] = useState(null)
+    const maps = useMapsAllData()
+
+    var mapsOptions = maps.data?.map(map => map.map_name)
+
+    useEffect(()=> {if(mapState) navigate(`/maps/${project_name}/${mapState}`)}, [mapState])
 
     const map  = useMapsData()
     const seats = useSeatsDataAll()
@@ -202,10 +237,14 @@ function MapSideMenu() {
         }
     }
 
-    if(!map_name) return
-
     return ( 
-        <>
+        <div className="side_menu">
+            <HiveSwitch 
+                options={mapsOptions} 
+                active={map_name}
+                setActive={setMap} 
+                bordKey="KeyQ" 
+            />
             <HiveSwitch 
                 options={['אל תערוך', 'ערוך']} 
                 active={'אל תערוך'} 
@@ -214,8 +253,18 @@ function MapSideMenu() {
             />
             {editSubMenu()}
             {noEditSubMenu()}
-        </>
+            <ProjectSM />
+        </div>
     );
 }
 
-export default MapSideMenu;
+function SideMenu(){
+
+    const {map_name} = useParams()
+
+    if(!map_name) return <ProjectSideMenu />
+    return <MapSideMenu />
+
+}
+
+export default SideMenu

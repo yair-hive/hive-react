@@ -26,7 +26,6 @@ function Projects(){
     
     var mapsOptions = maps.data?.map(map => map.map_name)
 
-    
     useEffect(()=> {if(map) navigate(`map/${map}`)}, [map])
 
     const location = useLocation()
