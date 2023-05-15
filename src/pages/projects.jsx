@@ -9,6 +9,7 @@ import HiveButton from "../hive_elements/hive_button"
 import HiveSwitch from "../hive_elements/hive_switch"
 import { useMapsAllData } from "../querys/maps"
 import ProjectSM from "./projects_sub_menu"
+import { useLocation } from 'react-router-dom'
 
 export const TableRefContext = React.createContext([])
 export const FixedContext = React.createContext([])
@@ -27,6 +28,12 @@ function Projects(){
 
     
     useEffect(()=> {if(map) navigate(`map/${map}`)}, [map])
+
+    const location = useLocation()
+    const params = useParams()
+
+    useEffect(()=> console.log(location), [location])
+    useEffect(()=> console.log(params), [params])
 
     return(
         <>
@@ -48,7 +55,7 @@ function Projects(){
             <Routes>
                 <Route path="guest/:map_name" element={<GuestsSideMenu />}/>
                 <Route path="map/:map_name" element={<><MapSideMenu /><ProjectSM /></>}/>
-                <Route path="*" element={<><MapSideMenu /><ProjectSM /></>}/>
+                <Route path="/" element={<><MapSideMenu /><ProjectSM /></>}/>
             </Routes>
         </div>
         </TableRefContext.Provider>

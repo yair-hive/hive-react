@@ -296,7 +296,7 @@ function MapBody(){
             <SelectedRCcontext.Provider value={[selectedRC, setSelectedRC]}>
             <SelectedContext.Provider value={[selected_seat, setSelectedSeat]}>
             <DropContext.Provider value={[dropDownPos, setDropDownPos]}>
-                <AddGuestDropDown/>
+                {/* <AddGuestDropDown/> */}
                 <div className='map_overlay' style={STYLE}>
                     {render_areas()}
                     {selected_rc()}

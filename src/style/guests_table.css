@@ -17,9 +17,11 @@ table {
     margin: 5px;
 }
 .td_x{
-    background-color: red;
+    background-color: rgb(198, 65, 65);
     cursor: pointer;
     user-select: none;
+    margin: 2px;
+    border-radius: 50%;
 }
 .td_x:hover{
     background-color: rgb(107, 89, 89);

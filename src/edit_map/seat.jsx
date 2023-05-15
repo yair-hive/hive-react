@@ -4,12 +4,64 @@ import TagsCount from "../components/tags_count"
 import { ActionsContext, EditContext, SelectablesContext } from "../app"
 import "../style/seat.css"
 import { DropContext, SelectedContext, SelectedRCcontext } from "./map"
-import { useSeatBelongsData, useSeatBelongsSetFixed } from "../querys/seat_belongs"
+import { useSeatBelongsCreate, useSeatBelongsData, useSeatBelongsSetFixed } from "../querys/seat_belongs"
 import { useGuestsData } from "../querys/guests"
 import { useGuestGroupsData } from "../querys/guest_groups"
 import { useTagBelongsData } from "../querys/tag_belongs"
 import { useSeatsDataScore } from "../querys/seats"
 import { FixedContext } from "../pages/projects"
+import RollingList from "../hive_elements/rolling_list"
+
+function DropTest({inputStr}){
+    const guests = useGuestsData()
+
+    const add_guest = useSeatBelongsCreate()
+    const [dropDownPos, setDropDownPos] = useContext(DropContext)
+    const [selected_seat, setSelectedSeat] = useContext(SelectedContext)
+
+    // useEffect(()=> setInputStr(''),[dropDownPos])
+
+    async function onItem(item){
+        // const {exist} = await check_guest(item.value)
+        // if(exist){
+            add_guest({
+                guest_id: item.value, 
+                seat_id: selected_seat
+            })
+        // }
+        setDropDownPos(null)
+        setSelectedSeat(null)
+    }
+
+    function createMatchList(){
+        var match_list = [] 
+        if(inputStr.length != 0){
+            var search_reg = new RegExp('^'+inputStr)
+            var guest_array = Object.entries(guests.data)
+            for(var [index, corrent] of guest_array){
+                corrent.name = corrent.last_name+' '+corrent.first_name
+                if(search_reg.test(corrent.name)){
+                    match_list.push({name: corrent.name, value: corrent.id})
+                }
+            }
+        }
+        return match_list
+    }
+
+    return (
+        <>
+        <div
+        className="drop_down" 
+        style={{
+            position: 'relative',
+            display: 'inline-block',
+            margin: 0,
+        }}>
+            <RollingList items={createMatchList()} onItemClick={onItem}/>
+        </div>
+        </>
+    )
+}
 
 function getColor(backColor){
     if(backColor){
@@ -36,16 +88,23 @@ function getFontSize(str){
 function NameBox({seat_id, tags, guest_name, group_color}){
 
     const [edit, setEdit] = useContext(EditContext)
+    // const [dropDownPos, setDropDownPos] = useState(false)
     const [dropDownPos, setDropDownPos] = useContext(DropContext)
     const [selected_seat, setSelectedSeat] = useContext(SelectedContext)
+    const [inputStr, setInputStr] = useState('')
 
     const nameBoxRef = useRef(null)
 
     function nameBoxOnClick(){
         if(edit == 'אל תערוך'){
-            setDropDownPos(nameBoxRef.current)
-            setSelectedSeat(seat_id)
+            // setDropDownPos(nameBoxRef.current)
+            // setSelectedSeat(seat_id)
+            setDropDownPos(seat_id)
         }
+    }
+
+    function onInput(event){
+        setInputStr(event.target.value)
     }
 
     var font_size = (guest_name ? getFontSize(guest_name) : '')
@@ -56,6 +115,13 @@ function NameBox({seat_id, tags, guest_name, group_color}){
         backgroundColor: group_color,
         fontSize: font_size,
         color: color
+    }
+
+    if(dropDownPos == seat_id){
+        return (<>
+            <input onChange={onInput} className="name_box" style={{margin: 0,}}/>
+            <DropTest inputStr={inputStr}/>
+        </>)
     }
 
     return(

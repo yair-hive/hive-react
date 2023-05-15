@@ -3,7 +3,7 @@ import TableRow from "./table_row"
 import React, { useContext, useEffect, useRef, useState } from "react"
 import RequestsDrop from "./requestsDrop"
 import { useSeatsDataAll } from "../querys/seats"
-import { useGuestsData, useGuestsUpdate } from "../querys/guests"
+import { useGuestsData, useGuestsDelete, useGuestsUpdate } from "../querys/guests"
 import { useGuestGroupsData } from "../querys/guest_groups"
 import { useTagBelongsData } from "../querys/tag_belongs"
 import { useSeatBelongsData } from "../querys/seat_belongs"
@@ -336,6 +336,18 @@ function RequestsCell(props){
 
 //   return <td onClick={onTdClick}>{score}</td>
 // }
+function DeleteCell(props){
+
+  const guest_id = props.cell.row.id
+
+  const delete_guest = useGuestsDelete()
+ 
+  function on_td_x(){
+    delete_guest({guest_id})
+  }
+
+  return (<div className="td_x" onClick={on_td_x}> x </div>)
+}
 function TableInstens({data}){
     const columns = React.useMemo(
         () => [
@@ -377,7 +389,13 @@ function TableInstens({data}){
                 accessor: "requests",
                 Cell: RequestsCell,
                 disableSortBy: true
-            }, 
+            },
+            {
+              Header: "x",
+              accessor: "x",
+              Cell: DeleteCell,
+              disableSortBy: true
+          }, 
         ],
         []
       )

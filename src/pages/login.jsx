@@ -1,3 +1,4 @@
+import new_api from "../new_api/new_api"
 import api from "../scripts/api/api"
 
 export default function Login(){
@@ -7,10 +8,16 @@ export default function Login(){
         var user_form_data = new FormData(user_form)
         const formDataObj = {};
         user_form_data.forEach((value, key) => (formDataObj[key] = value));
-        api.user.login(formDataObj)
-        .then(json => alert(json.msg))
+        console.log(formDataObj)
+        new_api.users.login(formDataObj.user_name, formDataObj.password)
+        .then(json => console.log(json))
+    }
+    async function active(){
+        var act_user = await new_api.users.get_active()
+        console.log(act_user)
     }
     return(
+        <>
         <form id="user_form"> 
             <label htmlFor="user_name"> user name </label>
                 <input type='text' name='user_name' style={{backgroundColor: 'red'}}/>  
@@ -21,5 +28,8 @@ export default function Login(){
                 {console.log(api.user.get())}
                 <div id="login_button" className="hive-button" onClick={on}> התחבר </div>
         </form>
+
+        <button onClick={active}> משתמש </button>
+        </>
     )
 }

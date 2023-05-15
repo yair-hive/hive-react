@@ -22,7 +22,7 @@ function ProjectsPop({id}){
         return projects.data?.map((project, index)=>{
             return (
                 <li key={index} onClick={onProjectClick}> 
-                    <Link to={`/projects/${project.name}`}> 
+                    <Link to={`/projects/${encodeURIComponent(project.name)}`}> 
                         {project.name} 
                     </Link>
                 </li>

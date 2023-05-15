@@ -9,6 +9,7 @@ import { useEffect } from 'react';
 import { useQueryClient } from 'react-query';
 import { HiveSocket } from '.';
 import Projects from './pages/projects';
+import Home from './pages/home';
 
 const HiveContext = React.createContext({})
 
@@ -97,6 +98,7 @@ function App() {
       <div className="content">
         <TopBar />
         <Routes>
+          <Route path='/' element ={<Home />}/>
           <Route path='/maps/:map_name/*' element ={<Maps />}/>
           <Route path='/guests/:project_name/*' element={<Guests/>} />
           <Route path='/projects/:project_name/*' element={<Projects />}/>

@@ -5,6 +5,7 @@ import { useContext } from 'react';
 import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools'
+import Test from './test';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -25,6 +26,7 @@ root.render(
       <BrowserRouter>
         <HiveSocket.Provider value={ws}>
           <App />
+          {/* <Test /> */}
           <ReactQueryDevtools />
         </HiveSocket.Provider>
       </BrowserRouter>

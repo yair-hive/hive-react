@@ -9,8 +9,10 @@ function InputBox(props) {
         if(props.pos){
             var parent = props.pos.getBoundingClientRect()
 
+            var top = parent.top 
+
             inputRef.current.style.width = parent.width+'px'
-            inputRef.current.style.top = parent.top+'px'
+            inputRef.current.style.top = top+'px'
             inputRef.current.style.left = parent.left+'px'
                 
         }
