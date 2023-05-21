@@ -7,13 +7,14 @@ import { useGuestsData, useGuestsDelete, useGuestsUpdate } from "../querys/guest
 import { useGuestGroupsData } from "../querys/guest_groups"
 import { useTagBelongsData } from "../querys/tag_belongs"
 import { useSeatBelongsData } from "../querys/seat_belongs"
-import { TableRefContext } from "../app"
+import { MBloaderContext, TableRefContext } from "../app"
 import { useSortBy, useTable } from "react-table";
 import TagsCount from "../components/tags_count"
 import { BelongsContext, GroupsContext, TagsContext } from "../app"
 import { useFilters } from "react-table/dist/react-table.development"
 import RequestsCount from "../components/requestsCount"
 import { useRequestsBelongsData } from "../querys/requests_belongs"
+import MBloader from "../hive_elements/MBloader"
 
 const DropPosContext = React.createContext([])
 const SelectedGuestContext = React.createContext([])
@@ -416,6 +417,8 @@ function GuestsTable(){
     const requests = useRequestsBelongsData()
     const tags_belongs = useTagBelongsData()
 
+    const [status, setStatus] = useContext(MBloaderContext)
+
     const [dropPos, setDropPos] = useState(null)
     const [selectedGuest, setSelectedGuest] = useState(null)
 
@@ -453,9 +456,14 @@ function GuestsTable(){
         return rows
     }
 
+    // if(guests.isLoading || belongs.isLoading || groups.isLoading || seats.isLoading || tags_belongs.isLoading || requests.isLoading) setStatus(101)
+    // if(guests.isFetching || belongs.isFetching || groups.isFetching || seats.isFetching || tags_belongs.isFetching || requests.isFetching) setStatus(101)
+    // if(guests.data && belongs.data && groups.data && seats.data && tags_belongs.data && requests.data) setStatus(0)
+
     return (
       <SelectedGuestContext.Provider value={[selectedGuest, setSelectedGuest]}>
       <DropPosContext.Provider value={[dropPos, setDropPos]}>
+      <MBloader />
       <div className="guest_table">
           <RequestsDrop 
             pos={dropPos} 

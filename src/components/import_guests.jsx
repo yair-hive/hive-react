@@ -15,7 +15,7 @@ function ImportGuests(props){
 
     async function onClick(){
         var rows = await readXlsxFile(file)
-        await create_guests(rows)
+        create_guests(rows)
         props.setState(false)
     }
 

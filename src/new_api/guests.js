@@ -3,11 +3,11 @@ import hiveFetch from "./hiveFetch";
 const guests = {}
 guests['update'] = {}
 
-guests['create'] = function(guests, project_name){
+guests['create'] = function(guests, project_name, socketId){
     const body = {
         category: 'guests',
         action: 'create',
-        guests, project_name
+        guests, project_name, socketId
     }
     return hiveFetch(body)
 };

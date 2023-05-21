@@ -1,18 +1,22 @@
 import { useMutation, useQueryClient, useQuery } from "react-query"
 import { useParams } from "react-router-dom"
-import { useSocket } from "../app"
+import { MBloaderContext, SocketIdContext, useSocket } from "../app"
 import new_api from "../new_api/new_api"
+import { useContext } from "react"
 
 export function useGuestsData(){
     const {project_name} = useParams()
     return useQuery(['guests', {project_name}], new_api.guests.get_all)
 }
 export function useGuestsCreate(){
+
+    const socketId = useContext(SocketIdContext)
+
     const {project_name} = useParams()
     const hiveSocket = useSocket()
     const mutation = useMutation(guests =>{
         guests = JSON.stringify(guests)
-        return new_api.guests.create(guests, project_name)
+        return new_api.guests.create(guests, project_name, socketId)
     }, {
         onSuccess: ()=>{
             var msg = JSON.stringify({action: 'invalidate', query_key: ['guests', {project_name}]})

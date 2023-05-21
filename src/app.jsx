@@ -31,18 +31,20 @@ export const GroupsContext = React.createContext(null)
 export const TagsContext = React.createContext(null)
 export const TableRefContext = React.createContext([])
 export const FixedContext = React.createContext([])
+export const SocketIdContext = React.createContext('')
 
 function App() {
 
   const hiveSocket = useSocket()
   const queryClient = useQueryClient()
-  const MBloaderState = useState(0)
+  const [MBloaderState, setMBloader] = useState(0)
   const editState = useState('אל תערוך')
   const selecteblsState = useState('cell')
   const actionsState = useState('numbers')
   const belongsState = useState('הכל')
   const groupsState = useState('הכל')
   const tagsState = useState('הכל')
+  const [socketId, setSocketId] = useState('')
   const [popUps, setPopUps] = useState({})
   const [TableRefState, setTableRefState] = useState(null)
   const [fixedState, setfixedState] = useState(false)
@@ -68,6 +70,12 @@ function App() {
       if(data.action == 'invalidate'){
         queryClient.invalidateQueries(data.query_key)
       }
+      if(data.action == 'connection_id'){
+        setSocketId(data.id)
+      }
+      if(data.action == 'progress'){
+        setMBloader(data.progress)
+      }
     }
     hiveSocket.onerror = function(msg){
       console.log(msg)
@@ -92,6 +100,7 @@ function App() {
 
 
   return (
+    <SocketIdContext.Provider value={socketId}>
     <HiveContext.Provider value={hive}>
     <BelongsContext.Provider value={belongsState}>
     <GroupsContext.Provider value={groupsState}>
@@ -99,7 +108,7 @@ function App() {
     <ActionsContext.Provider value={actionsState}>
     <EditContext.Provider value={editState}>
     <SelectablesContext.Provider value={selecteblsState}>
-    <MBloaderContext.Provider value={MBloaderState}>
+    <MBloaderContext.Provider value={[MBloaderState, setMBloader]}>
     <FixedContext.Provider value={[fixedState, setfixedState]}>
     <TableRefContext.Provider value={[TableRefState, setTableRefState]}>
     <div className="content">
@@ -128,6 +137,7 @@ function App() {
     </GroupsContext.Provider>
     </BelongsContext.Provider>
     </HiveContext.Provider>
+    </SocketIdContext.Provider>
   );
 }
 

@@ -57,6 +57,15 @@ function MB(){
 const MBloader = () => {
     const [status, setStatus] = useContext(MBloaderContext)
 
+    if(status == 101){
+        return (
+            <div className='MBloader-container'>
+                <div className='loader-box' style={{color: 'white'}}>
+                    <p> טוען </p>
+                </div>
+            </div>
+        );
+    }
     if(status != 0 && status != 100){
         return (
             <div className='MBloader-container'>
