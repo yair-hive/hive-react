@@ -20,6 +20,7 @@ function AddGuestDropDown(props){
     useEffect(()=> setInputStr(''),[dropDownPos])
 
     async function onItem(item){
+        console.log(item)
         // const {exist} = await check_guest(item.value)
         // if(exist){
             add_guest({

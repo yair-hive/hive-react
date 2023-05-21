@@ -10,11 +10,16 @@ import "../style/side_menu.css"
 import TagsPop from "./tags_pop";
 import { useQueryClient } from "react-query";
 import { useMapsAllData, useMapsData, useMapsUpdate } from "../querys/maps";
-import { useSeatsData, useSeatsDataAll } from "../querys/seats";
+import { useSeatsCreate, useSeatsData, useSeatsDataAll, useSeatsDelete, useSeatsUpdate } from "../querys/seats";
 import { useSeatBelongsData } from "../querys/seat_belongs";
 import { useGuestsData } from "../querys/guests";
 import { useGuestGroupsData } from "../querys/guest_groups";
 import ProjectSM from "../pages/projects_sub_menu";
+import { useTagBelongsCreate } from "../querys/tag_belongs";
+import { useMapElementsCreate, useMapElementsDelete } from "../querys/map_elements";
+import { useSeatsGroupsCreate } from "../querys/seats_groups";
+import { map_add_presers } from "./map_add_presers";
+import { map_delete_presers } from "./map_delete_presers";
 
 
 function ProjectSideMenu(){
@@ -88,6 +93,15 @@ function MapSideMenu() {
     const guests = useGuestsData()
     const groups = useGuestGroupsData()
 
+    const seats_create = useSeatsCreate()       
+    const tags_create = useTagBelongsCreate()        
+    const numbers_update = useSeatsUpdate().numbers
+    const elements_create = useMapElementsCreate()
+    const groups_create = useSeatsGroupsCreate()
+
+    const seats_delete  = useSeatsDelete()
+    const elements_delete = useMapElementsDelete()
+
     const [input_str, setInputStr] = useState('')
     const [tagsPopStatus, setTagsPopStatus] = useState(false)
     const [colsTo, setColsTo] = useState(undefined)
@@ -103,26 +117,6 @@ function MapSideMenu() {
     useEffect(()=>{
         if(colsTo) update_cols_to({to: colsTo})
     }, [colsTo])
-
-    function scheduling(){
-        const source = new EventSource(`http://localhost:3025/actions/scheduling/${map_name}`);
-
-        source.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-            setMBStatus(data.progress);
-            if(data.progress == 100){
-                queryClient.invalidateQueries(['belongs', map_name])
-                var msg = JSON.stringify({action: 'invalidate', quert_key: ['belongs', map_name]})
-                hiveSocket.send(msg)
-                source.close()
-                setMBStatus(0)
-            }
-        };
-
-        source.onerror = (error) => {
-            console.error('An error occurred:', error);
-        };
-    }
     
     function guestsList(){
         function createMatchList(guests_data){
@@ -181,6 +175,25 @@ function MapSideMenu() {
 
     function onInput(event){
         setInputStr(event.target.value)
+    }
+
+    function map_delete(){
+        const mutations = {   
+            seats: seats_delete,       
+            elements: elements_delete,
+        }
+        return mutations[action](map_delete_presers[action]())
+    }
+
+    function map_add(){
+        const mutations = {   
+            seats: seats_create,       
+            tags: tags_create,        
+            numbers: numbers_update,       
+            elements: elements_create,
+            groups: groups_create,
+        }
+        return mutations[action](map_add_presers[action]())
     }
 
     function selecteblsSwitch(){
@@ -256,8 +269,8 @@ function MapSideMenu() {
                 />
                     {selecteblsSwitch()}
                     {actionSwitch()}
-                    <HiveButton> הוסף </HiveButton>
-                    <HiveButton> מחק </HiveButton>
+                    <HiveButton onClick={()=> map_add()}> הוסף </HiveButton>
+                    <HiveButton onClick={()=> map_delete()}> מחק </HiveButton>
                     <HiveButton onClick={()=> {setTagsPopStatus(true)}}> תגיות </HiveButton>
                     <TagsPop status={tagsPopStatus} setState = {setTagsPopStatus}/>
 

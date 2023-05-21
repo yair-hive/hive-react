@@ -93,7 +93,7 @@ function MapBody(){
         var classList = event.target.classList
         if(!event.ctrlKey && !event.metaKey && !classList.contains('hive_button')){
             setSelectedRC({})
-            if(!classList.contains('name_box') && !classList.contains('drop_down') && !classList.contains('rolling_list_item')){
+            if(!classList.contains('name_box') && !classList.contains('drop_down') && !classList.contains("rolling-list-item")){
                 setDropDownPos(false)
             }                               
         }
