@@ -2,14 +2,20 @@ import { useState } from "react"
 import HiveButton from "../hive_elements/hive_button"
 import PopUp from "../hive_elements/pop_up"
 import { useProjectsCreate } from "../querys/projects";
+import { useNavigate } from "react-router-dom";
+import { useHive } from "../app";
 
 function AddProjectPop({id}){
 
     const [name, setName] = useState('')
     const create_project = useProjectsCreate()
+    const navigate = useNavigate()
+    const hive = useHive()
 
-    function onClick(){
-        create_project(name)
+    async function onClick(){
+        await create_project(name)
+        navigate(`/maps/${name}`)
+        hive.closePopUp(id)
     }
 
     return(

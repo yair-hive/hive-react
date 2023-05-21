@@ -42,6 +42,33 @@ function ProjectSideMenu(){
     )
 }
 
+function ChangeMapName(){
+
+    const {map_name, project_name} = useParams()
+    const [new_name, setNewName] = useState(map_name)
+
+    useEffect(()=> setNewName(map_name), [map_name])
+
+    const navigate = useNavigate()
+
+    const update_map = useMapsUpdate().map_name
+
+    function onChange(e){
+        setNewName(e.target.value)
+    }
+    async function onBlur(){
+        update_map({new_name})
+        navigate(`/maps/${project_name}/${new_name}`)
+    }
+
+    return (
+        <input 
+            onChange={onChange}
+            onBlur={onBlur}
+            value={new_name}
+        />
+    )
+}
 function MapSideMenu() {
 
     const navigate = useNavigate()
@@ -217,6 +244,7 @@ function MapSideMenu() {
         if(edit === 'ערוך'){
             return(
                 <div className="sub_menu">
+                <ChangeMapName />
                 <HiveSwitch
                     active={map.data?.cols_to}
                     options={[
@@ -232,6 +260,7 @@ function MapSideMenu() {
                     <HiveButton> מחק </HiveButton>
                     <HiveButton onClick={()=> {setTagsPopStatus(true)}}> תגיות </HiveButton>
                     <TagsPop status={tagsPopStatus} setState = {setTagsPopStatus}/>
+
                 </div>
             )
         }

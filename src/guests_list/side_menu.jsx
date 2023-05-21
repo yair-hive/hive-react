@@ -1,6 +1,6 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useDownloadExcel } from "react-export-table-to-excel";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { BelongsContext, GroupsContext, TagsContext, useHive } from "../app";
 import AddGuest from "../components/add_guest";
 import GroupsPop from "../components/groups_pop";
@@ -10,6 +10,31 @@ import HiveSwitch from "../hive_elements/hive_switch";
 import { TableRefContext } from "../app";
 import { useGuestGroupsData } from "../querys/guest_groups";
 import { useTagsData } from "../querys/tags";
+import { useMapsAllData } from "../querys/maps";
+
+function ProjectSideMenu(){
+
+    const navigate = useNavigate()
+    const {map_name, project_name} = useParams()
+
+    const [mapState, setMap] = useState(null)
+    const maps = useMapsAllData()
+
+    var mapsOptions = maps.data?.map(map => map.map_name)
+
+    useEffect(()=> {if(mapState) navigate(`/maps/${project_name}/${mapState}`)}, [mapState])
+
+    return (
+        <div className="side_menu">
+            <HiveSwitch 
+                options={mapsOptions} 
+                active={map_name}
+                setActive={setMap} 
+                bordKey="KeyQ" 
+            />
+        </div>
+    )
+}
 
 function GuestsSideMenu(){
 
@@ -50,6 +75,7 @@ function GuestsSideMenu(){
 
     return(
         <div className="sub_menu">
+        <ProjectSideMenu />
         <HiveButton onClick={()=>hive.openPopUp('add_guest')}> הוסף בחורים </HiveButton>
         <AddGuest id='add_guest'/>
         <HiveButton onClick={()=> setImportPop(true)}> ייבא בחורים </HiveButton>

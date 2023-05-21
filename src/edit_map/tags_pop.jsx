@@ -3,6 +3,52 @@ import { useSortBy, useTable } from "react-table";
 import PopUp from "../hive_elements/pop_up";
 import { useTagsData, useTagsDelete, useTagsUpdate } from "../querys/tags";
 
+function TagNameCell({value}){
+  return <div className="text_cell"> {value} </div>
+}
+function ScoreCell({value}){
+  return <div className="text_cell"> {value} </div>
+}
+function ColorCell({value, cell}){
+
+  const tag_id = cell.row.id
+  
+  const [colorState, setColor] = useState(value)
+  const update_color = useTagsUpdate().color
+
+  function onChange(event){
+      setColor(event.target.value)
+  }
+
+  function onBlur(){
+      update_color({tag_id, color: colorState})
+  }
+
+  return(
+      <input 
+          type={'color'} 
+          value={value}
+          onChange={onChange}
+          onBlur={onBlur}
+      />
+  )
+}
+function DeleteCell({cell}){
+
+  const tag_id = cell.row.id
+
+  const delete_tag = useTagsDelete()
+
+  function onClick(){
+    delete_tag({tag_id})
+  }
+
+  return(
+    <div className="td_x" onClick={onClick}> X </div>
+  )
+
+}
+
 function Table({ columns, data }) {
   const {
     getTableProps,
@@ -14,6 +60,9 @@ function Table({ columns, data }) {
     {
       columns,
       data,
+      getRowId: function(row, relativeIndex, parent){
+        return data[relativeIndex].id
+      }
     },
     useSortBy
   )
@@ -66,59 +115,29 @@ function Table({ columns, data }) {
   )
 }
 
-function ColorInput({tag_id, color}){
-
-    const [colorState, setColor] = useState(null)
-    const update_color = useTagsUpdate().color
-
-    function onChange(event){
-        setColor(event.target.value)
-    }
-
-    function onBlur(){
-        update_color({tag_id, color: colorState})
-    }
-
-    return(
-        <input 
-            type={'color'} 
-            value={color}
-            onChange={onChange}
-            onBlur={onBlur}
-        />
-    )
-}
-
-function TdX({tag_id}){
-
-    console.log(tag_id)
-
-    const delete_tag = useTagsDelete()
-
-    function onClick(){
-        delete_tag({tag_id})
-    }
-
-    return(
-        <td className="td_x" onClick={onClick}> X </td>
-    )
-}
-
 function TableInstens({data}){
     
     const columns = React.useMemo(
         () => [
           {
+            Header: 'x',
+            accessor: 'x',
+            Cell: DeleteCell
+          },
+          {
             Header: 'צבע',
             accessor: 'color', 
+            Cell: ColorCell
           },
           {
             Header: 'ניקוד',
             accessor: 'score',
+            Cell: ScoreCell
           },
           {
             Header: 'שם',
             accessor: 'name',
+            Cell: TagNameCell
           },
         ],
         []

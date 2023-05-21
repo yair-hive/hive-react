@@ -1,16 +1,17 @@
 import { useContext, useState } from "react"
 import { useQueryClient } from "react-query"
 import { Link, useParams } from "react-router-dom"
-import { MBloaderContext, useHive, useSocket } from "../app"
+import { FixedContext, MBloaderContext, useHive, useSocket } from "../app"
 import AddMapPop from "../components/add_map_pop"
 import HiveButton from "../hive_elements/hive_button"
-import { FixedContext } from "./projects"
+import { ShowScoreContext } from "./maps"
 
 function ProjectSM(){
 
     const {map_name, project_name} = useParams()
 
     const [MBstatus, setMBStatus] = useContext(MBloaderContext)
+    const [showScore, setShowScore] = useContext(ShowScoreContext)
 
     const hiveSocket = useSocket()
     const queryClient = useQueryClient()
@@ -43,6 +44,7 @@ function ProjectSM(){
             <HiveButton onClick={scheduling}> שבץ </HiveButton>
             <HiveButton onClick={()=> hive.openPopUp('add_map')}> הוסף מפה </HiveButton>
             <HiveButton onClick={()=> setfixedState(!fixedState)}> ניהול מקומות קבועים </HiveButton>
+            <HiveButton onClick={()=> setShowScore(!showScore)}> הצג ניקוד </HiveButton>
             <AddMapPop id={'add_map'}/>
         </div>
     )

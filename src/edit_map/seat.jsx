@@ -11,6 +11,7 @@ import { useTagBelongsData } from "../querys/tag_belongs"
 import { useSeatsDataScore } from "../querys/seats"
 import { FixedContext } from "../app"
 import RollingList from "../hive_elements/rolling_list"
+import { ShowScoreContext } from "../pages/maps"
 
 function DropTest({inputStr}){
     const guests = useGuestsData()
@@ -24,9 +25,10 @@ function DropTest({inputStr}){
     async function onItem(item){
         // const {exist} = await check_guest(item.value)
         // if(exist){
+            console.log(item)
             add_guest({
                 guest_id: item.value, 
-                seat_id: selected_seat
+                seat_id: dropDownPos
             })
         // }
         setDropDownPos(null)
@@ -85,8 +87,10 @@ function getFontSize(str){
     else return '15px'
 }
 
-function NameBox({seat_id, tags, guest_name, group_color}){
+function NameBox({seat_id, tags, guest_name, group_color, score}){
 
+
+    const [showScore, setShowScore] = useContext(ShowScoreContext)
     const [edit, setEdit] = useContext(EditContext)
     // const [dropDownPos, setDropDownPos] = useState(false)
     const [dropDownPos, setDropDownPos] = useContext(DropContext)
@@ -123,6 +127,8 @@ function NameBox({seat_id, tags, guest_name, group_color}){
             <DropTest inputStr={inputStr}/>
         </>)
     }
+
+    if(showScore) return <div className="name_box"> {score} </div>
 
     return(
         <div className="name_box" style={(edit !== 'ערוך' ? NAME_BOX_STYLE : null)} ref={nameBoxRef} onClick={nameBoxOnClick}>
@@ -162,6 +168,7 @@ function SeatNumber({number, belong_id, fixed}){
 }
 
 function Seat({seat}){
+
     const [edit, setEdit] = useContext(EditContext)
     const [selectebls] = useContext(SelectablesContext)
     const [action, setAction] = useContext(ActionsContext)
@@ -232,7 +239,7 @@ function Seat({seat}){
                 cell-col = {seat.col_num}
             >
                 <SeatNumber number={seat.seat_number} belong_id={belong_id} fixed={fixed}/>
-                <NameBox seat_id={seat.id} guest_name={guest_name} group_color={group_color} tags={tags}/>
+                <NameBox seat_id={seat.id} guest_name={guest_name} group_color={group_color} tags={tags} score={seat.score}/>
             </div>
         </div>
     )

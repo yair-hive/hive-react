@@ -19,27 +19,56 @@
     font-size: 40px;
     background-color: aqua;
 }
-.user_name{
-    height: 100%;
-    box-sizing: border-box;
-    width: 100px;
-    text-align: center;
-    padding: 10px;
-    font-size: 50%;
-}
-.user_name.active{
-    background-color: rgb(68, 62, 86);
-}
 .user_icon{
     user-select: none;
     padding-left: 50px;
     height: 100%;
 }
+.admin_link{
+    user-select: none;
+    padding: 0 10px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: cornflowerblue;
+    font-size: 24px;
+}
+.user_name{
+    height: 100%;
+    box-sizing: border-box;
+    width: 130px;
+    text-align: center;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: cornflowerblue;
+    font-size: 24px;
+}
+.admin_link > a{
+    color: cornflowerblue;
+}
+.admin_link:hover{
+    background-color: rgb(68, 62, 86);
+}
+.user_name.active{
+    background-color: rgb(68, 62, 86);
+}
 .actions_drop{
+    opacity: 0;
+    user-select: none;
+    pointer-events: none;
     box-shadow:0 0 .25em rgba(0,0,0,.25);
-    width: 100px;
+    width: 130px;
     background-color: rgb(105, 92, 143);
     position: absolute;
     margin: 0;
-    border-radius: 0 0 10px 10px ;
+    border-radius: 0 0 10px 10px;
+    transition: all 400ms;
+}
+.actions_drop.active{
+    opacity: 100;
+    user-select: all;
+    pointer-events: all;
 }

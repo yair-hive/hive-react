@@ -20,6 +20,13 @@ const SelectedGuestContext = React.createContext([])
 
 function Table({ columns, data }) {
 
+  const [TableRefState, setTableRefState] = useContext(TableRefContext)
+  const tableRef = useRef(null) 
+
+  useEffect(()=> {
+    setTableRefState(tableRef.current)
+  },[])
+
   const [tagsStatus, setTagsStatus] = useContext(TagsContext)
   const [groupsStatus, setGroupsStatus] = useContext(GroupsContext)
   const [belongsStatus, setBelongsStatus] = useContext(BelongsContext)
@@ -53,7 +60,7 @@ function Table({ columns, data }) {
   
     return (
       <>
-        <table className="names_table" dir="rtl" {...getTableProps()}>
+        <table className="names_table" dir="rtl" {...getTableProps()} ref={tableRef}>
           <thead>
             {headerGroups.map(headerGroup => (
               <tr {...headerGroup.getHeaderGroupProps()}>
@@ -291,51 +298,47 @@ function RequestsCell(props){
       </div>
   )
 }
-// function ScoreCell(props){
+function ScoreCell(props){
 
-//   const initialValue = props.value
-//   const guest_id = props.cell.row.id
+  const initialValue = props.value
+  const guest_id = props.cell.row.id
 
-//   const [isScoreInput, setScoreInput] = useState(false)
-//   const [score, setScore] = useState(props.guest_score + props.group_score)
-//   const update_score = useGuestsUpdate().score
+  const [isScoreInput, setScoreInput] = useState(false)
+  const [score, setScore] = useState(initialValue)
+  const update_score = useGuestsUpdate().score
 
-//   useEffect(()=> setScore(props.guest_score + props.group_score), [props.guest_score, props.group_score])
+  useEffect(()=> setScore(initialValue), [initialValue])
 
-//   function onTdClick(){
-//       setScoreInput(true)
-//   }
+  function onTdClick(){
+      setScoreInput(true)
+  }
 
-//   function onInputBlur(){
-//       update_score({guest_id: props.guest_id, score: (score -props.group_score)})
-//       setScoreInput(false)
-//   }
+  function onInputBlur(){
+      update_score({guest_id, score})
+      setScoreInput(false)
+  }
 
-//   function onInputChange(event){
-//       setScore(Number(event.target.value))
-//   }
+  function onInputChange(event){
+      setScore(Number(event.target.value))
+  }
 
-//   if(isScoreInput){ 
-//       return (
-//       <td style={{
-//           backgroundColor: 'white'
-//       }}>
-//           <input 
-//               type='text' 
-//               autoFocus 
-//               value={score} 
-//               onBlur={onInputBlur}
-//               onChange={onInputChange}
-//               style={{
-//                   width: `${score.toString().length}ch`
-//               }}
-//           />
-//       </td>
-//       )
-//   }
+  if(isScoreInput){ 
+      return (
+          <input 
+              type='text' 
+              autoFocus 
+              value={score} 
+              onBlur={onInputBlur}
+              onChange={onInputChange}
+              style={{
+                  width: `${score.toString().length}ch`
+              }}
+          />
+      )
+  }
 
-//   return <td onClick={onTdClick}>{score}</td>
-// }
+  return <div onClick={onTdClick} className="text_cell">{score}</div>
+}
 function DeleteCell(props){
 
   const guest_id = props.cell.row.id
@@ -383,6 +386,7 @@ function TableInstens({data}){
             {
                 Header: "ניקוד",
                 accessor: "score",
+                Cell: ScoreCell
             },  
             {
                 Header: "בקשות",

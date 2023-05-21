@@ -32,5 +32,12 @@ users['get_active'] = function(){
     }
     return hiveFetch(body)
 }
+users['get_all'] = function(){
+    const body = {
+        category: 'users',
+        action: 'get_all',
+    }
+    return hiveFetch(body)
+}
 
 export default users

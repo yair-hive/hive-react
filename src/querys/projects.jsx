@@ -15,5 +15,5 @@ export function useProjectsCreate(){
             hiveSocket.send(msg)
         }
     })
-    return mutation.mutate
+    return mutation.mutateAsync
 }

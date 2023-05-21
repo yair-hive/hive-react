@@ -22,12 +22,21 @@ export function useMapsCreate(){
             hiveSocket.send(msg)
         }
     })
-    return mutation.mutate
+    return mutation.mutateAsync
 }
 export function useMapsUpdate(){
     const {project_name, map_name} = useParams()
     const hiveSocket = useSocket()
 
+    var map_name_fild = useMutation(({new_name}) => {
+        return new_api.maps.update.map_name(map_name, project_name, new_name)
+    }, {
+        onSuccess: ()=>{
+            var msg = JSON.stringify({action: 'invalidate', query_key: ['maps', {project_name}]})
+            hiveSocket.send(msg)
+
+        }
+    })
     var cols_to = useMutation(({to}) => {
         return new_api.maps.update.cols_to(map_name, project_name, to)
     }, {
@@ -82,6 +91,7 @@ export function useMapsUpdate(){
         add_row: add_row.mutate,
         add_col: add_col.mutate,
         delete_row: delete_row.mutate,
-        delete_col: delete_col.mutate
+        delete_col: delete_col.mutate,
+        map_name: map_name_fild.mutateAsync
     }
 }

@@ -10,6 +10,7 @@ import { useQueryClient } from 'react-query';
 import { HiveSocket } from '.';
 import Projects from './pages/projects';
 import Home from './pages/home';
+import Admin from './pages/admin';
 
 const HiveContext = React.createContext({})
 
@@ -102,13 +103,18 @@ function App() {
     <FixedContext.Provider value={[fixedState, setfixedState]}>
     <TableRefContext.Provider value={[TableRefState, setTableRefState]}>
     <div className="content">
-        <TopBar />
+        <Routes>
+          <Route path='/maps/:project_name/*' element={<TopBar />}/>
+          <Route path='/guests/:project_name/*' element={<TopBar />}/>
+          <Route path='*' element={<TopBar />}/>
+        </Routes>
         <Routes>
           <Route path='/' element ={<Home />}/>
           <Route path='/maps/:project_name/:map_name/*' element ={<Maps />}/>
           <Route path='/maps/:project_name/*' element ={<Maps />}/>
           <Route path='/guests/:project_name/*' element={<Guests/>} />
           <Route path='/projects/:project_name/*' element={<Projects />}/>
+          <Route path='/admin/*' element={<Admin />}/>
           <Route path='login' element={<Login/>} />
         </Routes>
       </div>

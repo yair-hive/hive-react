@@ -47,3 +47,6 @@ export function useUserLogout(){
 export function useUserData(){
     return useQuery(['user'], new_api.users.get_active)
 }
+export function useUserDataAll(){
+    return useQuery(['all_users'], new_api.users.get_all)
+}

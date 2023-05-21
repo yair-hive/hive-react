@@ -29,6 +29,15 @@ maps['get'] = function({queryKey}){
     }
     return hiveFetch(body)
 };
+maps['update']['map_name'] = function(map_name, project_name, new_name){
+    const body = {
+        category: 'maps',
+        action: 'update',
+        fild: 'map_name',
+        map_name, project_name, new_name
+    }
+    return hiveFetch(body)
+};
 maps['update']['cols_to'] = function(map_name, project_name, to){
     const body = {
         category: 'maps',

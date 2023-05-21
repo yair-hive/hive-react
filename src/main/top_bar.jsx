@@ -1,5 +1,5 @@
 import '../style/top_bar.css'
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import HiveButton from '../hive_elements/hive_button';
 import AddProjectPop from '../components/add_project_pop';
 import { useHive } from '../app';
@@ -15,6 +15,7 @@ import SginupPop from '../user_components/sginup_pop';
 function TopBar(){
     
     const user_name = useUserData()
+    const {project_name} = useParams()
 
     function get_user_name(){ 
         if(user_name.data) return user_name.data
@@ -28,9 +29,12 @@ function TopBar(){
         <div className='top_bar'>
             <div className="user_icon" onMouseOver={()=> setDrop(true)} onMouseOut={()=> setDrop(false)}>
                     <div className = {`user_name ${drop ? 'active' : ''}`}>
-                        {get_user_name()}       
+                        <span>{get_user_name()}</span>      
                     </div>
                     <ActionsDrop drop={drop} setDrop={setDrop}/>               
+            </div>
+            <div className='admin_link'>
+                <Link to={'/admin'}>admin</Link>
             </div>
             <LoginPop id={'login'}/>
             <SginupPop id={'sginup'}/>
@@ -40,6 +44,7 @@ function TopBar(){
                         פרויקטים
                     </HiveButton>
                 </li>
+                <li>{project_name}</li>
             </ul>
             <ProjectsPop id={'projects'}/>
             <AddProjectPop id={'add_project'}/>
