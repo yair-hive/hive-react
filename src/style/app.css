@@ -58,6 +58,7 @@ html, body, #root{
   justify-content: center;
 }
 .side_menu{
+  overflow-y: auto;
   z-index: 20;
   padding: 10px;
   background-color: rgb(120, 140, 228);
