@@ -2,7 +2,7 @@
 import SelectionArea, { useSelection } from '@viselect/react'
 import { useContext, useEffect, useState} from 'react'
 import React from 'react'
-import { MBloaderContext } from '../app'
+import { MBloaderContext, useHive } from '../app'
 import { ActionsContext, EditContext } from '../app'
 import AddGuestDropDown from './add_guest_drop_down'
 import Cell from './cell'
@@ -17,6 +17,7 @@ import { useMapsData, useMapsUpdate } from '../querys/maps'
 import { map_delete_presers } from './map_delete_presers'
 import { useSeatsGroupsCreate, useSeatsGroupsData } from '../querys/seats_groups'
 import { useParams } from 'react-router-dom'
+import Prompt from '../hive_elements/Prompt'
 
 export const DropContext = React.createContext(null)
 export const SelectedContext = React.createContext(null)
@@ -64,6 +65,12 @@ function MapBody(){
     const elements = useMapElementsData()
     const seats_groups = useSeatsGroupsData()
 
+    const Hive = useHive()
+
+    const [tagNameToAdd, setTagNameToAdd] = useState('')
+    const [seatNumberToAdd, setSeatNumberToAdd] = useState('')
+    const [elementNameToAdd, setElementNameToAdd] = useState('')
+    const [groupNameToAdd, setGroupToAdd] = useState('')
     const [selected_seat, setSelectedSeat] = useState(null)
     const [selectedRC, setSelectedRC] = useState({})
     const [action, setAction] = useContext(ActionsContext)
@@ -82,6 +89,25 @@ function MapBody(){
     const seats_delete  = useSeatsDelete()
     const elements_delete = useMapElementsDelete()
 
+    function getSelectedIds(){
+        var selected = selection.getSelection()
+        var seats = []
+        for(let i = 0; i < selected.length; i++){
+            var seat = selected[i]
+            var seat_id = seat.getAttribute('seat_id')
+            seats.push(seat_id)
+        }
+        return seats
+    }
+
+    useEffect(()=>{
+        if(tagNameToAdd.length > 0){
+            var selectedSeats = getSelectedIds()
+            console.log(selectedSeats)
+            tags_create({seats: selectedSeats, tag_name:tagNameToAdd})
+        }
+    }, [tagNameToAdd])
+
     if(edit === 'ערוך') {
         if(selection?.enable) selection.enable()
     }
@@ -91,7 +117,7 @@ function MapBody(){
 
     function onMousedown(event){
         var classList = event.target.classList
-        if(!event.ctrlKey && !event.metaKey && !classList.contains('hive_button')){
+        if(!event.ctrlKey && !event.metaKey && !classList.contains('hive_button') && !classList.contains('hive_but')){
             setSelectedRC({})
             if(!classList.contains('name_box') && !classList.contains('drop_down') && !classList.contains("rolling-list-item")){
                 setDropDownPos(false)
@@ -115,6 +141,22 @@ function MapBody(){
             if(selectedRC.dir === 'col'){
                 map_update.add_col({col: selectedRC.number})
             }
+            return
+        }
+        if(action == 'tags'){
+            Hive.openPopUp("add_tags")
+            return
+        }
+        if(action == 'numbers'){
+            Hive.openPopUp("add_seat_number")
+            return
+        }
+        if(action == 'elements'){
+            Hive.openPopUp("add_elemnt")
+            return
+        }
+        if(action == 'groups'){
+            Hive.openPopUp("add_area")
             return
         }
         const mutations = {   
@@ -294,6 +336,10 @@ function MapBody(){
         <>
         <MBloader />
         <div className="map_container">
+            <Prompt id="add_tags" title="הוסף תגיות" setValue={setTagNameToAdd}/>
+            <Prompt id="add_seat_number" title="הסף מספרי כיסאות" setValue={setSeatNumberToAdd}/>
+            <Prompt id="add_element" title="הוסף אלמנט" setValue={setElementNameToAdd}/>
+            <Prompt id="add_area" title="הוסף איזור" setValue={setGroupToAdd}/>
             <SelectedRCcontext.Provider value={[selectedRC, setSelectedRC]}>
             <SelectedContext.Provider value={[selected_seat, setSelectedSeat]}>
             <DropContext.Provider value={[dropDownPos, setDropDownPos]}>
